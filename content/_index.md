@@ -18,9 +18,9 @@ Outside of academia, I enjoy playing badminton, swimming, photography, and gamin
 {{< pubs title="Publications" >}}
 <div id="publications" class="publication-grid">
 
-{{< publication-card title="m-Zephyr: A Digital In-Memory Ising Chip with 240 Spins Featuring Enhanced Connectivity Based on a Modified 3D Zephyr Topology" authors="<strong><ins>Yihao Wu</ins></strong>, Jooyoung Bae, Chaeyun Shim, Bongjin Kim" sourcelink="https://www.vlsisymposium.org/" source="VLSI'25" remark="✅ Accepted" remarkcolor="#d1ffd1" >}}
+{{< publication-card title="m-Zephyr: A Digital In-Memory Ising Chip with 240 Spins Featuring Enhanced Connectivity Based on a Modified 3D Zephyr Topology" authors="<strong><ins>Yihao Wu</ins></strong>, Jooyoung Bae, Chaeyun Shim, Bongjin Kim" sourcelink="https://www.vlsisymposium.org/" source="VLSI'25" pdf="/files/papers/m-Zephyr_A_Digital_In-Memory_Ising_Chip_with_240_Spins_Featuring_Enhanced_Connectivity_Based_on_a_Modified_3D_Zephyr_Topology.pdf">}}
 
-{{< publication-card title="Quantized Context Based LIF Neurons for Recurrent Spiking Neural Networks in 45nm" authors="Sai Sukruth Bezugam*, <strong><ins>Yihao Wu</ins></strong>, JaeBum Yoo*, Dmitri Strukov, Bongjin Kim (*equal contribution)" sourcelink="https://niceworkshop.org/" source="NICE'24" pdf="/files/papers/Quantized_Context_Based_LIF_Neurons_for_Recurrent_Spiking_Neural_Networks_in_45nm.pdf" >}}
+{{< publication-card title="Quantized Context Based LIF Neurons for Recurrent Spiking Neural Networks in 45nm" authors="Sai Sukruth Bezugam*, <strong><ins>Yihao Wu*</ins></strong>, JaeBum Yoo*, Dmitri Strukov, Bongjin Kim (*equal contribution)" sourcelink="https://niceworkshop.org/" source="NICE'24" pdf="/files/papers/Quantized_Context_Based_LIF_Neurons_for_Recurrent_Spiking_Neural_Networks_in_45nm.pdf" >}}
 
 {{< publication-card title="Micromachined Thin Film Ceramic PZT Multimode Resonant Temperature Sensor" authors="Wen Sui, Tahmid Kaisar, Haoran Wang, <strong><ins>Yihao Wu</ins></strong>, Jaesung Lee, Huikai Xie, Philip Feng" source="IEEE Sensors Journal'24" pdf="/files/papers/Micromachined_Thin_Film_Ceramic_PZT_Multimode_Resonant_Temperature_Sensor.pdf" >}}
 
@@ -32,7 +32,7 @@ Outside of academia, I enjoy playing badminton, swimming, photography, and gamin
 {{< poster title="Poster Presentations" >}}
 <div id="poster" class="poster-grid">
 
-{{< poster-card title="(Title Temporarily hide)" authors="<strong><ins>Yihao Wu</ins></strong>, Jooyoung Bae, Chaeyun Shim, Bongjin Kim" sourcelink="https://www.isscc.org/student-research-preview" source="ISSCC'25 SRP" remark="📰 Poster Session" remarkcolor="#FCE4EC" >}}
+{{< poster-card title="m-Zephyr: a Digital In-Memory Ising Chip with 240 Spins with Improved Connectivity with a Modified Zephyr Topology" authors="<strong><ins>Yihao Wu</ins></strong>, Jooyoung Bae, Chaeyun Shim, Bongjin Kim" sourcelink="https://www.isscc.org/student-research-preview" source="ISSCC'25 SRP" remark="📰 Poster Session" remarkcolor="#FCE4EC" >}}
 
 {{< poster-card title="Low-cost human posture monitoring system based on infrared array sensor" authors="<strong><ins>Yihao Wu</ins></strong>, Tahmid Kaisar, Hui Zhang, Philip X.-L. Feng" sourcelink="https://www.eng.ufl.edu/nimet/events/nanoday/" source="Nano Day'22" remark="📰 Poster Session" remarkcolor="#FCE4EC" >}}
 
