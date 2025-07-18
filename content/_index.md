@@ -42,7 +42,7 @@ Outside of academia, I enjoy playing badminton, swimming, photography, and gamin
 {{< section id="contact" >}}
 ## Contact
 
-1804 Ellison Hall
+1804 Ellison Hall 
 
 Santa Barbara, CA 93106
 
