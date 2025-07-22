@@ -12,7 +12,7 @@ Greetings from Yihao! I am currently a 2nd-year PhD student in the Department of
 
 My research interests include **digital and mixed-signal in-memory computing**, and **ASIC-based accelerators for Combinatorial Optimization Problems (COPs) and Artificial Intelligence (AI)**. 
 
-Outside of academia, I enjoy playing badminton, swimming, photography, and gaming. One of my dreams is to own a pickup truck (Espicially Ford F-150 Raptor) and travel the world with a capybara by my side.
+Outside of academia, I enjoy playing badminton, swimming, photography, and gaming. One of my dreams is to own a pickup truck (Espicially Ford F-150 Raptor) and travel the world with a cat and a capybara by my side.
 {{< /section >}}
 
 {{< pubs title="Publications" >}}
