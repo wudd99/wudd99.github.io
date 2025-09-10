@@ -1,26 +1,36 @@
-name: Build & Push to main
+name: Deploy Hugo Site
+
 on:
   push:
-    branches: [ source ]
-
-permissions:
-  contents: write   # 允许往 main 写
+    branches:
+      - source  # 当 source 分支有更新时触发
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: peaceiris/actions-hugo@v2
+      # 1. 检出 source 分支代码
+      - name: Checkout source branch
+        uses: actions/checkout@v2
+        with:
+          ref: source
+
+      # 2. 设置 Hugo 环境（指定版本，并启用 extended 模式，如果需要）
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
         with:
           hugo-version: '0.145.0'
           extended: true
-      - run: hugo --minify
-      - name: Deploy to main
+
+      # 3. 构建 Hugo 网站，将生成的静态文件存放到 public 文件夹
+      - name: Build site
+        run: hugo
+
+      # 4. 部署到 GitHub Pages，将 public 目录的内容推送到 main 分支
+      - name: Deploy to GitHub Pages (main branch)
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.PAT_TOKEN }}
           publish_dir: ./public
-          publish_branch: main 
-          # 如果 main 受保护，可能需要关闭强制孤儿分支或放宽保护：
-          # force_orphan: false
+          publish_branch: main
