@@ -1,1 +1,47 @@
-&lt;?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"><url><loc>https://yihaow.com/</loc><lastmod>2025-07-22T09:18:11+00:00</lastmod><priority>1.00</priority></url><url><loc>https://yihaow.com/blog/</loc><lastmod>2025-07-22T09:18:11+00:00</lastmod><priority>0.80</priority></url><url><loc>https://yihaow.com/files/papers/m-Zephyr_A_Digital_In-Memory_Ising_Chip_with_240_Spins_Featuring_Enhanced_Connectivity_Based_on_a_Modified_3D_Zephyr_Topology.pdf</loc><lastmod>2025-07-22T09:18:11+00:00</lastmod><priority>0.80</priority></url><url><loc>https://yihaow.com/files/papers/Quantized_Context_Based_LIF_Neurons_for_Recurrent_Spiking_Neural_Networks_in_45nm.pdf</loc><lastmod>2025-07-22T09:18:11+00:00</lastmod><priority>0.80</priority></url><url><loc>https://yihaow.com/files/papers/Micromachined_Thin_Film_Ceramic_PZT_Multimode_Resonant_Temperature_Sensor.pdf</loc><lastmod>2025-07-22T09:18:11+00:00</lastmod><priority>0.80</priority></url><url><loc>https://yihaow.com/files/papers/Thin_Film_PZT_Multimode_Resonant_MEMS_Temperature_Sensor.pdf</loc><lastmod>2025-07-22T09:18:11+00:00</lastmod><priority>0.80</priority></url><url><loc>https://yihaow.com/blog/test/</loc><lastmod>2025-07-22T09:18:11+00:00</lastmod><priority>0.64</priority></url></urlset>
+&lt;?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+
+
+<url> 
+  <loc>https://yihaow.com/</loc>
+  <lastmod>2025-07-22T09:18:11+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://yihaow.com/blog/</loc>
+  <lastmod>2025-07-22T09:18:11+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://yihaow.com/files/papers/m-Zephyr_A_Digital_In-Memory_Ising_Chip_with_240_Spins_Featuring_Enhanced_Connectivity_Based_on_a_Modified_3D_Zephyr_Topology.pdf</loc>
+  <lastmod>2025-07-22T09:18:11+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://yihaow.com/files/papers/Quantized_Context_Based_LIF_Neurons_for_Recurrent_Spiking_Neural_Networks_in_45nm.pdf</loc>
+  <lastmod>2025-07-22T09:18:11+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://yihaow.com/files/papers/Micromachined_Thin_Film_Ceramic_PZT_Multimode_Resonant_Temperature_Sensor.pdf</loc>
+  <lastmod>2025-07-22T09:18:11+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://yihaow.com/files/papers/Thin_Film_PZT_Multimode_Resonant_MEMS_Temperature_Sensor.pdf</loc>
+  <lastmod>2025-07-22T09:18:11+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://yihaow.com/blog/test/</loc>
+  <lastmod>2025-07-22T09:18:11+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+
+
+</urlset> 

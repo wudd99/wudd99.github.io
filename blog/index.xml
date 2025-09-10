@@ -1,1 +1,19 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blogs on Yihao Wu | PhD Student, UCSB</title><link>https://yihaow.com/blog/</link><description>Recent content in Blogs on Yihao Wu | PhD Student, UCSB</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sun, 30 Mar 2025 12:00:00 +0000</lastBuildDate><atom:link href="https://yihaow.com/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>My First Capybara Adventure</title><link>https://yihaow.com/blog/test/</link><pubDate>Sun, 30 Mar 2025 12:00:00 +0000</pubDate><guid>https://yihaow.com/blog/test/</guid><description>A glimpse into my first encounter with the charming capybaras.</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Blogs on Yihao Wu | PhD Student, UCSB</title>
+    <link>https://yihaow.com/blog/</link>
+    <description>Recent content in Blogs on Yihao Wu | PhD Student, UCSB</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 30 Mar 2025 12:00:00 +0000</lastBuildDate>
+    <atom:link href="https://yihaow.com/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>My First Capybara Adventure</title>
+      <link>https://yihaow.com/blog/test/</link>
+      <pubDate>Sun, 30 Mar 2025 12:00:00 +0000</pubDate>
+      <guid>https://yihaow.com/blog/test/</guid>
+      <description>A glimpse into my first encounter with the charming capybaras.</description>
+    </item>
+  </channel>
+</rss>
