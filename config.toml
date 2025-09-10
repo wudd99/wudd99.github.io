@@ -12,3 +12,9 @@ disableKinds = ["taxonomy", "term"]
   position = "PhD Student"
   company = " University of California, Santa Barbara"
 
+[params.social]
+  email = "wudd0907@gmail.com"
+  scholar = "https://scholar.google.com/citations?user=1hvJRIQAAAAJ&hl"
+  linkedin = "https://www.linkedin.com/in/yihao-wu-a91474255/"
+  orcid = "https://orcid.org/0009-0003-5126-0961"
+

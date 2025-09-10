@@ -6,6 +6,9 @@
   <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.4/css/academicons.min.css"
+      crossorigin="anonymous" referrerpolicy="no-referrer">
         
   <meta charset="UTF-8">
   <title>Yihao Wu | PhD Student, UCSB</title>
@@ -556,6 +559,62 @@
     .post-content p {
       margin-bottom: 20px;
     }
+    
+     
+    .profile-card .social-links {
+      margin-top: 16px;
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .profile-card .social-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;    
+      height: 44px;   
+      border: 1px solid #e5e7eb;
+      border-radius: 50%;            
+      background-color: #fafafa;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+      text-decoration: none;
+      color: #666;
+      transition: background-color 0.2s, box-shadow 0.2s;
+    }
+
+    .profile-card .social-links a i {
+      font-size: 20px;   
+      line-height: 1;
+    }
+
+     
+    .profile-card .social-links a:hover,
+    .profile-card .social-links a:active {
+      color: #666;
+      background-color: #f0f0f0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+     
+    body.dark-mode .profile-card .social-links a {
+      color: #ccc;
+      border-color: #555;
+      background-color: #2b2b2b;
+    }
+    body.dark-mode .profile-card .social-links a:hover {
+      background-color: #1f1f1f;
+    }
+
+     
+    @media (max-width: 420px) {
+      .profile-card .social-links a {
+        padding: 8px 12px;
+      }
+      .profile-card .social-links a i {
+        font-size: 18px;
+      }
+    }
      
     .mobile-menu {
       display: none;
@@ -693,6 +752,8 @@
       .mobile-mode-toggle input:checked + .slider:before {
         transform: translateX(18px);
       }
+
+
     }
   </style>
   <script type="application/ld+json">
@@ -757,14 +818,31 @@
         <h3>吴逸豪</h3>
         <p>PhD Student</p>
         <p> University of California, Santa Barbara</p>
+
+          
+        <div class="social-links" aria-label="Social links">
+          
+          <a href="mailto:wudd0907@gmail.com" aria-label="Email">
+            <i class="fa-solid fa-envelope"></i>
+          </a>
+
+          
+          <a href="https://scholar.google.com/citations?user=1hvJRIQAAAAJ&amp;hl" target="_blank" rel="noopener" aria-label="Google Scholar">
+            <i class="fa-brands fa-google fa-xl align-middle"></i>
+          </a>
+
+          
+          <a href="https://www.linkedin.com/in/yihao-wu-a91474255/" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <i class="fa-brands fa-linkedin"></i>
+          </a>
+
+          
+          <a href="https://orcid.org/0009-0003-5126-0961" target="_blank" rel="noopener" aria-label="ORCID">
+            <i class="ai ai-orcid"></i>
+          </a>
+        </div>
       </div>
-       <div class="social-links mt-2">
-        <a href="https://scholar.google.com/citations?user=1hvJRIQAAAAJ&hl"
-          target="_blank" aria-label="Google Scholar"
-          class="inline-block text-gray-600 hover:text-blue-600 transition">
-          <i class="fa-brands fa-google-scholar fa-xl align-middle"></i>
-        </a>
-      </div>
+       
       <nav class="nav">
         <ul>
           <li><a href="/">Home</a></li>
@@ -810,7 +888,7 @@
   
   
   
-  <h3>1. m-Zephyr: A Digital In-Memory Ising Chip with 240 Spins Featuring Enhanced Connectivity Based on a Modified 3D Zephyr Topology</h3>
+  <h3>25. m-Zephyr: A Digital In-Memory Ising Chip with 240 Spins Featuring Enhanced Connectivity Based on a Modified 3D Zephyr Topology</h3>
   <p> <strong><ins>Yihao Wu</ins></strong>, Jooyoung Bae, Chaeyun Shim, Bongjin Kim</p>
   <div class="pub-tags">
     <a class="pub-tag source" href='https://www.vlsisymposium.org/'>VLSI&#39;25</a>
@@ -828,7 +906,7 @@
   
   
   
-  <h3>2. Quantized Context Based LIF Neurons for Recurrent Spiking Neural Networks in 45nm</h3>
+  <h3>26. Quantized Context Based LIF Neurons for Recurrent Spiking Neural Networks in 45nm</h3>
   <p> Sai Sukruth Bezugam*, <strong><ins>Yihao Wu*</ins></strong>, JaeBum Yoo*, Dmitri Strukov, Bongjin Kim (*equal contribution)</p>
   <div class="pub-tags">
     <a class="pub-tag source" href='https://niceworkshop.org/'>NICE&#39;24</a>
@@ -846,7 +924,7 @@
   
   
   
-  <h3>3. Micromachined Thin Film Ceramic PZT Multimode Resonant Temperature Sensor</h3>
+  <h3>27. Micromachined Thin Film Ceramic PZT Multimode Resonant Temperature Sensor</h3>
   <p> Wen Sui, Tahmid Kaisar, Haoran Wang, <strong><ins>Yihao Wu</ins></strong>, Jaesung Lee, Huikai Xie, Philip Feng</p>
   <div class="pub-tags">
     <a class="pub-tag source" href=''>IEEE Sensors Journal&#39;24</a>
@@ -864,7 +942,7 @@
   
   
   
-  <h3>4. Thin Film PZT Multimode Resonant MEMS Temperature Sensor</h3>
+  <h3>28. Thin Film PZT Multimode Resonant MEMS Temperature Sensor</h3>
   <p> Wen Sui, Tahmid Kaisar, Haoran Wang, <strong><ins>Yihao Wu</ins></strong>, Jaesung Lee, Huikai Xie, Philip Feng</p>
   <div class="pub-tags">
     <a class="pub-tag source" href='https://ieee-sensorsconference.org/'>SENSORS&#39;22</a>
@@ -891,7 +969,7 @@
   
   
   
-  <h3>1. m-Zephyr: a Digital In-Memory Ising Chip with 240 Spins with Improved Connectivity with a Modified Zephyr Topology</h3>
+  <h3>13. m-Zephyr: a Digital In-Memory Ising Chip with 240 Spins with Improved Connectivity with a Modified Zephyr Topology</h3>
   <p> <strong><ins>Yihao Wu</ins></strong>, Jooyoung Bae, Chaeyun Shim, Bongjin Kim</p>
   <div class="poster-tags">
     <a class="poster-tag source" href='https://www.isscc.org/student-research-preview'>ISSCC&#39;25 SRP</a>
@@ -910,7 +988,7 @@
   
   
   
-  <h3>2. Low-cost human posture monitoring system based on infrared array sensor</h3>
+  <h3>14. Low-cost human posture monitoring system based on infrared array sensor</h3>
   <p> <strong><ins>Yihao Wu</ins></strong>, Tahmid Kaisar, Hui Zhang, Philip X.-L. Feng</p>
   <div class="poster-tags">
     <a class="poster-tag source" href='https://www.eng.ufl.edu/nimet/events/nanoday/'>Nano Day&#39;22</a>
