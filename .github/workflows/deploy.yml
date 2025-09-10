@@ -21,6 +21,6 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
-          publish_branch: main
+          publish_branch: main 
           # 如果 main 受保护，可能需要关闭强制孤儿分支或放宽保护：
           # force_orphan: false
