@@ -11,8 +11,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <!-- SEO Meta 标签 -->
-  <meta name="description" content="Yihao Wu is a PhD student in Electrical and Computer Engineering at UCSB. Discover his research on Ising and Potts machines, integrated circuits, and academic publications.">
-  <meta name="keywords" content="Yihao Wu, UCSB, 吴逸豪, Electrical and Computer Engineering, Ising machine, Potts machine, IC design, ASIC, publications, 北京工业大学, BJUT">
+  <meta name="description" content="Yihao Wu (吴逸豪) is a PhD student in Electrical and Computer Engineering at UCSB. His research focuses on Ising and Potts machines, integrated circuits, and hardware accelerators. Explore his publications, academic papers, and research projects.">
+  <meta name="keywords" content="Yihao Wu, 吴逸豪, UCSB, University of California Santa Barbara, Electrical and Computer Engineering, Ising machine, Potts machine, IC design, ASIC, hardware accelerators, publications, academic papers, research articles">
+
   
   <!-- Open Graph 标签，方便社交平台预览 -->
   <meta property="og:title" content="{{ .Site.Title }}">
@@ -20,6 +21,8 @@
   <meta property="og:image" content="{{ .Site.Params.profilePhoto | relURL }}">
   <meta property="og:url" content="{{ .Site.BaseURL }}">
   <meta property="og:type" content="website">
+  <meta property="profile:first_name" content="Yihao">
+  <meta property="profile:last_name" content="Wu">
   
   <!-- 加载 Lato 字体 -->
   <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
@@ -30,6 +33,14 @@
       --hamburger-size: 36px; /* 汉堡图标尺寸 */
       --hamburger-bg: #007acc; /* 汉堡背景色 */
       --hamburger-color: #fff; /* 汉堡图标颜色 */
+    }
+    /* hide h1*/
+    .visually-hidden {
+      position: absolute !important;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0);
+      white-space: nowrap; border: 0;
     }
     /* Dark Mode 样式 */
     body.dark-mode footer,
@@ -757,6 +768,7 @@
     
     <!-- 主要内容区域（使用语义化 main 标签） -->
     <main class="main-content">
+      <h1 class="visually-hidden">Yihao Wu – PhD Student in Electrical and Computer Engineering at UCSB</h1>
       <div class="content-area">
         {{ block "main" . }}{{ end }}
       </div>
