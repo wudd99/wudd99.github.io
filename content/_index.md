@@ -8,7 +8,7 @@ draft: false
 {{< section id="about" >}}
 ## Welcome!
 
-Greetings from Yihao! I am currently a 2nd-year PhD student in the Department of [Electrical and Computer Engineering](https://www.ece.ucsb.edu/) (ECE) at the [University of California, Santa Barbara](https://www.ucsb.edu/) (UCSB). I am honored to have my PhD co-advised by **Prof. Luke Theogarajan** from UCSB, and **Prof. Bongjin Kim** from [KAIST](https://www.kaist.ac.kr/en/) (Daejeon, Republic of Korea). 
+Greetings from Yihao! I am currently a 3rd-year PhD student in the Department of [Electrical and Computer Engineering](https://www.ece.ucsb.edu/) (ECE) at the [University of California, Santa Barbara](https://www.ucsb.edu/) (UCSB). I am honored to have my PhD co-advised by **Prof. Luke Theogarajan** from UCSB, and **Prof. Bongjin Kim** from [KAIST](https://www.kaist.ac.kr/en/) (Daejeon, Republic of Korea). Before joining UCSB, I earned a Bachelor of Engineering in Electronic Science and Technology and a Bachelor of Management in Information Management and Information Systems from Beijing University of Technology, as well as a Master of Science in Electrical and Computer Engineering from the University of Florida.
 
 My research interests include **digital and mixed-signal in-memory computing**, and **ASIC-based accelerators for Combinatorial Optimization Problems (COPs) and Artificial Intelligence (AI)**. 
 
