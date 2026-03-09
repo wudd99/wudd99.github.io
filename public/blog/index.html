@@ -336,10 +336,10 @@
       box-shadow: 0 10px 24px rgba(0,0,0,0.10);
       background-color: #fcfdff;
     }
-    .publication-card.clickable-card:active {
-      transform: translateY(-2px) scale(0.995);
-      box-shadow: 0 5px 14px rgba(0,0,0,0.10);
-      background-color: #f3f9ff;
+    .publication-card.clickable-card.card-pressed {
+      transform: translateY(-1px) scale(0.995);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+      border-color: #9fc4ff;
     }
     .publication-card.clickable-card:focus-visible {
       outline: none;
@@ -937,19 +937,10 @@
   </div>
   
   
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  
   <script>
     console.log("Script loaded");
-    document.addEventListener('click', function(e) {
-      if (e.target.closest('#hamburger') || e.target.closest('#closeMenu')) {
-        return;
-      }
-      confetti({
-        particleCount: 20,
-        spread: 100,
-        origin: { x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight }
-      });
-    });
+    
     window.addEventListener('load', function() {
       var hamburger = document.getElementById('hamburger');
       var mobileMenu = document.getElementById('mobileMenu');
