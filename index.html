@@ -74,6 +74,18 @@
     body.dark-mode .post-header p {
       color: #c7c6c6;
     }
+    body.dark-mode .publication-card.clickable-card:hover {
+      background-color: #4a4a4a;
+      border-color: #7ab8e6;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.28);
+    }
+    body.dark-mode .publication-card.clickable-card:active {
+      background-color: #505050;
+    }
+    body.dark-mode .publication-card.clickable-card:hover h3,
+    body.dark-mode .publication-card.clickable-card:focus-visible h3 {
+      color: #8fd3ff;
+    }
      
     body.transition-enabled,
     footer.transition-enabled,
@@ -307,25 +319,53 @@
       margin-bottom: 10px;
     }
     .publication-card {
+      position: relative;
       background: #fff;
       border: 1px solid #eaeaea;
       border-radius: 14px;
       padding: 14px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      transition: transform 0.2s;
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, background-color 0.22s ease;
       margin-bottom: 10px;
     }
-    .publication-card:hover {
-      transform: translateY(-5px);
+    .publication-card.clickable-card {
+      cursor: pointer;
+    }
+    .publication-card.clickable-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(0, 122, 204, 0.24);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.10);
+      background-color: #fcfdff;
+    }
+    .publication-card.clickable-card.card-pressed {
+      transform: translateY(-1px) scale(0.995);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+      border-color: #9fc4ff;
+    }
+    .publication-card.clickable-card:focus-visible {
+      outline: none;
+      border-color: #007acc;
+      box-shadow: 0 0 0 3px rgba(0,122,204,0.16), 0 8px 22px rgba(0,0,0,0.10);
     }
     .publication-card h3 {
       font-size: 16px;
       margin-bottom: 10px;
+      transition: color 0.22s ease;
+    }
+    .publication-card.clickable-card:hover h3,
+    .publication-card.clickable-card:focus-visible h3 {
+      color: #007acc;
     }
     .publication-card p {
       font-size: 14px;
       color: #555;
       margin-bottom: 8px;
+      transition: color 0.22s ease;
+    }
+    .publication-card .pub-tags,
+    .publication-card .pub-tag {
+      position: relative;
+      z-index: 2;
     }
     .pub-tags {
       margin-top: 10px;
@@ -883,96 +923,280 @@
   
 <div id="publications" class="publication-grid">
 
-<section id='publication_cobi-a-degree-of-56-column-bipartite-densely-connected-digital-ising-chip-with-8b-spin-coefficients' class='publication-card'> 
+
+
+
+
+
+
+
+
+<section
+  id='publication_cobi-a-degree-of-56-column-bipartite-densely-connected-digital-ising-chip-with-8b-spin-coefficients'
+  class='publication-card clickable-card'
   
+    tabindex="0"
+    role="link"
+    aria-label='Open publication page: COBI: A Degree-of-56 Column-Bipartite Densely Connected  Digital Ising Chip with 8b Spin Coefficients'
+    onclick="window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/11409141', '_blank', 'noopener');"
+    onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/11409141', '_blank', 'noopener'); }"
+    onpointerdown="if (!event.target.closest('a, .pub-tag')) { this.classList.add('card-pressed'); }"
+    onpointerup="this.classList.remove('card-pressed');"
+    onpointerleave="this.classList.remove('card-pressed');"
+    onpointercancel="this.classList.remove('card-pressed');"
   
-  
+>
   <h3>1. COBI: A Degree-of-56 Column-Bipartite Densely Connected  Digital Ising Chip with 8b Spin Coefficients</h3>
-  <p> <strong><ins>Yihao Wu</ins></strong>, Jooyoung Bae, Seunghun Shin, Bongjin Kim</p>
+  <p><strong><ins>Yihao Wu</ins></strong>, Jooyoung Bae, Seunghun Shin, Bongjin Kim</p>
+
   <div class="pub-tags">
-    <a class="pub-tag source" href='https://www.isscc.org/'>ISSCC&#39;26</a>
     
+      <a
+        class="pub-tag source"
+        href='https://www.isscc.org/'
+        target="_blank"
+        rel="noopener"
+        onclick="event.stopPropagation();"
+      >
+        ISSCC&#39;26
+      </a>
     
+
     
+      <a
+        class="pub-tag link"
+        href='/files/papers/10.8_COBI_A_Degree-of-56_Column-Bipartite_Densely_Connected_Digital_Ising_Chip_with_8b_Spin_Coefficients.pdf'
+        target="_blank"
+        rel="noopener"
+        onclick="event.stopPropagation();"
+      >
+        📓 PDF
+      </a>
     
-      
-      <a class="pub-tag remark" style="background-color: #d1ffd1;">✅ Accepted</a>
+
     
   </div>
 </section>
 
 
-<section id='publication_m-zephyr-a-digital-in-memory-ising-chip-with-240-spins-featuring-enhanced-connectivity-based-on-a-modified-3d-zephyr-topology' class='publication-card'> 
+
+
+
+
+
+
+
+<section
+  id='publication_m-zephyr-a-digital-in-memory-ising-chip-with-240-spins-featuring-enhanced-connectivity-based-on-a-modified-3d-zephyr-topology'
+  class='publication-card clickable-card'
   
+    tabindex="0"
+    role="link"
+    aria-label='Open publication page: m-Zephyr: A Digital In-Memory Ising Chip with 240 Spins Featuring Enhanced Connectivity Based on a Modified 3D Zephyr Topology'
+    onclick="window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/11075071', '_blank', 'noopener');"
+    onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/11075071', '_blank', 'noopener'); }"
+    onpointerdown="if (!event.target.closest('a, .pub-tag')) { this.classList.add('card-pressed'); }"
+    onpointerup="this.classList.remove('card-pressed');"
+    onpointerleave="this.classList.remove('card-pressed');"
+    onpointercancel="this.classList.remove('card-pressed');"
   
-  
+>
   <h3>2. m-Zephyr: A Digital In-Memory Ising Chip with 240 Spins Featuring Enhanced Connectivity Based on a Modified 3D Zephyr Topology</h3>
-  <p> <strong><ins>Yihao Wu</ins></strong>, Jooyoung Bae, Chaeyun Shim, Bongjin Kim</p>
+  <p><strong><ins>Yihao Wu</ins></strong>, Jooyoung Bae, Chaeyun Shim, Bongjin Kim</p>
+
   <div class="pub-tags">
-    <a class="pub-tag source" href='https://www.vlsisymposium.org/'>VLSI&#39;25</a>
     
+      <a
+        class="pub-tag source"
+        href='https://www.vlsisymposium.org/'
+        target="_blank"
+        rel="noopener"
+        onclick="event.stopPropagation();"
+      >
+        VLSI&#39;25
+      </a>
     
-      <a class="pub-tag link" href='/files/papers/m-Zephyr_A_Digital_In-Memory_Ising_Chip_with_240_Spins_Featuring_Enhanced_Connectivity_Based_on_a_Modified_3D_Zephyr_Topology.pdf'>📓 PDF</a>
+
     
+      <a
+        class="pub-tag link"
+        href='/files/papers/m-Zephyr_A_Digital_In-Memory_Ising_Chip_with_240_Spins_Featuring_Enhanced_Connectivity_Based_on_a_Modified_3D_Zephyr_Topology.pdf'
+        target="_blank"
+        rel="noopener"
+        onclick="event.stopPropagation();"
+      >
+        📓 PDF
+      </a>
     
+
     
   </div>
 </section>
 
 
-<section id='publication_quantized-context-based-lif-neurons-for-recurrent-spiking-neural-networks-in-45nm' class='publication-card'> 
+
+
+
+
+
+
+
+<section
+  id='publication_quantized-context-based-lif-neurons-for-recurrent-spiking-neural-networks-in-45nm'
+  class='publication-card clickable-card'
   
+    tabindex="0"
+    role="link"
+    aria-label='Open publication page: Quantized Context Based LIF Neurons for Recurrent Spiking Neural Networks in 45nm'
+    onclick="window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/10548306', '_blank', 'noopener');"
+    onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/10548306', '_blank', 'noopener'); }"
+    onpointerdown="if (!event.target.closest('a, .pub-tag')) { this.classList.add('card-pressed'); }"
+    onpointerup="this.classList.remove('card-pressed');"
+    onpointerleave="this.classList.remove('card-pressed');"
+    onpointercancel="this.classList.remove('card-pressed');"
   
-  
+>
   <h3>3. Quantized Context Based LIF Neurons for Recurrent Spiking Neural Networks in 45nm</h3>
-  <p> Sai Sukruth Bezugam*, <strong><ins>Yihao Wu*</ins></strong>, JaeBum Yoo*, Dmitri Strukov, Bongjin Kim (*equal contribution)</p>
+  <p>Sai Sukruth Bezugam*, <strong><ins>Yihao Wu*</ins></strong>, JaeBum Yoo*, Dmitri Strukov, Bongjin Kim (*equal contribution)</p>
+
   <div class="pub-tags">
-    <a class="pub-tag source" href='https://niceworkshop.org/'>NICE&#39;24</a>
     
+      <a
+        class="pub-tag source"
+        href='https://niceworkshop.org/'
+        target="_blank"
+        rel="noopener"
+        onclick="event.stopPropagation();"
+      >
+        NICE&#39;24
+      </a>
     
-      <a class="pub-tag link" href='/files/papers/Quantized_Context_Based_LIF_Neurons_for_Recurrent_Spiking_Neural_Networks_in_45nm.pdf'>📓 PDF</a>
+
     
+      <a
+        class="pub-tag link"
+        href='/files/papers/Quantized_Context_Based_LIF_Neurons_for_Recurrent_Spiking_Neural_Networks_in_45nm.pdf'
+        target="_blank"
+        rel="noopener"
+        onclick="event.stopPropagation();"
+      >
+        📓 PDF
+      </a>
     
+
     
   </div>
 </section>
 
 
-<section id='publication_micromachined-thin-film-ceramic-pzt-multimode-resonant-temperature-sensor' class='publication-card'> 
+
+
+
+
+
+
+
+<section
+  id='publication_micromachined-thin-film-ceramic-pzt-multimode-resonant-temperature-sensor'
+  class='publication-card clickable-card'
   
+    tabindex="0"
+    role="link"
+    aria-label='Open publication page: Micromachined Thin Film Ceramic PZT Multimode Resonant Temperature Sensor'
+    onclick="window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/10184202', '_blank', 'noopener');"
+    onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/10184202', '_blank', 'noopener'); }"
+    onpointerdown="if (!event.target.closest('a, .pub-tag')) { this.classList.add('card-pressed'); }"
+    onpointerup="this.classList.remove('card-pressed');"
+    onpointerleave="this.classList.remove('card-pressed');"
+    onpointercancel="this.classList.remove('card-pressed');"
   
-  
+>
   <h3>4. Micromachined Thin Film Ceramic PZT Multimode Resonant Temperature Sensor</h3>
-  <p> Wen Sui, Tahmid Kaisar, Haoran Wang, <strong><ins>Yihao Wu</ins></strong>, Jaesung Lee, Huikai Xie, Philip Feng</p>
+  <p>Wen Sui, Tahmid Kaisar, Haoran Wang, <strong><ins>Yihao Wu</ins></strong>, Jaesung Lee, Huikai Xie, Philip Feng</p>
+
   <div class="pub-tags">
-    <a class="pub-tag source" href=''>IEEE Sensors Journal&#39;24</a>
     
+      <a
+        class="pub-tag source"
+        href='https://ieee-sensors.org/ieee-sensors-journal/'
+        target="_blank"
+        rel="noopener"
+        onclick="event.stopPropagation();"
+      >
+        IEEE Sensors Journal&#39;24
+      </a>
     
-      <a class="pub-tag link" href='/files/papers/Micromachined_Thin_Film_Ceramic_PZT_Multimode_Resonant_Temperature_Sensor.pdf'>📓 PDF</a>
+
     
+      <a
+        class="pub-tag link"
+        href='/files/papers/Micromachined_Thin_Film_Ceramic_PZT_Multimode_Resonant_Temperature_Sensor.pdf'
+        target="_blank"
+        rel="noopener"
+        onclick="event.stopPropagation();"
+      >
+        📓 PDF
+      </a>
     
+
     
   </div>
 </section>
 
 
-<section id='publication_thin-film-pzt-multimode-resonant-mems-temperature-sensor' class='publication-card'> 
+
+
+
+
+
+
+
+<section
+  id='publication_thin-film-pzt-multimode-resonant-mems-temperature-sensor'
+  class='publication-card clickable-card'
   
+    tabindex="0"
+    role="link"
+    aria-label='Open publication page: Thin Film PZT Multimode Resonant MEMS Temperature Sensor'
+    onclick="window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/9967330', '_blank', 'noopener');"
+    onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/9967330', '_blank', 'noopener'); }"
+    onpointerdown="if (!event.target.closest('a, .pub-tag')) { this.classList.add('card-pressed'); }"
+    onpointerup="this.classList.remove('card-pressed');"
+    onpointerleave="this.classList.remove('card-pressed');"
+    onpointercancel="this.classList.remove('card-pressed');"
   
-  
+>
   <h3>5. Thin Film PZT Multimode Resonant MEMS Temperature Sensor</h3>
-  <p> Wen Sui, Tahmid Kaisar, Haoran Wang, <strong><ins>Yihao Wu</ins></strong>, Jaesung Lee, Huikai Xie, Philip Feng</p>
+  <p>Wen Sui, Tahmid Kaisar, Haoran Wang, <strong><ins>Yihao Wu</ins></strong>, Jaesung Lee, Huikai Xie, Philip Feng</p>
+
   <div class="pub-tags">
-    <a class="pub-tag source" href='https://ieee-sensorsconference.org/'>SENSORS&#39;22</a>
     
+      <a
+        class="pub-tag source"
+        href='https://ieee-sensorsconference.org/'
+        target="_blank"
+        rel="noopener"
+        onclick="event.stopPropagation();"
+      >
+        SENSORS&#39;22
+      </a>
     
-      <a class="pub-tag link" href='/files/papers/Thin_Film_PZT_Multimode_Resonant_MEMS_Temperature_Sensor.pdf'>📓 PDF</a>
+
     
+      <a
+        class="pub-tag link"
+        href='/files/papers/Thin_Film_PZT_Multimode_Resonant_MEMS_Temperature_Sensor.pdf'
+        target="_blank"
+        rel="noopener"
+        onclick="event.stopPropagation();"
+      >
+        📓 PDF
+      </a>
     
+
     
   </div>
 </section>
-
 
 </div>
 
@@ -1128,6 +1352,7 @@
       if (mobileToggle) {
         mobileToggle.addEventListener('change', toggleDarkMode, false);
       }
+
     });
   </script>
 </body>
