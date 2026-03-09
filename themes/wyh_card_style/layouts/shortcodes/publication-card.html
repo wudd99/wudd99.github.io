@@ -1,19 +1,61 @@
-<section id='publication_{{ .Get "title" | urlize }}' class='publication-card'> 
-  {{ $counter := .Page.Scratch.Get "pubCounter" | default 0 }}
-  {{ $counter = add $counter 1 }}
-  {{ .Page.Scratch.Set "pubCounter" $counter }}
+{{ $counter := .Page.Scratch.Get "pubCounter" | default 0 }}
+{{ $counter = add $counter 1 }}
+{{ .Page.Scratch.Set "pubCounter" $counter }}
+
+{{ $pageLink := .Get "pagelink" }}
+{{ $sourceLink := .Get "sourcelink" }}
+{{ $pdf := .Get "pdf" }}
+
+<section
+  id='publication_{{ .Get "title" | urlize }}'
+  class='publication-card{{ if $pageLink }} clickable-card{{ end }}'
+  {{ with $pageLink }}
+    tabindex="0"
+    role="link"
+    aria-label='Open publication page: {{ $.Get "title" | plainify }}'
+    onclick="window.open('{{ . }}', '_blank', 'noopener');"
+    onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); window.open('{{ . }}', '_blank', 'noopener'); }"
+    onpointerdown="if (!event.target.closest('a, .pub-tag')) { this.classList.add('card-pressed'); }"
+    onpointerup="this.classList.remove('card-pressed');"
+    onpointerleave="this.classList.remove('card-pressed');"
+    onpointercancel="this.classList.remove('card-pressed');"
+  {{ end }}
+>
   <h3>{{ $counter }}. {{ .Get "title" | safeHTML }}</h3>
-  <p> {{ .Get "authors" | safeHTML }}</p>
+  <p>{{ .Get "authors" | safeHTML }}</p>
+
   <div class="pub-tags">
-    <a class="pub-tag source" href='{{ .Get "sourcelink" }}'>{{ .Get "source" }}</a>
-    {{ $pdf := .Get "pdf" }}
-    {{ if $pdf }}
-      <a class="pub-tag link" href='{{ $pdf }}'>📓 PDF</a>
+    {{ with $sourceLink }}
+      <a
+        class="pub-tag source"
+        href='{{ . }}'
+        target="_blank"
+        rel="noopener"
+        onclick="event.stopPropagation();"
+      >
+        {{ $.Get "source" }}
+      </a>
     {{ end }}
-    {{ $remark := .Get "remark" }}
-    {{ if $remark }}
-      {{ $remarkColor := .Get "remarkcolor" | default "#d1ffd1" }}
-      <a class="pub-tag remark" style="background-color: {{ $remarkColor }};">{{ $remark | safeHTML }}</a>
+
+    {{ with $pdf }}
+      <a
+        class="pub-tag link"
+        href='{{ . }}'
+        target="_blank"
+        rel="noopener"
+        onclick="event.stopPropagation();"
+      >
+        📓 PDF
+      </a>
+    {{ end }}
+
+    {{ with .Get "remark" }}
+      <span
+        class="pub-tag remark"
+        style="background-color: {{ $.Get "remarkcolor" | default "#d1ffd1" }};"
+      >
+        {{ . | safeHTML }}
+      </span>
     {{ end }}
   </div>
 </section>
