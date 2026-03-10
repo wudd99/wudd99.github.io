@@ -46,6 +46,8 @@ Outside of academia, I enjoy playing badminton, swimming, photography, and gamin
 
 3217 Bioengineering Building
 
+University of California
+
 Santa Barbara, CA 93106
 
 Email: [wudd0907@gmail.com](mailto:wudd0907@gmail.com)
