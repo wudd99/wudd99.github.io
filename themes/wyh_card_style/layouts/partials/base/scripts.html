@@ -1,0 +1,6 @@
+<script>
+  window.WYH_SITE_DATA = window.WYH_SITE_DATA || {};
+  window.WYH_SITE_DATA.timelineItems = {{ with .Params.timeline.items }}{{ . | jsonify | safeJS }}{{ else }}[]{{ end }};
+</script>
+{{ $siteJS := resources.Get "js/site.js" }}
+<script src="{{ $siteJS.RelPermalink }}" defer></script>

@@ -1,0 +1,12 @@
+<div class="meteor-layer" aria-hidden="true"></div>
+<div class="cursor-spotlight" aria-hidden="true"></div>
+<script>
+  (function() {
+    try {
+      var isDark = localStorage.getItem('dark-mode') === 'true';
+      document.documentElement.classList.toggle('dark-mode', isDark);
+      document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
+      document.body.classList.toggle('dark-mode', isDark);
+    } catch (e) {}
+  })();
+</script>

@@ -1,0 +1,9 @@
+{{ $id := .id }}
+{{ $className := .className }}
+<div class="{{ $className }}">
+  <span class="label">Dark Mode</span>
+  <label class="switch">
+    <input type="checkbox" id="{{ $id }}">
+    <span class="slider"></span>
+  </label>
+</div>

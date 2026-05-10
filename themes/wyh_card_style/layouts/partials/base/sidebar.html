@@ -1,0 +1,7 @@
+<aside class="sidebar">
+  {{ partial "base/profile-card.html" . }}
+  <nav class="nav">
+    {{ partial "base/nav-links.html" . }}
+  </nav>
+  {{ partial "base/theme-toggle.html" (dict "id" "mode-toggle" "className" "mode-toggle") }}
+</aside>

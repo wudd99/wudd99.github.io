@@ -1,0 +1,40 @@
+<meta charset="UTF-8">
+<title>{{ .Site.Title }}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  (function() {
+    try {
+      var root = document.documentElement;
+      var isDark = localStorage.getItem('dark-mode') === 'true';
+      root.classList.add('js-enabled');
+      root.classList.toggle('dark-mode', isDark);
+      root.dataset.theme = isDark ? 'dark' : 'light';
+    } catch (e) {
+      document.documentElement.classList.add('js-enabled');
+    }
+  })();
+</script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      crossorigin="anonymous" referrerpolicy="no-referrer">
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.4/css/academicons.min.css"
+      crossorigin="anonymous" referrerpolicy="no-referrer">
+<meta name="description" content="Yihao Wu (吴逸豪) is a PhD student in Electrical and Computer Engineering at UCSB. His research focuses on Ising and Potts machines, integrated circuits, and hardware accelerators. Explore his publications, academic papers, and research projects.">
+<meta name="keywords" content="Yihao Wu, 吴逸豪, UCSB, University of California Santa Barbara, Electrical and Computer Engineering, Ising machine, Potts machine, IC design, ASIC, hardware accelerators, publications, academic papers, research articles">
+<meta property="og:title" content="{{ .Site.Title }}">
+<meta property="og:description" content="Welcome come to {{ .Site.Title }}，learn more about {{ .Site.Params.name_en }}.">
+<meta property="og:image" content="{{ .Site.Params.profilePhoto | relURL }}">
+<meta property="og:url" content="{{ .Site.BaseURL }}">
+<meta property="og:type" content="website">
+<meta property="profile:first_name" content="Yihao">
+<meta property="profile:last_name" content="Wu">
+<link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+
+{{ $tokensCSS := resources.Get "css/tokens.css" }}
+<link rel="stylesheet" href="{{ $tokensCSS.RelPermalink }}">
+
+{{ $siteCSS := resources.Get "css/site.css" }}
+<link rel="stylesheet" href="{{ $siteCSS.RelPermalink }}">
+
+{{ partial "structured-data.html" . }}

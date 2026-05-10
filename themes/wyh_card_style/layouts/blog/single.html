@@ -1,16 +1,30 @@
 {{ define "main" }}
+<div class="blog-post-top-row content-title-row">
+  <a class="blog-back-link" href="{{ "/blog/" | relURL }}"><i class="fa-solid fa-arrow-left-long"></i> Back to blog</a>
+</div>
+
 <article class="blog-post">
   {{ with .Params.cover }}
     <div class="post-cover">
-      <img src="{{ . }}" alt="{{ $.Title }}">
+      <img src="{{ . | relURL }}" alt="{{ $.Title }}">
     </div>
   {{ end }}
+
   <header class="post-header">
+    <span class="post-eyebrow"><i class="fa-solid fa-feather-pointed"></i> Capybara's Blog</span>
     <h1>{{ .Title }}</h1>
-    <p class="post-meta">📅 {{ .Date.Format "January 2, 2006" }}</p>
+    <div class="post-meta-row">
+      <span class="post-meta-chip"><i class="fa-regular fa-calendar"></i>{{ .Date.Format "January 2, 2006" }}</span>
+      <span class="post-meta-chip"><i class="fa-regular fa-clock"></i>{{ .ReadingTime }} min read</span>
+    </div>
   </header>
+
   <div class="post-content">
-    {{ .Content }}
+    {{ with .Content }}
+      {{ . }}
+    {{ else }}
+      {{ .RawContent | markdownify }}
+    {{ end }}
   </div>
 </article>
 {{ end }}

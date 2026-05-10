@@ -6,21 +6,56 @@
 {{ $sourceLink := .Get "sourcelink" }}
 {{ $pdf := .Get "pdf" }}
 
+{{ $typeInput := lower (.Get "type" | default "other") }}
+{{ $pubType := "other" }}
+
+{{ if in (slice "journal" "journals" "j") $typeInput }}
+  {{ $pubType = "journal" }}
+{{ else if in (slice "conference" "conf" "conferences" "symposium" "workshop") $typeInput }}
+  {{ $pubType = "conference" }}
+{{ else }}
+  {{ $pubType = "other" }}
+{{ end }}
+
+{{ $typeLabel := "Other" }}
+{{ $typeIcon := "fa-solid fa-layer-group" }}
+
+{{ if eq $pubType "journal" }}
+  {{ $typeLabel = "Journal" }}
+  {{ $typeIcon = "fa-solid fa-book-journal-whills" }}
+{{ else if eq $pubType "conference" }}
+  {{ $typeLabel = "Conference" }}
+  {{ $typeIcon = "fa-solid fa-users" }}
+{{ end }}
+
+{{ $topics := or (.Get "topic") (.Get "topics") "Research" }}
+
 <section
   id='publication_{{ .Get "title" | urlize }}'
   class='publication-card{{ if $pageLink }} clickable-card{{ end }}'
+  data-pub-type="{{ $pubType }}"
+  data-pub-type-label="{{ $typeLabel }}"
+  data-pub-topics="{{ $topics | plainify | htmlEscape }}"
+  data-pub-source="{{ .Get "source" | plainify | htmlEscape }}"
   {{ with $pageLink }}
     tabindex="0"
     role="link"
     aria-label='Open publication page: {{ $.Get "title" | plainify }}'
     onclick="window.open('{{ . }}', '_blank', 'noopener');"
     onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); window.open('{{ . }}', '_blank', 'noopener'); }"
-    onpointerdown="if (!event.target.closest('a, .pub-tag')) { this.classList.add('card-pressed'); }"
+    onpointerdown="if (!event.target.closest('a, .pub-tag, .pub-card-meta')) { this.classList.add('card-pressed'); }"
     onpointerup="this.classList.remove('card-pressed');"
     onpointerleave="this.classList.remove('card-pressed');"
     onpointercancel="this.classList.remove('card-pressed');"
   {{ end }}
 >
+  <div class="pub-card-meta">
+    <span class="meta-pill publication-type-pill type-{{ $pubType }}">
+      <i class="{{ $typeIcon }}"></i>
+      <span>{{ $typeLabel }}</span>
+    </span>
+  </div>
+
   <h3>{{ $counter }}. {{ .Get "title" | safeHTML }}</h3>
   <p>{{ .Get "authors" | safeHTML }}</p>
 
@@ -50,9 +85,10 @@
     {{ end }}
 
     {{ with .Get "remark" }}
+      {{ $remarkColor := $.Get "remarkcolor" | default "#d1ffd1" }}
       <span
         class="pub-tag remark"
-        style="background-color: {{ $.Get "remarkcolor" | default "#d1ffd1" }};"
+        data-remark-color="{{ $remarkColor | safeHTMLAttr }}"
       >
         {{ . | safeHTML }}
       </span>

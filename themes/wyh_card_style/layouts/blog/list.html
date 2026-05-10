@@ -1,24 +1,56 @@
 {{ define "main" }}
-<section class="blog-list">
-  <h2>Capybara's Blog</h2>
-  <div class="publication-grid">
-    {{ range .Pages }}
-      {{ $p := . }}
-      <div class="blog-card">
-        {{ if $p.Params.cover }}
-          <a href="{{ $p.Permalink }}">
-            <div class="cover-image">
-              <img src="{{ $p.Params.cover }}" alt="{{ $p.Title }}">
-            </div>
-          </a>
-        {{ end }}
-        <div class="card-content" {{ if not $p.Params.cover }}style="padding-top: 20px;"{{ end }}>
-          <h3><a href="{{ $p.Permalink }}">{{ $p.Title }}</a></h3>
-          <p class="summary">{{ $p.Summary }}</p>
-          <p class="date"> 📅 {{ $p.Date.Format "01-02-2006" }}</p>
-        </div>
-      </div>
-    {{ end }}
+<section class="blog-list page-section" id="blog">
+  <div class="content-title-row blog-title-row">
+    <h2>Capybara's Blog</h2>
   </div>
+
+  {{ $pages := .RegularPages }}
+  {{ if not $pages }}{{ $pages = .Pages }}{{ end }}
+
+  {{ if $pages }}
+    <div class="blog-grid">
+      {{ range $pages.ByDate.Reverse }}
+        {{ $p := . }}
+        <article
+          class="blog-card clickable-card{{ if not $p.Params.cover }} no-cover{{ end }}"
+          role="link"
+          tabindex="0"
+          aria-label="Open blog post: {{ $p.Title }}"
+          onclick="if (!event.target.closest('a')) { window.location.href='{{ $p.RelPermalink }}'; }"
+          onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); window.location.href='{{ $p.RelPermalink }}'; }"
+          onpointerdown="if (!event.target.closest('a')) { this.classList.add('card-pressed'); }"
+          onpointerup="this.classList.remove('card-pressed');"
+          onpointerleave="this.classList.remove('card-pressed');"
+          onpointercancel="this.classList.remove('card-pressed');"
+        >
+          {{ with $p.Params.cover }}
+            <a class="blog-cover-link" href="{{ $p.RelPermalink }}" onclick="event.stopPropagation();">
+              <div class="cover-image">
+                <img src="{{ . | relURL }}" alt="{{ $p.Title }}">
+              </div>
+            </a>
+          {{ end }}
+
+          <div class="card-content">
+            <div class="blog-card-meta">
+              <span class="blog-meta-pill"><i class="fa-regular fa-calendar"></i>{{ $p.Date.Format "Jan 2, 2006" }}</span>
+              <span class="blog-meta-pill"><i class="fa-regular fa-clock"></i>{{ $p.ReadingTime }} min read</span>
+            </div>
+
+            <h3><a href="{{ $p.RelPermalink }}" onclick="event.stopPropagation();">{{ $p.Title }}</a></h3>
+            <p class="summary">{{ with $p.Params.summary }}{{ . | plainify }}{{ else }}{{ $p.Summary | plainify }}{{ end }}</p>
+            <span class="read-more">Read post <i class="fa-solid fa-arrow-right-long"></i></span>
+          </div>
+        </article>
+      {{ end }}
+    </div>
+  {{ else }}
+    <article class="blog-card no-cover">
+      <div class="card-content">
+        <h3>No posts yet</h3>
+        <p class="summary">New posts will appear here once they are added under <code>content/blog/</code>.</p>
+      </div>
+    </article>
+  {{ end }}
 </section>
 {{ end }}

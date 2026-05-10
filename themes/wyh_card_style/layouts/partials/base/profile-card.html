@@ -1,0 +1,28 @@
+<div class="profile-card">
+  {{ $profilePhoto := .Site.Params.profilePhoto }}
+  {{ $profileNightPhoto := replaceRE "[^/]+$" "wyh_night.png" $profilePhoto }}
+  <img
+    id="profilePhoto"
+    src="{{ $profilePhoto | relURL }}"
+    data-light-src="{{ $profilePhoto | relURL }}"
+    data-dark-src="{{ $profileNightPhoto | relURL }}"
+    alt="Profile Photo">
+  <h2>{{ .Site.Params.name_en }}</h2>
+  <h3>{{ .Site.Params.name_cn }}</h3>
+  <p>{{ .Site.Params.position }}</p>
+  <p>{{ .Site.Params.company }}</p>
+  <div class="social-links" aria-label="Social links">
+    <a href="mailto:{{ .Site.Params.social.email }}" aria-label="Email">
+      <i class="fa-solid fa-envelope"></i>
+    </a>
+    <a href="{{ .Site.Params.social.scholar }}" target="_blank" rel="noopener" aria-label="Google Scholar">
+      <i class="fa-brands fa-google fa-xl align-middle"></i>
+    </a>
+    <a href="{{ .Site.Params.social.linkedin }}" target="_blank" rel="noopener" aria-label="LinkedIn">
+      <i class="fa-brands fa-linkedin"></i>
+    </a>
+    <a href="{{ .Site.Params.social.orcid }}" target="_blank" rel="noopener" aria-label="ORCID">
+      <i class="ai ai-orcid"></i>
+    </a>
+  </div>
+</div>

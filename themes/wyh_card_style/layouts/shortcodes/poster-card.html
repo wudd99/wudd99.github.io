@@ -13,7 +13,7 @@
     {{ $remark := .Get "remark" }}
     {{ if $remark }}
       {{ $remarkColor := .Get "remarkcolor" | default "#d1ffd1" }}
-      <a class="poster-tag remark" style="background-color: {{ $remarkColor }};">{{ $remark | safeHTML }}</a>
+      <a class="poster-tag remark" data-remark-color="{{ $remarkColor | safeHTMLAttr }}">{{ $remark | safeHTML }}</a>
     {{ end }}
   </div>
 </section>
