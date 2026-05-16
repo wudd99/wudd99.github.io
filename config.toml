@@ -13,7 +13,7 @@ disableKinds = ["taxonomy", "term"]
   company = " University of California, Santa Barbara"
 
 [params.social]
-  email = "wudd0907@gmail.com"
+  email = "yihao_wu@ucsb.edu"
   scholar = "https://scholar.google.com/citations?user=1hvJRIQAAAAJ&hl"
   linkedin = "https://www.linkedin.com/in/yihao-wu-a91474255/"
   orcid = "https://orcid.org/0009-0003-5126-0961"

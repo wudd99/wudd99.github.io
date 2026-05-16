@@ -96,7 +96,7 @@ University of California
 
 Santa Barbara, CA 93106
 
-Email: [wudd0907@gmail.com](mailto:wudd0907@gmail.com)
+Email: [yihao_wu@ucsb.edu](mailto:yihao_wu@ucsb.edu)
 
 {{< /section >}}
 
