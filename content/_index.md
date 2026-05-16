@@ -80,6 +80,13 @@ Outside of academia, I enjoy playing badminton, swimming, photography, and gamin
 </div>
 {{< /poster >}}
 
+{{< section id="service" >}}
+## Academic Service
+
+- **Reviewer** IEEE Transactions on Circuits and Systems I: Regular Papers (TCAS-I), 2026.
+
+{{< /section >}}
+
 {{< section id="contact" >}}
 ## Contact
 
