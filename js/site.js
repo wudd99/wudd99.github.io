@@ -541,59 +541,97 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
       function bindTactilePressFeedback() {
+        var cardSelector = '.publication-card, .poster-card';
         var selectors = [
-          '.pub-tag', '.poster-tag', '.pub-filter-chip', '.timeline-marker',
+          '.pub-tag', '.poster-tag', '.card-index', '.pub-filter-chip', '.timeline-marker',
           '.timeline-chip', '.timeline-stat', '.pub-card-meta .meta-pill',
           '.blog-meta-pill', '.post-meta-chip', '.profile-card .social-links a',
           '.nav ul li a', '.mobile-menu ul li a', '.blog-back-link',
-          '.blog-card .read-more', '.clickable-card'
+          '.blog-card .read-more', '.clickable-card', cardSelector
         ].join(', ');
-        var pressed = new Set();
+        var pressed = new Map();
+        var releases = new Map();
 
-        function skipPress(target, eventTarget) {
-          if (!target.classList.contains('clickable-card')) return false;
-          if (eventTarget.closest('a, button, input, label, select, textarea')) return true;
-          return !!eventTarget.closest('.pub-card-meta') && !eventTarget.closest('.publication-type-pill');
+        function targetsFor(eventTarget) {
+          if (!(eventTarget instanceof Element)) return [];
+          var target = eventTarget.closest(selectors);
+          var card = eventTarget.closest(cardSelector);
+          var control = eventTarget.closest('a, button, input, label, select, textarea, .publication-type-pill, .pub-tag, .poster-tag, .card-index');
+          if (control && target && target.matches('.clickable-card') && !card) target = null;
+          if (control && card && card.contains(control)) {
+            if (target === card) target = null;
+            card = null;
+          }
+          return [target, card].filter(function(el, index, all) {
+            return el && all.indexOf(el) === index;
+          });
         }
 
-        function clearOne(target, delay) {
-          if (!target) return;
+        function begin(target) {
+          window.clearTimeout(releases.get(target));
+          releases.delete(target);
+          if (!pressed.has(target)) pressed.set(target, performance.now());
+          target.classList.add('press-active');
+        }
+
+        function clearOne(target, immediate) {
+          if (!pressed.has(target) && !releases.has(target)) return;
+          var started = pressed.get(target);
           pressed.delete(target);
-          window.setTimeout(function() { target.classList.remove('press-active'); }, delay == null ? 70 : delay);
+          window.clearTimeout(releases.get(target));
+          // Give even a quick click enough time to show the inset surface.
+          var delay = immediate ? 0 : Math.max(70, 160 - (performance.now() - (started || 0)));
+          if (!delay) {
+            target.classList.remove('press-active');
+            releases.delete(target);
+            return;
+          }
+          var timer = window.setTimeout(function() {
+            if (releases.get(target) !== timer) return;
+            target.classList.remove('press-active');
+            releases.delete(target);
+          }, delay);
+          releases.set(target, timer);
         }
 
-        function clearAll(delay) {
-          Array.from(pressed).forEach(function(target) { clearOne(target, delay); });
-        }
-
-        function isPointerInside(target, e) {
-          var el = document.elementFromPoint(e.clientX, e.clientY);
-          return !!(el && target.contains(el));
+        function clearAll(immediate) {
+          var targets = Array.from(pressed.keys());
+          if (immediate) targets = targets.concat(Array.from(releases.keys()));
+          targets.forEach(function(target) { clearOne(target, immediate); });
         }
 
         document.addEventListener('pointerdown', function(e) {
-          if (e.button !== undefined && e.button !== 0) return;
-          var target = e.target.closest(selectors);
-          if (!target || skipPress(target, e.target)) return;
-          target.classList.add('press-active');
-          pressed.add(target);
+          if ((e.button !== undefined && e.button !== 0) || e.isPrimary === false) return;
+          targetsFor(e.target).forEach(begin);
         }, { passive: true });
 
         document.addEventListener('pointermove', function(e) {
           if (!pressed.size) return;
-          Array.from(pressed).forEach(function(target) {
-            if (!isPointerInside(target, e)) clearOne(target, 0);
+          var hit = document.elementFromPoint(e.clientX, e.clientY);
+          Array.from(pressed.keys()).forEach(function(target) {
+            if (!hit || !target.contains(hit)) clearOne(target, true);
           });
         }, { passive: true });
 
-        ['pointerup', 'pointercancel', 'dragstart'].forEach(function(type) {
-          document.addEventListener(type, function() { clearAll(); }, { passive: true });
+        document.addEventListener('pointerup', function() { clearAll(false); }, { passive: true });
+        ['pointercancel', 'dragstart'].forEach(function(type) {
+          document.addEventListener(type, function() { clearAll(true); }, { passive: true });
         });
-        ['blur', 'mouseup', 'touchend', 'touchcancel'].forEach(function(type) {
-          window.addEventListener(type, function() { clearAll(0); }, { passive: true });
+        window.addEventListener('blur', function() { clearAll(false); }, { passive: true });
+        document.addEventListener('visibilitychange', function() {
+          if (document.hidden) clearAll(false);
         });
-        document.addEventListener('visibilitychange', function() { if (document.hidden) clearAll(0); });
-        document.addEventListener('scroll', function() { clearAll(0); }, true);
+        document.addEventListener('scroll', function() { clearAll(true); }, true);
+        document.addEventListener('keydown', function(e) {
+          if (e.key !== 'Enter' && e.key !== ' ') return;
+          // Apply keyboard feedback only to genuine, focused interactive elements.
+          var target = e.target;
+          if (!(target instanceof Element) || !target.matches('a[href], button, .clickable-card[tabindex]')) return;
+          targetsFor(target).forEach(begin);
+        }, true);
+        document.addEventListener('keyup', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') clearAll(false);
+        }, true);
       }
 
       bindTactilePressFeedback();

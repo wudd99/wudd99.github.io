@@ -1,3 +1,13 @@
+/* A local medium-weight face keeps the card index consistent across devices. */
+@font-face {
+  font-family: "Card Numerals";
+  src: url('/fonts/roboto-latin-500-normal.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  unicode-range: U+0030-0039;
+}
+
     html {
       scroll-behavior: smooth;
     }
@@ -409,14 +419,12 @@
     }
 
     body {
-      font-family: "Lato", "Helvetica Neue", Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Lato", "PingFang SC", "Microsoft YaHei", sans-serif;
       background: var(--body-gradient);
       color: var(--text-main);
       line-height: 1.7;
       overflow-x: hidden;
       overflow-y: auto;
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
     }
 
 
@@ -3440,7 +3448,7 @@
     .timeline-marker{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
     .timeline-marker:is(:active,.press-active) .timeline-marker-dot{transform:translateX(-50%) scale(.94)!important;box-shadow:inset 0 2px 6px rgba(0,0,0,.22),0 0 0 3px rgba(15,111,216,.08)!important;filter:brightness(.94)}
     body.dark-mode .timeline-marker:is(:active,.press-active) .timeline-marker-dot{box-shadow:inset 0 2px 6px rgba(0,0,0,.38),0 0 0 3px rgba(140,200,255,.09)!important}
-    .clickable-card.press-active,.clickable-card:active{transform:translateY(1px) scale(.988)!important}
+    .clickable-card.press-active{transform:translateY(1px) scale(.988)!important}
     .mode-toggle:is(:active,.press-active),.mobile-mode-toggle:is(:active,.press-active){transform:none!important;background-color:inherit!important;box-shadow:inherit!important;filter:none!important}
     .mobile-menu-backdrop{display:none}
     @media (hover:none) and (pointer:coarse){:where(.publication-card.clickable-card,.poster-card,.blog-card.clickable-card):hover{transform:none}}
@@ -4003,8 +4011,10 @@
       }
     }
 
-    /* Publication cards: approved expressive design, with full-width citation text. */
-    .publication-card {
+    /* Shared research card structure; each citation type has its own accent. */
+    :is(.publication-card, .poster-card) {
+      --research-label-height: 34px;
+      --research-card-padding: 24px;
       --pub-type-color: var(--pub-journal-color);
       --pub-type-bg: var(--pub-journal-bg);
       --pub-type-border: var(--pub-journal-border);
@@ -4012,7 +4022,7 @@
       --pub-accent: linear-gradient(180deg, #2bb3ba, #87dbd2);
     }
 
-    .publication-card[data-pub-type="conference"] {
+    :is(.publication-card, .poster-card)[data-pub-type="conference"] {
       --pub-type-color: var(--pub-conference-color);
       --pub-type-bg: var(--pub-conference-bg);
       --pub-type-border: var(--pub-conference-border);
@@ -4020,33 +4030,47 @@
       --pub-accent: linear-gradient(180deg, #7567dc, #9daaf2);
     }
 
-    body:not(.dark-mode) .publication-card,
-    body.dark-mode .publication-card {
-      padding: 24px;
+    .poster-card {
+      --pub-surface-glow: rgba(213, 144, 40, .075);
+      --pub-source-color: var(--poster-color);
+      --pub-surface: var(--poster-surface);
+      --pub-surface-end: var(--poster-surface-end);
+      --pub-border: var(--poster-border);
+      --pub-type-color: var(--poster-color);
+      --pub-type-bg: var(--poster-badge-bg);
+      --pub-type-border: var(--poster-badge-border);
+      --pub-type-icon: url('/images/icons/publication-conference.svg');
+      --pub-accent: linear-gradient(180deg, #d59028, #f1c873);
+    }
+
+    body:not(.dark-mode) :is(.publication-card, .poster-card),
+    body.dark-mode :is(.publication-card, .poster-card) {
+      padding: var(--research-card-padding);
       border-radius: 18px;
       border-color: var(--pub-border);
-      background: radial-gradient(ellipse at 100% 0%, rgba(104, 149, 244, .075), transparent 52%),
+      background: radial-gradient(ellipse at 100% 0%, var(--pub-surface-glow), transparent 52%),
         linear-gradient(135deg, var(--pub-surface), var(--pub-surface-end));
       box-shadow: var(--pub-shadow);
     }
 
-    .publication-card::before {
+    :is(.publication-card, .poster-card)::before {
       content: "";
       position: absolute;
       left: -1px;
-      top: 24px;
+      top: var(--research-card-padding);
       width: 3px;
-      height: 42px;
+      height: var(--research-label-height);
       border-radius: 0 3px 3px 0;
       background: var(--pub-accent);
       pointer-events: none;
     }
 
-    .publication-grid {
+    .publication-grid,
+    .poster-grid {
       gap: 16px;
     }
 
-    .publication-card .pub-card-header {
+    :is(.publication-card, .poster-card) .pub-card-header {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
       align-items: start;
@@ -4054,7 +4078,7 @@
       margin-bottom: 20px;
     }
 
-    .publication-card .pub-card-header .pub-card-meta {
+    :is(.publication-card, .poster-card) .pub-card-header .pub-card-meta {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
@@ -4062,13 +4086,14 @@
       gap: 8px 12px;
       width: auto;
       min-width: 0;
-      min-height: 38px;
+      min-height: var(--research-label-height);
       margin: 0;
     }
 
-    body:not(.dark-mode) .publication-card .pub-card-meta .publication-type-pill,
-    body.dark-mode .publication-card .pub-card-meta .publication-type-pill {
-      min-height: 34px;
+    body:not(.dark-mode) :is(.publication-card, .poster-card) .pub-card-meta .publication-type-pill,
+    body.dark-mode :is(.publication-card, .poster-card) .pub-card-meta .publication-type-pill {
+      height: var(--research-label-height);
+      min-height: var(--research-label-height);
       gap: 8px;
       padding: 7px 11px;
       border-radius: 10px;
@@ -4104,7 +4129,7 @@
       mask-image: url('/images/icons/publication-document.svg');
     }
 
-    .publication-card .pub-card-meta .pub-tag.source {
+    :is(.publication-card, .poster-card) .pub-card-meta .pub-tag.source {
       min-width: 0;
       padding: 0;
       border: 0;
@@ -4119,22 +4144,23 @@
       overflow-wrap: anywhere;
     }
 
-    .publication-card .pub-card-meta .pub-tag.source:hover {
+    :is(.publication-card, .poster-card) .pub-card-meta .pub-tag.source:hover {
       background: transparent;
       text-decoration: underline;
       transform: none;
     }
 
-    .publication-card .pub-card-header > .pub-tag.link {
+    :is(.publication-card, .poster-card) .pub-card-header > .pub-tag.link {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       align-self: start;
       gap: 6px;
       min-width: 78px;
-      min-height: 38px;
+      height: var(--research-label-height);
+      min-height: var(--research-label-height);
       margin: 0;
-      padding: 8px 10px;
+      padding: 0 10px;
       border: 0;
       border-radius: 10px;
       background: var(--pub-pdf-bg);
@@ -4146,47 +4172,76 @@
       white-space: nowrap;
     }
 
-    .publication-card .pub-card-header > .pub-tag.link:hover {
+    :is(.publication-card, .poster-card) .pub-card-header > .pub-tag.link:hover {
       background: var(--pub-pdf-hover-bg);
       transform: translateY(-1px);
     }
 
-    .publication-card .pub-card-header > .pub-tag.link:is(:active, .press-active) {
+    :is(.publication-card, .poster-card) .pub-card-header > .pub-tag.link:is(:active, .press-active) {
       background: var(--pub-pdf-hover-bg) !important;
       color: var(--pub-pdf-color) !important;
       transform: translateY(0) !important;
       filter: brightness(.95);
     }
 
-    .publication-card .pub-card-header > .pub-tag.link:focus-visible,
-    .publication-card .pub-card-meta .pub-tag.source:focus-visible {
+    :is(.publication-card, .poster-card) .pub-card-header > .pub-tag.link:focus-visible,
+    :is(.publication-card, .poster-card) .pub-card-meta .pub-tag.source:focus-visible {
       outline: 3px solid #4d78d4;
       outline-offset: 4px;
     }
 
-    .publication-card h3 {
-      margin-bottom: 12px;
-      color: var(--pub-title-color);
-      font-size: 19px;
-      font-weight: 700;
-      line-height: 1.5;
-      letter-spacing: -.1px;
+    .card-type-group {
+      display: inline-flex;
+      flex: 0 0 auto;
+      align-items: center;
+      /* Match the distance from the index to the accent's inside edge. */
+      gap: calc(var(--research-card-padding) - 2px);
+      min-width: 0;
     }
 
-    body:not(.dark-mode) .publication-card .pub-authors,
-    body.dark-mode .publication-card .pub-authors {
+    .card-index {
+      display: inline-block;
+      flex: 0 0 auto;
+      width: 1ch;
+      text-align: center;
+      color: var(--pub-type-color);
+      font-family: "Card Numerals", sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      font-synthesis: none;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0;
+      line-height: 1.5;
+      transition: transform .08s ease-out;
+    }
+
+    .card-index.press-active {
+      transform: translateY(1px) scale(.96);
+    }
+
+    :is(.publication-card, .poster-card) h3 {
+      margin: 0 0 12px;
+      color: var(--pub-title-color);
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.5;
+      letter-spacing: 0;
+    }
+
+    body:not(.dark-mode) :is(.publication-card, .poster-card) .pub-authors,
+    body.dark-mode :is(.publication-card, .poster-card) .pub-authors {
       margin: 0;
       color: var(--pub-author-color);
       font-size: 14px;
       line-height: 1.7;
     }
 
-    .publication-card .pub-authors strong {
+    :is(.publication-card, .poster-card) .pub-authors strong {
       color: var(--pub-title-color);
       font-weight: 700;
     }
 
-    .publication-card .pub-authors ins {
+    :is(.publication-card, .poster-card) .pub-authors ins {
       text-decoration-color: var(--pub-author-underline);
       text-decoration-thickness: 1px;
       text-underline-offset: 3px;
@@ -4201,56 +4256,100 @@
         top: 29px;
       }
 
-      body:not(.dark-mode) .publication-card,
-      body.dark-mode .publication-card {
-        padding: 18px;
+      body:not(.dark-mode) :is(.publication-card, .poster-card),
+      body.dark-mode :is(.publication-card, .poster-card) {
+        --research-card-padding: 18px;
+        --research-label-height: 44px;
+        padding: var(--research-card-padding);
         border-radius: 16px;
       }
 
-      .publication-grid {
+      .publication-grid,
+      .poster-grid {
         gap: 14px;
       }
 
-      .publication-card .pub-card-header {
+      :is(.publication-card, .poster-card) .pub-card-header {
         gap: 12px;
         margin-bottom: 18px;
       }
 
-      .publication-card .pub-card-header .pub-card-meta {
-        min-height: 44px;
+      :is(.publication-card, .poster-card) .pub-card-header .pub-card-meta {
+        min-height: var(--research-label-height);
       }
 
-      body:not(.dark-mode) .publication-card .pub-card-meta .publication-type-pill,
-      body.dark-mode .publication-card .pub-card-meta .publication-type-pill {
+      body:not(.dark-mode) :is(.publication-card, .poster-card) .pub-card-meta .publication-type-pill,
+      body.dark-mode :is(.publication-card, .poster-card) .pub-card-meta .publication-type-pill {
         padding-inline: 10px;
         font-size: 12px;
         letter-spacing: .3px;
       }
 
-      .publication-card .pub-card-meta .pub-tag.source {
+      :is(.publication-card, .poster-card) .pub-card-meta .pub-tag.source {
         font-size: 13px;
       }
 
-      .publication-card .pub-card-header > .pub-tag.link {
+      :is(.publication-card, .poster-card) .pub-card-header > .pub-tag.link {
         min-width: 80px;
-        min-height: 44px;
-        padding-block: 11px;
+        min-height: var(--research-label-height);
+        padding-block: 0;
       }
 
-      .publication-card h3 {
-        font-size: 17px;
+      :is(.publication-card, .poster-card) h3 {
+        font-size: 16px;
         line-height: 1.55;
         letter-spacing: 0;
       }
 
-      .publication-card .pub-authors {
+      :is(.publication-card, .poster-card) .pub-authors {
         font-size: 13.5px;
         line-height: 1.75;
       }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .publication-card .pub-card-header > .pub-tag.link:hover {
+      :is(.publication-card, .poster-card) .pub-card-header > .pub-tag.link:hover {
         transform: none;
+      }
+    }
+
+    body .poster-card:is(:hover, :focus-within) {
+      border-color: var(--poster-badge-border);
+    }
+
+    body .poster-card:is(:hover, :focus-within) h3 {
+      color: var(--poster-color);
+    }
+
+    :is(.publication-card, .poster-card):is(.press-active, .card-pressed) {
+      transform: translateY(1px) scale(.988) !important;
+      background: linear-gradient(180deg, var(--pub-surface-end), var(--pub-surface)) !important;
+      border-color: var(--pub-type-border) !important;
+      box-shadow: var(--research-pressed-shadow) !important;
+      transition: transform 65ms ease-out, box-shadow 65ms ease-out,
+        background 65ms ease-out, border-color 65ms ease-out !important;
+      filter: brightness(.98) !important;
+    }
+
+    :is(.publication-card, .poster-card).press-active > .theme-card-fade {
+      opacity: 0 !important;
+    }
+
+    .publication-card.clickable-card:focus-visible {
+      outline: 3px solid var(--pub-type-border);
+      outline-offset: 4px;
+    }
+
+    @media (max-width: 768px) {
+      .card-index {
+        line-height: 1.55;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      :is(.publication-card, .poster-card).press-active,
+      .card-index.press-active {
+        transform: none !important;
+        transition: none !important;
       }
     }

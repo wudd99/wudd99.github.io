@@ -266,8 +266,16 @@
       --active-filter-color: #13202d;
     }
 
-/* Approved publication card palette; kept separate from poster and blog tags. */
+/* Research card palette; publication types and posters have distinct accents. */
 :root {
+  --pub-surface-glow: rgba(104, 149, 244, .075);
+  --poster-color: #835108;
+  --poster-surface: #ffffff;
+  --poster-surface-end: #fff8eb;
+  --poster-border: #ead6b2;
+  --poster-badge-bg: #fff1d4;
+  --poster-badge-border: #e5c184;
+  --research-pressed-shadow: inset 0 4px 11px rgba(15, 23, 42, .20), inset 0 1px 2px rgba(255, 255, 255, .65), 0 1px 3px rgba(15, 23, 42, .04);
   --pub-surface: #ffffff;
   --pub-surface-end: #f5f9ff;
   --pub-border: #d3e1f1;
@@ -289,6 +297,13 @@
 }
 
 html.dark-mode {
+  --poster-color: #f4cf8b;
+  --poster-surface: #353746;
+  --poster-surface-end: #3f3540;
+  --poster-border: #6b5b52;
+  --poster-badge-bg: #4e402e;
+  --poster-badge-border: #8d7046;
+  --research-pressed-shadow: inset 0 5px 14px rgba(0, 0, 0, .40), inset 0 1px 2px rgba(255, 255, 255, .04), 0 1px 2px rgba(0, 0, 0, .10);
   --pub-surface: #2c3748;
   --pub-surface-end: #25384d;
   --pub-border: #4a5e77;
