@@ -85,6 +85,94 @@ document.addEventListener('DOMContentLoaded', function() {
 
       placeDesktopToggleInTitleRow();
 
+      function initSidebarScrolling() {
+        var sidebar = document.querySelector('.sidebar');
+        if (!sidebar || !window.matchMedia) return;
+
+        var desktop = window.matchMedia('(min-width: 769px)');
+        var hideTimer = null;
+        var resizeFrame = null;
+        var draggingScrollbar = false;
+
+        function hideScrollbar() {
+          window.clearTimeout(hideTimer);
+          sidebar.classList.remove('is-scrolling');
+        }
+
+        function scheduleHide() {
+          window.clearTimeout(hideTimer);
+          if (!draggingScrollbar) {
+            hideTimer = window.setTimeout(hideScrollbar, 800);
+          }
+        }
+
+        function updateOverflow() {
+          resizeFrame = null;
+          var scrollbarWidth = desktop.matches ? sidebar.offsetWidth - sidebar.clientWidth : 0;
+          sidebar.style.setProperty('--sidebar-scrollbar-width', scrollbarWidth + 'px');
+          var overflowing = desktop.matches && sidebar.scrollHeight > sidebar.clientHeight + 1;
+          sidebar.classList.toggle('has-overflow', overflowing);
+          if (overflowing) {
+            sidebar.setAttribute('tabindex', '0');
+          } else {
+            sidebar.removeAttribute('tabindex');
+            draggingScrollbar = false;
+            hideScrollbar();
+          }
+        }
+
+        function requestOverflowUpdate() {
+          if (resizeFrame === null) {
+            resizeFrame = window.requestAnimationFrame(updateOverflow);
+          }
+        }
+
+        sidebar.addEventListener('scroll', function() {
+          if (!desktop.matches || !sidebar.classList.contains('has-overflow')) return;
+          sidebar.classList.add('is-scrolling');
+          scheduleHide();
+        }, { passive: true });
+
+        sidebar.addEventListener('pointerdown', function(event) {
+          if (!sidebar.classList.contains('has-overflow')) return;
+          var rect = sidebar.getBoundingClientRect();
+          if (event.clientX >= rect.left + sidebar.clientLeft + sidebar.clientWidth) {
+            draggingScrollbar = true;
+            window.clearTimeout(hideTimer);
+          }
+        }, { passive: true });
+
+        function finishDrag() {
+          if (!draggingScrollbar) return;
+          draggingScrollbar = false;
+          scheduleHide();
+        }
+
+        document.addEventListener('pointerup', finishDrag, { passive: true });
+        document.addEventListener('pointercancel', finishDrag, { passive: true });
+        window.addEventListener('blur', finishDrag);
+        window.addEventListener('resize', requestOverflowUpdate, { passive: true });
+        sidebar.addEventListener('load', requestOverflowUpdate, true);
+        if (desktop.addEventListener) {
+          desktop.addEventListener('change', requestOverflowUpdate);
+        } else {
+          desktop.addListener(requestOverflowUpdate);
+        }
+        if (window.ResizeObserver) {
+          var observer = new ResizeObserver(requestOverflowUpdate);
+          observer.observe(sidebar);
+          Array.prototype.forEach.call(sidebar.children, function(child) {
+            observer.observe(child);
+          });
+        }
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(requestOverflowUpdate);
+        }
+        updateOverflow();
+      }
+
+      initSidebarScrolling();
+
       function getProfilePhoto() {
         return document.getElementById('profilePhoto');
       }
@@ -139,6 +227,7 @@ document.addEventListener('DOMContentLoaded', function() {
           mobileMenu.classList.toggle('open', open);
           document.body.classList.toggle('mobile-menu-open', open);
           hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+          hamburger.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
         }
 
         hamburger.setAttribute('aria-controls', 'mobileMenu');

@@ -1,368 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+<head>
   <meta charset="UTF-8">
-  <title>Yihao Wu</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --footer-height: 50px;  
+<title>My First Capybara Adventure2 | Yihao Wu</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  (function() {
+    try {
+      var root = document.documentElement;
+      var isDark = localStorage.getItem('dark-mode') === 'true';
+      root.classList.add('js-enabled');
+      root.classList.toggle('dark-mode', isDark);
+      root.dataset.theme = isDark ? 'dark' : 'light';
+    } catch (e) {
+      document.documentElement.classList.add('js-enabled');
     }
-     
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-     
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Lato", "PingFang SC", "Microsoft YaHei", sans-serif;
-      background-color: #f5f5fa;
-      color: #333;
-      line-height: 1.6;
-      overflow: hidden;
-    }
-     
-    .container {
-      display: flex;
-      max-width: 1200px;
-      margin: 20px auto 0;  
-      gap: 40px;
-      height: calc(100vh - 20px);  
-      padding: 0 20px;  
-    }
-     
-    .sidebar {
-      width: 300px;
-      position: sticky;
-      top: 20px;
-      flex-shrink: 0;
-    }
-     
-    .main-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      padding: 10px;
-    }
-     
-    .content-area {
-      flex: 1;
-      overflow-y: auto;
-      padding-right: 30px;
-    }
-     
-    .profile-card {
-      background: #fff;
-      border: 1px solid #eaeaea;
-      border-radius: 20px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      margin-bottom: 20px;
-    }
-    .profile-card img {
-      width: 100%;
-      border-radius: 20px;
-    }
-    .profile-card h2 {
-      font-size: 24px;
-      margin: 15px 0 5px;
-    }
-    .profile-card h3 {
-      font-size: 20px;
-      color: #777;
-      margin-bottom: 10px;
-    }
-    .profile-card p {
-      font-size: 14px;
-    }
-    .nav {
-      margin-top: 20px;
-    }
-    .nav ul {
-      list-style: none;
-    }
-    .nav ul li {
-      margin-bottom: 10px;
-    }
-    .nav ul li a {
-      text-decoration: none;
-      color: #007acc;
-      font-size: 16px;
-      transition: color 0.3s;
-    }
-    .nav ul li a:hover {
-      color: #005999;
-    }
-     
-    section {
-      margin-bottom: 10px;
-    }
-    section h2, .publications-section h2 {
-      font-size: 32px;
-      margin-top: 20px;
-      margin-bottom: 20px;
-      border-bottom: 2px solid #eaeaea;
-      padding-bottom: 10px;
-    }
-    #about p {
-      margin-bottom: 1em;
-    }
-     
-    .publication-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-    }
-    .publication-card {
-      background: #fff;
-      border: 1px solid #eaeaea;
-      border-radius: 14px;
-      padding: 14px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      transition: transform 0.2s;
-    }
-    .publication-card:hover {
-      transform: translateY(-5px);
-    }
-    .publication-card h3 {
-      font-size: 16px;
-      margin-bottom: 10px;
-    }
-    .publication-card p {
-      font-size: 14px;
-      color: #555;
-      margin-bottom: 8px;
-    }
-    .pub-tags {
-      margin-top: 10px;
-    }
-    .pub-tag {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 14px;
-      text-decoration: none;
-      transition: background-color 0.3s;
-      margin-right: 5px;
-    }
-    .pub-tag.source {
-      background-color: #e0f7fa;
-      color: #007acc;
-    }
-    .pub-tag.source:hover {
-      background-color: #b2ebf2;
-    }
-    .pub-tag.source:active {
-      background-color: #80deea;
-    }
-    .pub-tag.link {
-      background-color: #EDE7F6;
-      color: #3F3F3F;
-    }
-    .pub-tag.link:hover {
-      background-color: #D1C4E9;
-    }
-    .pub-tag.link:active {
-      background-color: #B39DDB;
-    }
-    .pub-tag.remark {
-      background-color: #d1ffd1;
-      color: #228822;
-    }
-     
-    #contact a {
-      color: #007acc;
-      text-decoration: none;
-    }
-    #contact a:hover {
-      text-decoration: underline;
-    }
-     
-    footer {
-      height: var(--footer-height);
-      background: #f5f5fa;
-      text-align: center;
-      font-size: 14px;
-      color: #aaa;
-      border-top: 1px solid #eaeaea;
-      line-height: var(--footer-height);
-      margin-top: 40px;
-    }
-
-     
-    .blog-card {
-      background: #fff;
-      border: 1px solid #eaeaea;
-      border-radius: 14px;
-       
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;          
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      transition: transform 0.2s;
-      margin-bottom: 20px;       
-    }
-
-    .blog-card:hover {
-      transform: translateY(-5px);
-    }
-
-     
-    .blog-card .cover-image {
-      height: 200px;   
-      width: 100%;
-      overflow: hidden;
-    }
-
-    .blog-card .cover-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;  
-      display: block;
-    }
-    
-    .blog-card .card-content {
-      flex: 1;
-      padding: 20px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
-     
-    .blog-card .card-content h3 {
-      margin: 0 0 2px;  
-      color: #000;
-      font-size: 24px;
-    }
-
-    .blog-card .card-content p.summary {
-      margin: 0 0 18px;  
-      color: #777;
-      font-size: 20px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .blog-card .card-content p.date {
-      margin: 0;
-      color: #777;
-      font-size: 14px;
-      line-height: 1.4;
-    }
-
-     
-    .blog-card .card-content h3 a {
-      text-decoration: none;
-      color: inherit;         
-    }
-
-     
-    .blog-post {
-      max-width: 800px;
-      margin: 40px auto;  
-      padding: 0 20px;
-      background: #fff;
-      border: 1px solid #eaeaea;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-
-    .post-cover {
-      width: calc(100% + 40px);  
-      margin: 0 -20px;          
-      overflow: hidden;
-      border-top-left-radius: 8px;   
-      border-top-right-radius: 8px;  
-    }
-
-    .post-cover img {
-      width: 100%;
-      height: auto;
-      object-fit: cover;
-      display: block;
-    }
-
-     
-    .post-header {
-      padding: 20px;
-      border-bottom: 1px solid #eaeaea;
-    }
-
-    .post-header h1 {
-      font-size: 36px;
-      margin-bottom: 10px;
-      color: #000;
-      font-family: 'Lato', sans-serif;
-      font-weight: bold;
-    }
-
-    .post-meta {
-      font-size: 16px;
-      color: #777;
-      margin: 0;
-      font-family: 'Lato', sans-serif;
-    }
-
-     
-    .post-content {
-      padding: 20px;
-      font-size: 18px;
-      line-height: 1.8;
-      color: #333;
-      font-family: 'Lato', sans-serif;
-    }
-
-     
-    .post-content img {
-      width: 100%;
-      height: auto;
-      display: block;
-      margin: 20px 0;  
-    }
-
-     
-    .post-content p {
-      margin-bottom: 20px;
-    }
+  })();
+</script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      crossorigin="anonymous" referrerpolicy="no-referrer">
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.4/css/academicons.min.css"
+      crossorigin="anonymous" referrerpolicy="no-referrer">
+<meta name="description" content="My first encounter with capybaras and their relaxed, sociable nature.">
+<meta name="keywords" content="Yihao Wu, 吴逸豪, UCSB, University of California Santa Barbara, Electrical and Computer Engineering, Ising machine, Potts machine, IC design, ASIC, hardware accelerators, publications, academic papers, research articles">
+<meta property="og:title" content="My First Capybara Adventure2 | Yihao Wu">
+<meta property="og:description" content="My first encounter with capybaras and their relaxed, sociable nature.">
+<meta property="og:image" content="https://yihaow.com/images/wyh.jpg">
+<meta property="og:url" content="https://yihaow.com/blog/test-copy/">
+<meta property="og:type" content="website">
+<meta property="profile:first_name" content="Yihao">
+<meta property="profile:last_name" content="Wu">
+<link href="https://fonts.googleapis.com/css?family=Lato&amp;display=swap" rel="stylesheet">
 
 
-  </style>
+<link rel="stylesheet" href="/css/tokens.css">
+
+
+<link rel="stylesheet" href="/css/site.css">
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Person",
+  "name":"Yihao Wu",
+  "alternateName":"吴逸豪",
+  "givenName":"Yihao","familyName":"Wu",
+  "url":"https:\/\/yihaow.com\/",
+  "image":"https:\/\/yihaow.com\/images/wyh.jpg",
+  "affiliation":{"@type":"CollegeOrUniversity","name":"University of California, Santa Barbara","url":"https://www.ucsb.edu/"},
+  "sameAs":[
+    "https://scholar.google.com/citations?user=1hvJRIQAAAAJ",
+    "https://www.linkedin.com/in/yihao-wu-a91474255/",
+    "https://orcid.org/0009-0003-5126-0961"
+  ]
+}
+</script>
+
+
 </head>
 <body>
-  <header style="height: 20px;"></header>
-  <div class="container">
-    <div class="sidebar">
- <div class="profile-card">
-   <img src="/images/wyh.jpg" alt="Profile Photo">
-   <h2>Yihao Wu</h2>
-   <h3>吴逸豪</h3>
-   <p>PhD Student</p>
-   <p> University of California, Santa Barbara</p>
- </div>
-  <nav class="nav">
-    <ul>
-      <li><a href="/">Home</a></li>
-      <li><a href="/#about">About</a></li>
-      <li><a href="/#publications">Publications</a></li>
-      <li><a href="/#contact">Contact</a></li>
-      <li><a href="/blog/">Capybara's blog</a></li>
-    </ul>
-  </nav>
+  <div class="meteor-layer" aria-hidden="true"></div>
+<div class="cursor-spotlight" aria-hidden="true"></div>
+<script>
+  (function() {
+    try {
+      var isDark = localStorage.getItem('dark-mode') === 'true';
+      document.documentElement.classList.toggle('dark-mode', isDark);
+      document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
+      document.body.classList.toggle('dark-mode', isDark);
+    } catch (e) {}
+  })();
+</script>
+
+  <header></header>
+
+  <nav class="mobile-menu" id="mobileMenu">
+  <div class="close-menu" id="closeMenu" aria-label="Close menu" role="button" tabindex="0">&times;</div>
+  <ul>
+  <li><a href="/">Home</a></li>
+  <li><a href="/#about">About</a></li>
+  <li><a href="/#publications">Publications</a></li>
+  <li><a href="/#poster">Posters</a></li>
+  <li><a href="/#contact">Contact</a></li>
+  <li><a href="/blog/">Capybara's blog</a></li>
+</ul>
+
+
+
+<div class="mobile-mode-toggle">
+  <span class="label" id="mobile-mode-label">Dark Mode</span>
+  <label class="switch">
+    <input type="checkbox" id="mobile-mode-toggle-checkbox" aria-labelledby="mobile-mode-label">
+    <span class="slider"></span>
+  </label>
 </div>
 
+</nav>
+<div class="mobile-menu-backdrop" id="mobileMenuBackdrop" aria-hidden="true"></div>
 
-    <div class="main-content">
+
+  <nav class="nav">
+    <button type="button" class="hamburger" id="hamburger" aria-label="Open navigation menu" aria-controls="mobileMenu" aria-expanded="false">&#9776;</button>
+  </nav>
+
+  <div class="container">
+    <aside class="sidebar">
+  <div class="profile-card">
+
+
+  <img
+    id="profilePhoto"
+    src="/images/wyh.jpg"
+    data-light-src="/images/wyh.jpg"
+    data-dark-src="/images/wyh_night.png"
+    alt="Profile Photo">
+  <h2>Yihao Wu</h2>
+  <h3>吴逸豪</h3>
+  <p>PhD Student</p>
+  <p> University of California, Santa Barbara</p>
+  <div class="social-links" role="group" aria-label="Social links">
+    <a href="mailto:yihao_wu@ucsb.edu" aria-label="Email">
+      <i class="fa-solid fa-envelope"></i>
+    </a>
+    <a href="https://scholar.google.com/citations?user=1hvJRIQAAAAJ&amp;hl" target="_blank" rel="noopener" aria-label="Google Scholar">
+      <i class="fa-brands fa-google fa-xl align-middle"></i>
+    </a>
+    <a href="https://www.linkedin.com/in/yihao-wu-a91474255/" target="_blank" rel="noopener" aria-label="LinkedIn">
+      <i class="fa-brands fa-linkedin"></i>
+    </a>
+    <a href="https://orcid.org/0009-0003-5126-0961" target="_blank" rel="noopener" aria-label="ORCID">
+      <i class="ai ai-orcid"></i>
+    </a>
+  </div>
+</div>
+
+  <nav class="nav">
+    <ul>
+  <li><a href="/">Home</a></li>
+  <li><a href="/#about">About</a></li>
+  <li><a href="/#publications">Publications</a></li>
+  <li><a href="/#poster">Posters</a></li>
+  <li><a href="/#contact">Contact</a></li>
+  <li><a href="/blog/">Capybara's blog</a></li>
+</ul>
+
+  </nav>
+
+
+<div class="mode-toggle">
+  <span class="label" id="desktop-mode-label">Dark Mode</span>
+  <label class="switch">
+    <input type="checkbox" id="mode-toggle" aria-labelledby="desktop-mode-label">
+    <span class="slider"></span>
+  </label>
+</div>
+
+</aside>
+
+
+    <main class="main-content">
+      <h1 class="visually-hidden">Yihao Wu – PhD Student in Electrical and Computer Engineering at UCSB</h1>
       <div class="content-area">
-        
+
+<div class="blog-post-top-row content-title-row">
+  <a class="blog-back-link" href="/blog/"><i class="fa-solid fa-arrow-left-long"></i> Back to blog</a>
+</div>
+
 <article class="blog-post">
-  
+
   <header class="post-header">
     <h1>My First Capybara Adventure2</h1>
-    <p class="post-meta">📅 March 30, 2025</p>
+    <div class="post-meta-row"><span class="post-meta-chip">📅 March 30, 2025</span></div>
   </header>
   <div class="post-content">
     <p>Welcome to my blog!</p>
@@ -389,10 +199,19 @@
 
       </div>
       <footer>
-        <p>© 2025 Yihao Wu. All Rights Reserved.</p>
-      </footer>
-    </div>
+  <p>© 2025 Yihao Wu. All Rights Reserved.</p>
+</footer>
+
+    </main>
   </div>
+
+  <script>
+  window.WYH_SITE_DATA = window.WYH_SITE_DATA || {};
+  window.WYH_SITE_DATA.timelineItems = [];
+</script>
+
+<script src="/js/site.js" defer></script>
+
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   <script>
     document.addEventListener('click', function(e) {

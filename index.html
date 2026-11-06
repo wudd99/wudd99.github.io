@@ -27,13 +27,13 @@
 <meta name="description" content="Yihao Wu (吴逸豪) is a PhD student in Electrical and Computer Engineering at UCSB. His research focuses on Ising and Potts machines, integrated circuits, and hardware accelerators. Explore his publications, academic papers, and research projects.">
 <meta name="keywords" content="Yihao Wu, 吴逸豪, UCSB, University of California Santa Barbara, Electrical and Computer Engineering, Ising machine, Potts machine, IC design, ASIC, hardware accelerators, publications, academic papers, research articles">
 <meta property="og:title" content="Yihao Wu | PhD Student, UCSB">
-<meta property="og:description" content="Welcome come to Yihao Wu | PhD Student, UCSB，learn more about Yihao Wu.">
-<meta property="og:image" content="/images/wyh.jpg">
+<meta property="og:description" content="Learn about Yihao Wu, a PhD student at UCSB researching Ising machines, integrated circuits, and hardware accelerators.">
+<meta property="og:image" content="https://yihaow.com/images/wyh.jpg">
 <meta property="og:url" content="https://yihaow.com/">
 <meta property="og:type" content="website">
 <meta property="profile:first_name" content="Yihao">
 <meta property="profile:last_name" content="Wu">
-<link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Lato&amp;display=swap" rel="stylesheet">
 
 
 <link rel="stylesheet" href="/css/tokens.css">
@@ -91,9 +91,9 @@
   
 
 <div class="mobile-mode-toggle">
-  <span class="label">Dark Mode</span>
+  <span class="label" id="mobile-mode-label">Dark Mode</span>
   <label class="switch">
-    <input type="checkbox" id="mobile-mode-toggle-checkbox">
+    <input type="checkbox" id="mobile-mode-toggle-checkbox" aria-labelledby="mobile-mode-label">
     <span class="slider"></span>
   </label>
 </div>
@@ -103,7 +103,7 @@
 
 
   <nav class="nav">
-    <div class="hamburger" id="hamburger">&#9776;</div>
+    <button type="button" class="hamburger" id="hamburger" aria-label="Open navigation menu" aria-controls="mobileMenu" aria-expanded="false">&#9776;</button>
   </nav>
 
   <div class="container">
@@ -121,7 +121,7 @@
   <h3>吴逸豪</h3>
   <p>PhD Student</p>
   <p> University of California, Santa Barbara</p>
-  <div class="social-links" aria-label="Social links">
+  <div class="social-links" role="group" aria-label="Social links">
     <a href="mailto:yihao_wu@ucsb.edu" aria-label="Email">
       <i class="fa-solid fa-envelope"></i>
     </a>
@@ -151,9 +151,9 @@
   
 
 <div class="mode-toggle">
-  <span class="label">Dark Mode</span>
+  <span class="label" id="desktop-mode-label">Dark Mode</span>
   <label class="switch">
-    <input type="checkbox" id="mode-toggle">
+    <input type="checkbox" id="mode-toggle" aria-labelledby="desktop-mode-label">
     <span class="slider"></span>
   </label>
 </div>
@@ -171,7 +171,7 @@
     <h2 id="welcome">Welcome!</h2>
 <p>Greetings from Yihao! I am currently a 3rd-year PhD student in the Department of <a href="https://www.ece.ucsb.edu/">Electrical and Computer Engineering</a> (ECE) at the <a href="https://www.ucsb.edu/">University of California, Santa Barbara</a> (UCSB). I am honored to have my PhD co-advised by <strong>Prof. Luke Theogarajan</strong> from UCSB, and <strong>Prof. Bongjin Kim</strong> from <a href="https://www.kaist.ac.kr/en/">KAIST</a> (Daejeon, Republic of Korea). Before joining UCSB, I earned a Bachelor of Engineering in Electronic Science and Technology and a Bachelor of Management in Information Management and Information Systems from <a href="https://english.bjut.edu.cn/">Beijing University of Technology</a>, as well as a Master of Science in Electrical and Computer Engineering from the <a href="https://www.ufl.edu/">University of Florida</a>.</p>
 <p>My research interests include <strong>digital and mixed-signal in-memory computing</strong>, and <strong>ASIC-based accelerators for Combinatorial Optimization Problems (COPs) and Artificial Intelligence (AI)</strong>.</p>
-<p>Outside of academia, I enjoy playing badminton, swimming, photography, and gaming. One of my dreams is to own a pickup truck (Especially Ford F-150 Raptor) and travel the world with a cat and a capybara by my side.</p>
+<p>Outside of academia, I enjoy playing badminton, swimming, photography, and gaming. One of my dreams is to own a pickup truck (especially a Ford F-150 Raptor) and travel the world with a cat and a capybara by my side.</p>
 
   
 </section>
@@ -218,7 +218,7 @@
     role="link"
     aria-label='Open publication page: A CMOS Probabilistic Computing Chip with Hardware-Aware Learning'
     onclick="window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/11503224', '_blank', 'noopener');"
-    onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/11503224', '_blank', 'noopener'); }"
+    onkeydown="if(event.target===this && (event.key==='Enter' || event.key===' ')){ event.preventDefault(); window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/11503224', '_blank', 'noopener'); }"
     onpointerdown="if (!event.target.closest('a, .pub-tag, .pub-card-meta')) { this.classList.add('card-pressed'); }"
     onpointerup="this.classList.remove('card-pressed');"
     onpointerleave="this.classList.remove('card-pressed');"
@@ -301,7 +301,7 @@
     role="link"
     aria-label='Open publication page: COBI: A Degree-of-56 Column-Bipartite Densely Connected  Digital Ising Chip with 8b Spin Coefficients'
     onclick="window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/11409141', '_blank', 'noopener');"
-    onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/11409141', '_blank', 'noopener'); }"
+    onkeydown="if(event.target===this && (event.key==='Enter' || event.key===' ')){ event.preventDefault(); window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/11409141', '_blank', 'noopener'); }"
     onpointerdown="if (!event.target.closest('a, .pub-tag, .pub-card-meta')) { this.classList.add('card-pressed'); }"
     onpointerup="this.classList.remove('card-pressed');"
     onpointerleave="this.classList.remove('card-pressed');"
@@ -384,7 +384,7 @@
     role="link"
     aria-label='Open publication page: m-Zephyr: A Digital In-Memory Ising Chip with 240 Spins Featuring Enhanced Connectivity Based on a Modified 3D Zephyr Topology'
     onclick="window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/11075071', '_blank', 'noopener');"
-    onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/11075071', '_blank', 'noopener'); }"
+    onkeydown="if(event.target===this && (event.key==='Enter' || event.key===' ')){ event.preventDefault(); window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/11075071', '_blank', 'noopener'); }"
     onpointerdown="if (!event.target.closest('a, .pub-tag, .pub-card-meta')) { this.classList.add('card-pressed'); }"
     onpointerup="this.classList.remove('card-pressed');"
     onpointerleave="this.classList.remove('card-pressed');"
@@ -467,7 +467,7 @@
     role="link"
     aria-label='Open publication page: Quantized Context Based LIF Neurons for Recurrent Spiking Neural Networks in 45nm'
     onclick="window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/10548306', '_blank', 'noopener');"
-    onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/10548306', '_blank', 'noopener'); }"
+    onkeydown="if(event.target===this && (event.key==='Enter' || event.key===' ')){ event.preventDefault(); window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/10548306', '_blank', 'noopener'); }"
     onpointerdown="if (!event.target.closest('a, .pub-tag, .pub-card-meta')) { this.classList.add('card-pressed'); }"
     onpointerup="this.classList.remove('card-pressed');"
     onpointerleave="this.classList.remove('card-pressed');"
@@ -550,7 +550,7 @@
     role="link"
     aria-label='Open publication page: Micromachined Thin Film Ceramic PZT Multimode Resonant Temperature Sensor'
     onclick="window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/10184202', '_blank', 'noopener');"
-    onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/10184202', '_blank', 'noopener'); }"
+    onkeydown="if(event.target===this && (event.key==='Enter' || event.key===' ')){ event.preventDefault(); window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/10184202', '_blank', 'noopener'); }"
     onpointerdown="if (!event.target.closest('a, .pub-tag, .pub-card-meta')) { this.classList.add('card-pressed'); }"
     onpointerup="this.classList.remove('card-pressed');"
     onpointerleave="this.classList.remove('card-pressed');"
@@ -633,7 +633,7 @@
     role="link"
     aria-label='Open publication page: Thin Film PZT Multimode Resonant MEMS Temperature Sensor'
     onclick="window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/9967330', '_blank', 'noopener');"
-    onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/9967330', '_blank', 'noopener'); }"
+    onkeydown="if(event.target===this && (event.key==='Enter' || event.key===' ')){ event.preventDefault(); window.open('https:\/\/ieeexplore.ieee.org\/abstract\/document\/9967330', '_blank', 'noopener'); }"
     onpointerdown="if (!event.target.closest('a, .pub-tag, .pub-card-meta')) { this.classList.add('card-pressed'); }"
     onpointerup="this.classList.remove('card-pressed');"
     onpointerleave="this.classList.remove('card-pressed');"
@@ -744,7 +744,7 @@
 
 <section id="contact">
   
-    <h2 id="contact">Contact</h2>
+    <h2>Contact</h2>
 <p>3217 Bioengineering Building</p>
 <p>University of California</p>
 <p>Santa Barbara, CA 93106</p>

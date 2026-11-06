@@ -265,11 +265,11 @@
       box-shadow: var(--hamburger-shadow);
     }
 
-    body.dark-mode .sidebar:hover {
+    body.dark-mode .sidebar.has-overflow.is-scrolling {
       scrollbar-color: var(--scrollbar-thumb-hover) transparent;
     }
 
-    body.dark-mode .sidebar:hover::-webkit-scrollbar-thumb {
+    body.dark-mode .sidebar.has-overflow.is-scrolling::-webkit-scrollbar-thumb {
       background: var(--scrollbar-thumb-hover);
     }
 
@@ -622,6 +622,12 @@
 
     .nav .hamburger {
       display: none;
+      font: inherit;
+    }
+
+    .nav .hamburger:focus-visible {
+      outline: 2px solid var(--primary-strong);
+      outline-offset: 3px;
     }
 
     :root {
@@ -3724,6 +3730,7 @@
       :root {
         --sidebar-width: 248px;
         --sidebar-shadow-bleed: 14px;
+        --card-shadow-bleed: 14px;
       }
     }
 
@@ -3778,12 +3785,36 @@
 
     @media (min-width: 769px) {
       .sidebar {
-        overflow: visible !important;
-        scrollbar-width: none;
+        max-height: calc(100vh - var(--page-top-offset) + var(--sidebar-shadow-bleed) - 12px);
+        max-height: calc(100dvh - var(--page-top-offset) + var(--sidebar-shadow-bleed) - 12px);
+        overflow-y: auto;
+        overflow-x: hidden;
+        scrollbar-gutter: stable;
+        scrollbar-width: thin;
+        scrollbar-color: transparent transparent;
+        padding-right: calc(var(--sidebar-shadow-bleed) - var(--sidebar-scrollbar-width, 0px));
+      }
+
+      .sidebar.has-overflow.is-scrolling {
+        scrollbar-color: var(--scrollbar-thumb) transparent;
       }
 
       .sidebar::-webkit-scrollbar {
-        display: none;
+        width: 6px;
+      }
+
+      .sidebar::-webkit-scrollbar-track,
+      .sidebar::-webkit-scrollbar-thumb {
+        background: transparent;
+      }
+
+      .sidebar.has-overflow.is-scrolling::-webkit-scrollbar-thumb {
+        background: var(--scrollbar-thumb);
+        border-radius: 999px;
+      }
+
+      .sidebar.has-overflow.is-scrolling::-webkit-scrollbar-thumb:hover {
+        background: var(--scrollbar-thumb-hover);
       }
 
       .profile-card {

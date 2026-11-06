@@ -110,7 +110,7 @@
       --tag-source-bg: var(--color-blue-50);
       --tag-source-bg-hover: var(--color-blue-75);
       --tag-source-bg-active: var(--color-blue-150);
-      --tag-source-color: var(--primary);
+      --tag-source-color: var(--color-blue-700);
       --tag-source-border: var(--color-blue-100);
       --tag-link-bg: var(--color-purple-50);
       --tag-link-bg-hover: var(--color-purple-100);
