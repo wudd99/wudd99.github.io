@@ -265,3 +265,46 @@
       --active-filter-press-bg: linear-gradient(180deg,#79bfff 0%,#5eb1f2 100%);
       --active-filter-color: #13202d;
     }
+
+/* Approved publication card palette; kept separate from poster and blog tags. */
+:root {
+  --pub-surface: #ffffff;
+  --pub-surface-end: #f5f9ff;
+  --pub-border: #d3e1f1;
+  --pub-title-color: #253248;
+  --pub-author-color: #5e6c80;
+  --pub-source-color: #405876;
+  --pub-author-underline: #96acc4;
+  --pub-journal-color: #086c77;
+  --pub-journal-bg: #e4f7f5;
+  --pub-journal-border: #a9ded8;
+  --pub-conference-color: #5146a6;
+  --pub-conference-bg: #efedff;
+  --pub-conference-border: #cbc6f1;
+  --pub-pdf-bg: linear-gradient(120deg, #2469ce, #575ed2);
+  --pub-pdf-hover-bg: linear-gradient(120deg, #1c5fbd, #4b50ba);
+  --pub-pdf-color: #ffffff;
+  --pub-pdf-shadow: 0 4px 12px rgba(57, 91, 187, .16);
+  --pub-shadow: 0 5px 20px rgba(34, 75, 128, .07);
+}
+
+html.dark-mode {
+  --pub-surface: #2c3748;
+  --pub-surface-end: #25384d;
+  --pub-border: #4a5e77;
+  --pub-title-color: #ecf2fa;
+  --pub-author-color: #b9c5d6;
+  --pub-source-color: #c5d6ec;
+  --pub-author-underline: #8eaac7;
+  --pub-journal-color: #a6ede3;
+  --pub-journal-bg: #24484e;
+  --pub-journal-border: #3f777b;
+  --pub-conference-color: #d5c9ff;
+  --pub-conference-bg: #3c365e;
+  --pub-conference-border: #706495;
+  --pub-pdf-bg: linear-gradient(120deg, #9ad7ff, #b3bdff);
+  --pub-pdf-hover-bg: linear-gradient(120deg, #b1e1ff, #c1c7ff);
+  --pub-pdf-color: #1c3155;
+  --pub-pdf-shadow: 0 4px 16px rgba(124, 165, 255, .15);
+  --pub-shadow: 0 7px 24px rgba(0, 0, 0, .18);
+}

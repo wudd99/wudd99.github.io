@@ -640,9 +640,10 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       function iconForPubType(type) {
-        if (type === 'journal') return 'fa-solid fa-book-open';
-        if (type === 'conference') return 'fa-solid fa-users';
-        return 'fa-solid fa-layer-group';
+        if (type === 'journal' || type === 'conference') {
+          return '<span class="publication-type-icon" aria-hidden="true"></span>';
+        }
+        return '<i class="fa-solid fa-layer-group" aria-hidden="true"></i>';
       }
 
       function escapeHTML(value) {
@@ -690,11 +691,15 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         }
 
-        holder.innerHTML =
-          '<span class="meta-pill publication-type-pill type-' + escapeHTML(meta.type) + '">' +
-            '<i class="' + escapeHTML(iconForPubType(meta.type)) + '"></i>' +
-            '<span>' + escapeHTML(meta.typeLabel) + '</span>' +
-          '</span>';
+        var pill = holder.querySelector('.publication-type-pill');
+        if (!pill) {
+          pill = document.createElement('span');
+          holder.insertBefore(pill, holder.firstChild);
+        }
+        pill.className = 'meta-pill publication-type-pill type-' + meta.type;
+        pill.innerHTML =
+          '<span>' + escapeHTML(meta.typeLabel) + '</span>' +
+          iconForPubType(meta.type);
       }
 
       function resolveSectionAndGrid(id, gridClass) {
