@@ -4,6 +4,23 @@
   <meta charset="UTF-8">
 <title>Capybara’s Blog | Yihao Wu</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script id="background-choice">
+(function(){
+ var root=document.documentElement;
+ var requested=new URLSearchParams(location.search).get('bg');
+ var mode=requested==='image'||requested==='pattern'?requested:'pattern';
+ if(!requested){try{var saved=sessionStorage.getItem('yihao-background');if(saved==='image'||saved==='pattern')mode=saved;}catch(e){}}
+ root.dataset.background=mode;
+ try{sessionStorage.setItem('yihao-background',mode);}catch(e){}
+ if(mode==='image'){
+  var image=new Image();image.decoding='async';image.fetchPriority='high';
+  image.onload=function(){var ready=image.decode?image.decode().catch(function(){}):Promise.resolve();ready.then(function(){root.dataset.wallpaperReady='true';});};
+  image.onerror=function(){root.dataset.wallpaperReady='error';};
+  image.src='/images/soft-haze.webp?v=backgrounds-7';
+ }
+})();
+</script>
+<script src="/js/starfield.js?v=scatter-11"></script>
 <script>
   (function() {
     try {
@@ -38,7 +55,7 @@
 <link rel="stylesheet" href="/css/tokens.css">
 
 
-<link rel="stylesheet" href="/css/site.css">
+<link rel="stylesheet" href="/css/site.css"><link rel="stylesheet" href="/css/mobile-topbar.css"><link rel="stylesheet" href="/css/glass.css?v=card-rim-27"><link rel="stylesheet" href="/css/canvas.css?v=desktop-canvas-28">
 
 <script type="application/ld+json">
 {
@@ -74,7 +91,7 @@
   })();
 </script>
 
-  <header></header>
+  <header class="ref-topbar"><a class="ref-brand" href="/"><img src="/images/wyh.jpg" alt=""><span>Yihao Wu<small>PhD Student · UCSB</small></span></a><button type="button" id="refTheme" aria-label="Switch color theme"><svg class="ref-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5"/></svg><svg class="ref-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15A9 9 0 0 1 9 4a9 9 0 1 0 11 11Z"/></svg></button><button type="button" class="hamburger" id="retainedMenu" aria-label="Open navigation menu" aria-controls="mobileMenu" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button></header>
 
   <nav class="mobile-menu" id="mobileMenu">
   <div class="close-menu" id="closeMenu" aria-label="Close menu" role="button" tabindex="0">&times;</div>
@@ -183,10 +200,6 @@
           aria-label="Open blog post: My First Capybara Adventure"
           onclick="if (!event.target.closest('a')) { window.location.href='\/blog\/test\/'; }"
           onkeydown="if(event.target===this && (event.key==='Enter' || event.key===' ')){ event.preventDefault(); window.location.href='\/blog\/test\/'; }"
-          onpointerdown="if (!event.target.closest('a')) { this.classList.add('card-pressed'); }"
-          onpointerup="this.classList.remove('card-pressed');"
-          onpointerleave="this.classList.remove('card-pressed');"
-          onpointercancel="this.classList.remove('card-pressed');"
         >
           
             <a class="blog-cover-link" href="/blog/test/" onclick="event.stopPropagation();">
@@ -225,7 +238,7 @@
   window.WYH_SITE_DATA.timelineItems = [];
 </script>
 
-<script src="/js/site.js" defer></script>
+<script src="/js/site.js?v=unified-liquid-20" defer></script><script src="/js/mobile-topbar.js" defer></script><script src="/js/glass.js?v=unified-liquid-20" defer></script>
 
 </body>
 </html>

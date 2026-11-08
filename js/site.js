@@ -541,30 +541,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
       function bindTactilePressFeedback() {
-        var cardSelector = '.publication-card, .poster-card';
-        var selectors = [
-          '.pub-tag', '.poster-tag', '.card-index', '.pub-filter-chip', '.timeline-marker',
-          '.timeline-chip', '.timeline-stat', '.pub-card-meta .meta-pill',
-          '.blog-meta-pill', '.post-meta-chip', '.profile-card .social-links a',
-          '.nav ul li a', '.mobile-menu ul li a', '.blog-back-link',
-          '.blog-card .read-more', '.clickable-card', cardSelector
-        ].join(', ');
+        // Liquid glass owns its complete gesture lifecycle; do not add a second press state.
+        if (typeof window.WYH_GLASS_SURFACE_FOR === 'function') return;
         var pressed = new Map();
         var releases = new Map();
 
         function targetsFor(eventTarget) {
-          if (!(eventTarget instanceof Element)) return [];
-          var target = eventTarget.closest(selectors);
-          var card = eventTarget.closest(cardSelector);
-          var control = eventTarget.closest('a, button, input, label, select, textarea, .publication-type-pill, .pub-tag, .poster-tag, .card-index');
-          if (control && target && target.matches('.clickable-card') && !card) target = null;
-          if (control && card && card.contains(control)) {
-            if (target === card) target = null;
-            card = null;
+          if (typeof window.WYH_GLASS_SURFACE_FOR === 'function') {
+            var surface = window.WYH_GLASS_SURFACE_FOR(eventTarget);
+            return surface ? [surface] : [];
           }
-          return [target, card].filter(function(el, index, all) {
-            return el && all.indexOf(el) === index;
-          });
+          if (!(eventTarget instanceof Element)) return [];
+          var target = eventTarget.closest('a[href],button,input,label.switch,[role="button"],.clickable-card[tabindex]');
+          return target && !target.matches('[disabled],[aria-disabled="true"]') ? [target] : [];
         }
 
         function begin(target) {
