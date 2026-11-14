@@ -1,0 +1,4 @@
+Tabler Icons 3.34.1
+https://github.com/tabler/tabler-icons
+Source: https://cdn.jsdelivr.net/npm/@tabler/icons@3.34.1/icons/outline/
+License: MIT (see LICENSE.txt)

@@ -419,7 +419,7 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Lato", "PingFang SC", "Microsoft YaHei", sans-serif;
+      font-family: "Lato", -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
       background: var(--body-gradient);
       color: var(--text-main);
       line-height: 1.7;
@@ -4023,7 +4023,7 @@
       --pub-type-color: var(--pub-journal-color);
       --pub-type-bg: var(--pub-journal-bg);
       --pub-type-border: var(--pub-journal-border);
-      --pub-type-icon: url('/images/icons/publication-journal.svg');
+      --pub-type-icon: url('/images/icons/publication-journal.svg?v=tabler-43');
       --pub-accent: linear-gradient(180deg, #2bb3ba, #87dbd2);
     }
 
@@ -4031,7 +4031,7 @@
       --pub-type-color: var(--pub-conference-color);
       --pub-type-bg: var(--pub-conference-bg);
       --pub-type-border: var(--pub-conference-border);
-      --pub-type-icon: url('/images/icons/publication-conference.svg');
+      --pub-type-icon: url('/images/icons/publication-conference.svg?v=tabler-43');
       --pub-accent: linear-gradient(180deg, #7567dc, #9daaf2);
     }
 
@@ -4044,7 +4044,7 @@
       --pub-type-color: var(--poster-color);
       --pub-type-bg: var(--poster-badge-bg);
       --pub-type-border: var(--poster-badge-border);
-      --pub-type-icon: url('/images/icons/publication-conference.svg');
+      --pub-type-icon: url('/images/icons/publication-conference.svg?v=tabler-43');
       --pub-accent: linear-gradient(180deg, #d59028, #f1c873);
     }
 
@@ -4130,8 +4130,8 @@
     }
 
     .pub-pdf-icon {
-      -webkit-mask-image: url('/images/icons/publication-document.svg');
-      mask-image: url('/images/icons/publication-document.svg');
+      -webkit-mask-image: url('/images/icons/publication-document.svg?v=tabler-43');
+      mask-image: url('/images/icons/publication-document.svg?v=tabler-43');
     }
 
     :is(.publication-card, .poster-card) .pub-card-meta .pub-tag.source {

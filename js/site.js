@@ -600,7 +600,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (type === 'journal' || type === 'conference') {
           return '<span class="publication-type-icon" aria-hidden="true"></span>';
         }
-        return '<i class="fa-solid fa-layer-group" aria-hidden="true"></i>';
+        return '<svg class="ui-icon tabler-icon" data-icon="tabler-layers-intersect" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/> <path d="M8 4m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z" /> <path d="M4 8m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z" /></svg>';
       }
 
       function escapeHTML(value) {
@@ -741,7 +741,7 @@ document.addEventListener('DOMContentLoaded', function() {
         shell.setAttribute('aria-label', 'Search and filter publications');
         shell.innerHTML = '<form class="post-search publication-search" role="search">' +
           '<label for="publication-query">Search publications</label>' +
-          '<div class="search-field"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>' +
+          '<div class="search-field"><svg class="ui-icon tabler-icon" data-icon="tabler-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/> <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /> <path d="M21 21l-6 -6" /></svg>' +
           '<input id="publication-query" type="search" placeholder="Search papers…" aria-controls="publication-results" aria-describedby="publication-search-help"></div>' +
           '<p class="search-help" id="publication-search-help">Titles, authors &amp; venues</p></form>' +
           '<span class="pub-filter-heading">Filter publications</span>';

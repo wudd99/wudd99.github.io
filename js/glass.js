@@ -1,6 +1,6 @@
 (function(){
  // Only a genuine action owns feedback. Decorative containers never inherit it.
- const surfaceSelector='.clickable-card[tabindex],.clickable-card[onclick],a.pub-tag[href],a.poster-tag[href],button.pub-filter-chip,button.timeline-marker,.profile-card .social-links a[href],.nav ul li a[href],.mobile-menu ul li a[href],a.blog-back-link[href],.blog-card a.read-more[href],.blog-card a.blog-cover-link[href],.ref-topbar button,a.ref-brand[href],label.switch,.close-menu[role="button"]';
+ const surfaceSelector='button.appearance-button,.clickable-card[tabindex],.clickable-card[onclick],a.pub-tag[href],a.poster-tag[href],button.pub-filter-chip,button.timeline-marker,.profile-card .social-links a[href],.nav ul li a[href],.mobile-menu ul li a[href],a.blog-back-link[href],.blog-card a.read-more[href],.blog-card a.blog-cover-link[href],.ref-topbar button,a.ref-brand[href],label.switch,.close-menu[role="button"]';
  function surfaceFor(target){
   if(!(target instanceof Element))return null;
   const surface=target.closest(surfaceSelector);if(!surface)return null;
