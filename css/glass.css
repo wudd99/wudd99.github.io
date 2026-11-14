@@ -74,7 +74,8 @@ html body .liquid-control{--glass-rest-blur:3px;transition:transform .24s cubic-
 html body .liquid-ready>.liquid-glass-skin{position:absolute!important;inset:0;z-index:0!important;pointer-events:none;border-radius:inherit;overflow:hidden;opacity:0;background:none;transition:opacity .16s ease}
 html body .liquid-pressed>.liquid-glass-skin{opacity:1}
 /* A fine specular rim sits over a much wider, feathered refraction band. */
-html body .liquid-card{--liquid-rim-width:3.5px;--liquid-halo-width:12px;--liquid-edge-core:4px;--liquid-edge-falloff:1;--liquid-edge-opacity:.68}
+html body .liquid-card{--liquid-rim-width:2px;--liquid-halo-width:12px;--card-rim-light:rgba(255,255,255,.98);--card-rim-blue:rgba(115,190,255,.50);--card-rim-violet:rgba(178,151,246,.42)}
+html.dark-mode body .liquid-card{--card-rim-light:rgba(232,247,255,.72);--card-rim-blue:rgba(113,190,255,.48);--card-rim-violet:rgba(177,147,248,.42)}
 html body .liquid-card.liquid-pressed{--liquid-halo-width:16px}
 html body .liquid-control{--liquid-rim-width:1.5px;--liquid-halo-width:5px;--liquid-edge-core:2px;--liquid-edge-falloff:1.3;--liquid-edge-opacity:.58}
 html body .liquid-ready>.liquid-glass-skin::before,html body .liquid-ready>.liquid-glass-skin::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none}
@@ -85,6 +86,8 @@ html body .liquid-ready>.liquid-glass-skin::after{padding:0;filter:none;-webkit-
 html.dark-mode body .liquid-card.liquid-pressed{--liquid-edge-top:rgba(13,22,38,.60);--liquid-edge-bottom:rgba(210,236,255,.42)}
 @supports ((mask-composite:exclude) or (-webkit-mask-composite:xor)){
  html body .liquid-ready>.liquid-glass-skin::before{padding:var(--liquid-rim-width,2px);background:linear-gradient(var(--liquid-angle,135deg),var(--liquid-rim-light),var(--liquid-rim-blue) 32%,transparent 52%,var(--liquid-rim-violet) 74%,var(--liquid-rim-light));-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+ /* Restore the v20 hard-cut card ring, with no feathering on the broad band. */
+ html body .liquid-card>.liquid-glass-skin::after{padding:var(--liquid-halo-width,12px);filter:none;opacity:.75;background:linear-gradient(var(--liquid-angle,135deg),var(--card-rim-light),var(--card-rim-blue) 32%,transparent 52%,var(--card-rim-violet) 74%,var(--card-rim-light));-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
 }
 /* Old hover lift must not animate a card when its nested button owns the pointer. */
 html body :is(.clickable-card:hover:not(.liquid-hover),.poster-card:not(.clickable-card):hover,#service li:not(.clickable-card):hover):not(.liquid-pressed):not(.liquid-releasing){transform:none!important}
@@ -118,3 +121,6 @@ html body .profile-card .social-links a>.liquid-glass-skin,html body .profile-ca
 /* Compact controls retain a close upper edge with a stronger curved recess. */
 html body .liquid-control:not(.blog-cover-link){--glass-pressed-shadow:inset calc(var(--liquid-shadow-x,0px) * .25) calc(var(--liquid-shadow-y,9px) * .32) 10px -1px rgba(23,47,79,.30),inset 0 2px 5px -1px rgba(23,47,79,.20),inset 0 0 8px -3px rgba(23,47,79,.09),inset 0 -2px 6px -1px rgba(255,255,255,.65),0 1px 4px -2px rgba(35,72,129,.06)}
 html.dark-mode body .liquid-control:not(.blog-cover-link){--glass-pressed-shadow:inset calc(var(--liquid-shadow-x,0px) * .25) calc(var(--liquid-shadow-y,9px) * .32) 10px -1px rgba(0,5,16,.64),inset 0 2px 5px -1px rgba(0,5,16,.36),inset 0 0 8px -3px rgba(0,5,16,.18),inset 0 -2px 6px -1px rgba(215,238,255,.38),0 1px 4px -2px rgba(0,8,25,.10)}
+
+/* Dragging a card manipulates its glass surface without selecting its labels. */
+html body :is(.profile-card,.publication-card,.poster-card,.blog-card,.research-timeline,.timeline-card,.pub-filter-shell,.liquid-control,#service li){-webkit-user-select:none;user-select:none}

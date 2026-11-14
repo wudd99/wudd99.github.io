@@ -16,80 +16,11 @@ document.addEventListener('DOMContentLoaded', function() {
       applyRemarkTagColors();
 
 
-      function placeDesktopToggleInTitleRow() {
-        var toggleShell = desktopToggle ? desktopToggle.closest('.mode-toggle') : null;
-        if (!toggleShell) return;
-
-        function markToggleReady() {
-          toggleShell.classList.add('mode-toggle-ready');
-        }
-
-        var blogPostTopRow = document.querySelector('.content-area .blog-post-top-row');
-        if (blogPostTopRow) {
-          blogPostTopRow.appendChild(toggleShell);
-          markToggleReady();
-          return;
-        }
-
-        var existingTitleRow = document.querySelector('.content-area .content-title-row');
-        if (existingTitleRow) {
-          if (!existingTitleRow.contains(toggleShell)) {
-            existingTitleRow.appendChild(toggleShell);
-          }
-          markToggleReady();
-          return;
-        }
-
-        var targetTitle = null;
-        var titleParent = null;
-        var ariaLabel = 'Page title and display mode';
-
-        var aboutSection = document.getElementById('about');
-        if (aboutSection) {
-          targetTitle = aboutSection.querySelector('h2');
-          titleParent = aboutSection;
-          ariaLabel = 'Welcome and display mode';
-        }
-
-        if (!targetTitle) {
-          targetTitle = document.querySelector('.content-area .blog-list > h2');
-          titleParent = targetTitle ? targetTitle.parentElement : null;
-          ariaLabel = 'Blog title and display mode';
-        }
-
-        if (!targetTitle) {
-          targetTitle = document.querySelector('.content-area .post-header > h1');
-          titleParent = targetTitle ? targetTitle.parentElement : null;
-          ariaLabel = 'Post title and display mode';
-        }
-
-        if (!targetTitle) {
-          targetTitle = document.querySelector('.content-area section > h2, .content-area article h1, .content-area h2, .content-area h1');
-          titleParent = targetTitle ? targetTitle.parentElement : null;
-        }
-
-        if (!targetTitle || !titleParent) {
-          toggleShell.classList.add('mode-toggle-ready', 'mode-toggle-fallback');
-          return;
-        }
-
-        var titleRow = document.createElement('div');
-        titleRow.className = 'content-title-row';
-        titleRow.setAttribute('aria-label', ariaLabel);
-
-        titleParent.insertBefore(titleRow, targetTitle);
-        titleRow.appendChild(targetTitle);
-        titleRow.appendChild(toggleShell);
-        markToggleReady();
-      }
-
-      placeDesktopToggleInTitleRow();
-
       function initSidebarScrolling() {
         var sidebar = document.querySelector('.sidebar');
         if (!sidebar || !window.matchMedia) return;
 
-        var desktop = window.matchMedia('(min-width: 769px)');
+        var desktop = window.matchMedia('(min-width: 768px)');
         var hideTimer = null;
         var resizeFrame = null;
         var draggingScrollbar = false;
@@ -210,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       preloadProfilePhotos();
 
-      var darkModeEnabled = localStorage.getItem('dark-mode') === 'true';
+      var darkModeEnabled = document.documentElement.classList.contains('dark-mode');
       document.documentElement.classList.toggle('dark-mode', darkModeEnabled);
       document.documentElement.dataset.theme = darkModeEnabled ? 'dark' : 'light';
       document.body.classList.toggle('dark-mode', darkModeEnabled);
@@ -358,7 +289,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
       function getThemeSurfaceSelector() {
         return [
-          '.profile-card',
           '.publication-card',
           '.poster-card',
           '.blog-card',
@@ -522,7 +452,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.documentElement.classList.toggle('dark-mode', nextDarkMode);
         document.documentElement.dataset.theme = nextDarkMode ? 'dark' : 'light';
         document.body.classList.toggle('dark-mode', nextDarkMode);
-        localStorage.setItem('dark-mode', nextDarkMode ? 'true' : 'false');
+        try { localStorage.setItem('dark-mode', nextDarkMode ? 'true' : 'false'); } catch (e) {}
         animateThemeBorders(borderStates);
         if (desktopToggle) desktopToggle.checked = nextDarkMode;
         if (mobileToggle) mobileToggle.checked = nextDarkMode;
@@ -744,7 +674,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         var root = null;
         if (grid) {
-          root = grid.closest('section') || anchor.closest('section') || anchor.parentElement || anchor;
+          root = grid.closest('.publications-section, .poster-section, section') || anchor.closest('section') || anchor.parentElement || anchor;
         } else {
           root = anchor.closest('section') || anchor.parentElement || anchor;
         }
@@ -806,12 +736,21 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         var shell = document.createElement('div');
-        shell.className = 'pub-filter-shell';
-        shell.innerHTML = '<span class="pub-filter-heading">Filter publications</span>';
+        shell.className = 'pub-filter-shell home-publication-tools';
+        shell.id = 'publication-tools';
+        shell.setAttribute('aria-label', 'Search and filter publications');
+        shell.innerHTML = '<form class="post-search publication-search" role="search">' +
+          '<label for="publication-query">Search publications</label>' +
+          '<div class="search-field"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg>' +
+          '<input id="publication-query" type="search" placeholder="Search papers…" aria-controls="publication-results" aria-describedby="publication-search-help"></div>' +
+          '<p class="search-help" id="publication-search-help">Titles, authors &amp; venues</p></form>' +
+          '<span class="pub-filter-heading">Filter publications</span>';
+        grid.id = 'publication-results';
 
         var state = {
           type: '',
-          topic: ''
+          topic: '',
+          query: ''
         };
 
         function makeGroup(name, options, allLabel) {
@@ -819,6 +758,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
           var group = document.createElement('div');
           group.className = 'pub-filter-group';
+          group.setAttribute('role', 'group');
+          group.setAttribute('aria-label', name === 'type' ? 'Publication type' : 'Research topic');
+          var groupLabel = document.createElement('span');
+          groupLabel.className = 'pub-filter-group-label';
+          groupLabel.textContent = name === 'type' ? 'Type' : 'Topic';
+          group.appendChild(groupLabel);
 
           var allChip = document.createElement('button');
           allChip.type = 'button';
@@ -826,6 +771,7 @@ document.addEventListener('DOMContentLoaded', function() {
           allChip.textContent = allLabel;
           allChip.dataset.filterType = name;
           allChip.dataset.filterValue = '';
+          allChip.setAttribute('aria-controls', 'publication-results');
           group.appendChild(allChip);
 
           options.forEach(function(option) {
@@ -835,6 +781,7 @@ document.addEventListener('DOMContentLoaded', function() {
             chip.textContent = option.label;
             chip.dataset.filterType = name;
             chip.dataset.filterValue = option.value;
+            chip.setAttribute('aria-controls', 'publication-results');
             group.appendChild(chip);
           });
 
@@ -848,24 +795,72 @@ document.addEventListener('DOMContentLoaded', function() {
           shell.appendChild(group);
         });
 
+        var resultStatus = document.createElement('p');
+        resultStatus.className = 'publication-filter-status';
+        resultStatus.setAttribute('role', 'status');
+        resultStatus.setAttribute('aria-live', 'polite');
+        shell.appendChild(resultStatus);
+        var actions = document.createElement('div');
+        actions.className = 'publication-tool-actions';
+        actions.innerHTML = '<a href="#publications">View results ↓</a><button type="button" class="text-button" data-publication-clear>Clear filters</button>';
+        shell.appendChild(actions);
+        var empty = document.createElement('div');
+        empty.className = 'publication-empty utility-panel';
+        empty.hidden = true;
+        empty.innerHTML = '<h3>No publications found</h3><p>Try another title, author or venue, or clear your filters.</p><button type="button" class="text-button" data-publication-clear>Clear filters</button>';
+        grid.parentNode.insertBefore(empty, grid);
+
         function refreshFilterUI() {
           shell.querySelectorAll('.pub-filter-chip').forEach(function(chip) {
             var type = chip.dataset.filterType;
             var value = chip.dataset.filterValue;
             chip.classList.toggle('active', state[type] === value);
+            chip.setAttribute('aria-pressed', String(state[type] === value));
           });
         }
 
+        function normalizeSearch(value) {
+          return String(value || '').normalize('NFKC').toLocaleLowerCase();
+        }
+        var searchTexts = cards.map(function(card, index) {
+          return normalizeSearch(card.textContent + ' ' + metas[index].source + ' ' + metas[index].topics.join(' '));
+        });
         function applyFilters() {
-          cards.forEach(function(card) {
+          var words = normalizeSearch(state.query).trim().split(/\s+/).filter(Boolean);
+          var visible = 0;
+          cards.forEach(function(card, index) {
             var cardTopics = (card.dataset.pubTopics || '').split('|').filter(Boolean);
 
             var matchType = !state.type || card.dataset.pubType === state.type;
             var matchTopic = !state.topic || cardTopics.indexOf(state.topic) >= 0;
-
-            card.classList.toggle('is-filtered-out', !(matchType && matchTopic));
+            var matchQuery = words.every(function(word) { return searchTexts[index].indexOf(word) >= 0; });
+            var matches = matchType && matchTopic && matchQuery;
+            card.classList.toggle('is-filtered-out', !matches);
+            card.hidden = !matches;
+            if (matches) visible += 1;
           });
+          resultStatus.textContent = visible + ' of ' + cards.length + ' publications';
+          empty.hidden = visible !== 0;
         }
+
+        var searchInput = shell.querySelector('#publication-query');
+        searchInput.addEventListener('input', function() {
+          state.query = searchInput.value;
+          applyFilters();
+        });
+        shell.querySelector('form').addEventListener('submit', function(e) {
+          e.preventDefault();
+          state.query = searchInput.value;
+          applyFilters();
+          document.getElementById('publications').scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+        });
+        [shell, empty].forEach(function(container) {
+          container.querySelector('[data-publication-clear]').addEventListener('click', function() {
+            state.type = ''; state.topic = ''; state.query = '';
+            searchInput.value = '';
+            refreshFilterUI(); applyFilters(); searchInput.focus({ preventScroll: true });
+          });
+        });
 
         shell.addEventListener('click', function(e) {
           var chip = e.target.closest('.pub-filter-chip');
@@ -1028,7 +1023,8 @@ document.addEventListener('DOMContentLoaded', function() {
       var publicationMetas = buildPublicationFilters();
       buildResearchTimeline(publicationMetas);
 
-      var allNavLinks = Array.prototype.slice.call(document.querySelectorAll('.nav ul li a, .mobile-menu ul li a'));
+      // Page navigation and in-page section navigation have independent current states.
+      var allNavLinks = Array.prototype.slice.call(document.querySelectorAll('.sidebar > .nav a, .mobile-menu > ul a'));
 
       function normalizePath(path) {
         if (!path) return '/';
@@ -1060,46 +1056,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }, false);
       });
 
-      var sections = ['about', 'publications', 'poster', 'contact']
-        .map(function(id) { return document.getElementById(id); })
-        .filter(Boolean);
+      setActiveLinks(normalizePath(window.location.pathname).indexOf('/blog') === 0 ? '/blog/' : '/');
 
-      var currentPath = normalizePath(window.location.pathname);
-
-      if (currentPath.indexOf('/blog') === 0) {
-        setActiveLinks('/blog/');
-      } else if (sections.length > 0 && currentPath === '/') {
-        setActiveLinks('/');
-        var observer = new IntersectionObserver(function(entries) {
-          var visibleEntries = entries
-            .filter(function(entry) { return entry.isIntersecting; })
-            .sort(function(a, b) { return b.intersectionRatio - a.intersectionRatio; });
-
-          if (window.scrollY < 80) {
-            setActiveLinks('/');
-            return;
-          }
-
-          if (visibleEntries.length > 0) {
-            setActiveLinks('/#' + visibleEntries[0].target.id);
-          }
-        }, {
-          rootMargin: '-20% 0px -55% 0px',
-          threshold: [0.2, 0.35, 0.5, 0.7]
-        });
-
-        sections.forEach(function(section) {
-          observer.observe(section);
-        });
-
-        window.addEventListener('scroll', function() {
-          if (window.scrollY < 80) {
-            setActiveLinks('/');
-          }
-        }, { passive: true });
-      } else {
-        setActiveLinks('/');
-      }
     });
 
     (function initNaturalMeteorAmbience() {

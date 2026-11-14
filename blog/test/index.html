@@ -49,13 +49,14 @@
 <meta property="og:type" content="website">
 <meta property="profile:first_name" content="Yihao">
 <meta property="profile:last_name" content="Wu">
-<link href="https://fonts.googleapis.com/css?family=Lato&amp;display=swap" rel="stylesheet">
+<link rel="preload" href="/fonts/lato-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/fonts.css?v=lato-32">
 
 
 <link rel="stylesheet" href="/css/tokens.css">
 
 
-<link rel="stylesheet" href="/css/site.css"><link rel="stylesheet" href="/css/mobile-topbar.css"><link rel="stylesheet" href="/css/glass.css?v=card-rim-27"><link rel="stylesheet" href="/css/canvas.css?v=desktop-canvas-28">
+<link rel="stylesheet" href="/css/site.css?v=type-35"><link rel="stylesheet" href="/css/glass.css?v=card-selection-31"><link rel="stylesheet" href="/css/canvas.css?v=desktop-canvas-28">
 
 <script type="application/ld+json">
 {
@@ -76,8 +77,10 @@
 </script>
 
 
+<link rel="stylesheet" href="/css/layout.css?v=stack-40">
 </head>
-<body>
+<body data-page="blog-post">
+<a class="skip-link" href="#main-content">Skip to content</a>
   <div class="meteor-layer" aria-hidden="true"></div>
 <div class="cursor-spotlight" aria-hidden="true"></div>
 <script>
@@ -91,30 +94,9 @@
   })();
 </script>
 
-  <header class="ref-topbar"><a class="ref-brand" href="/"><img src="/images/wyh.jpg" alt=""><span>Yihao Wu<small>PhD Student · UCSB</small></span></a><button type="button" id="refTheme" aria-label="Switch color theme"><svg class="ref-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5"/></svg><svg class="ref-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15A9 9 0 0 1 9 4a9 9 0 1 0 11 11Z"/></svg></button><button type="button" class="hamburger" id="retainedMenu" aria-label="Open navigation menu" aria-controls="mobileMenu" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button></header>
+  <header class="ref-topbar"><a class="ref-brand" href="/"><img src="/images/wyh.jpg" alt="" width="42" height="42"><span>Yihao Wu<small>PhD Student · UCSB</small></span></a><button type="button" class="hamburger" id="retainedMenu" aria-label="Open navigation menu" aria-controls="mobileMenu" aria-expanded="false"><svg class="ui-icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button></header>
 
-  <nav class="mobile-menu" id="mobileMenu">
-  <div class="close-menu" id="closeMenu" aria-label="Close menu" role="button" tabindex="0">&times;</div>
-  <ul>
-  <li><a href="/">Home</a></li>
-  <li><a href="/#about">About</a></li>
-  <li><a href="/#publications">Publications</a></li>
-  <li><a href="/#poster">Posters</a></li>
-  <li><a href="/#contact">Contact</a></li>
-  <li><a href="/blog/">Capybara's blog</a></li>
-</ul>
-
-  
-
-<div class="mobile-mode-toggle">
-  <span class="label" id="mobile-mode-label">Dark Mode</span>
-  <label class="switch">
-    <input type="checkbox" id="mobile-mode-toggle-checkbox" aria-labelledby="mobile-mode-label">
-    <span class="slider"></span>
-  </label>
-</div>
-
-</nav>
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation" aria-hidden="true" inert><button type="button" class="close-menu" id="closeMenu" aria-label="Close navigation menu">×</button><ul><li><a href="/"><svg class="ui-icon " viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10H3Z"/><path d="M9 20v-7h6v7"/></svg><span>Home</span></a></li><li><a href="/blog/" class="active" aria-current="page"><svg class="ui-icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21h16M6 16l10-12 4 4-10 12H5Z"/></svg><span>Capybara’s Blog</span></a></li></ul><div class="mobile-home-sections"><p>Home sections</p><ul><li><a href="/#about">About</a></li><li><a href="/#publications">Publications</a></li><li><a href="/#poster">Posters</a></li><li><a href="/#service">Academic Service</a></li><li><a href="/#contact">Contact</a></li></ul></div><div class="mobile-appearance"><button type="button" class="appearance-button" data-theme-toggle><svg class="ui-icon theme-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15A9 9 0 0 1 9 4a9 9 0 1 0 11 11Z"/></svg><svg class="ui-icon theme-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5"/></svg><span data-theme-label>Dark mode</span></button><input type="checkbox" id="mobile-mode-toggle-checkbox" hidden tabindex="-1" aria-hidden="true"></div></nav>
 <div class="mobile-menu-backdrop" id="mobileMenuBackdrop" aria-hidden="true"></div>
 
 
@@ -123,66 +105,15 @@
   </nav>
 
   <div class="container">
-    <aside class="sidebar">
-  <div class="profile-card">
-  
-  
-  <img
-    id="profilePhoto"
-    src="/images/wyh.jpg"
-    data-light-src="/images/wyh.jpg"
-    data-dark-src="/images/wyh_night.png"
-    alt="Profile Photo">
-  <h2>Yihao Wu</h2>
-  <h3>吴逸豪</h3>
-  <p>PhD Student</p>
-  <p> University of California, Santa Barbara</p>
-  <div class="social-links" role="group" aria-label="Social links">
-    <a href="mailto:yihao_wu@ucsb.edu" aria-label="Email">
-      <i class="fa-solid fa-envelope"></i>
-    </a>
-    <a href="https://scholar.google.com/citations?user=1hvJRIQAAAAJ&amp;hl" target="_blank" rel="noopener" aria-label="Google Scholar">
-      <i class="fa-brands fa-google fa-xl align-middle"></i>
-    </a>
-    <a href="https://www.linkedin.com/in/yihao-wu-a91474255/" target="_blank" rel="noopener" aria-label="LinkedIn">
-      <i class="fa-brands fa-linkedin"></i>
-    </a>
-    <a href="https://orcid.org/0009-0003-5126-0961" target="_blank" rel="noopener" aria-label="ORCID">
-      <i class="ai ai-orcid"></i>
-    </a>
-  </div>
-</div>
-
-  <nav class="nav">
-    <ul>
-  <li><a href="/">Home</a></li>
-  <li><a href="/#about">About</a></li>
-  <li><a href="/#publications">Publications</a></li>
-  <li><a href="/#poster">Posters</a></li>
-  <li><a href="/#contact">Contact</a></li>
-  <li><a href="/blog/">Capybara's blog</a></li>
-</ul>
-
-  </nav>
-  
-
-<div class="mode-toggle">
-  <span class="label" id="desktop-mode-label">Dark Mode</span>
-  <label class="switch">
-    <input type="checkbox" id="mode-toggle" aria-labelledby="desktop-mode-label">
-    <span class="slider"></span>
-  </label>
-</div>
-
-</aside>
+    <aside class="sidebar" aria-label="Profile and site navigation"><div class="profile-card"><a class="profile-home" href="/" aria-label="Yihao Wu home"><img id="profilePhoto" src="/images/wyh.jpg" data-light-src="/images/wyh.jpg" data-dark-src="/images/wyh_night.png" alt="Yihao Wu" width="144" height="144"></a><h2>Yihao Wu</h2><h3 lang="zh">吴逸豪</h3><p>PhD Student · UCSB</p><div class="social-links" role="group" aria-label="Social links"><a href="https://scholar.google.com/citations?user=1hvJRIQAAAAJ" target="_blank" rel="noopener" aria-label="Google Scholar" title="Google Scholar"><svg class="brand-icon" data-icon="fa-google" fill="currentColor" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"/></svg></a><a href="https://www.linkedin.com/in/yihao-wu-a91474255/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn"><svg class="brand-icon" data-icon="fa-linkedin-in" fill="currentColor" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z"/></svg></a><a href="https://orcid.org/0009-0003-5126-0961" target="_blank" rel="noopener" aria-label="ORCID" title="ORCID"><svg class="brand-icon" data-icon="fa-orcid" fill="currentColor" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc. --><path d="M294.75 188.19h-45.92V342h47.47c67.62 0 83.12-51.34 83.12-76.91 0-41.64-26.54-76.9-84.67-76.9zM256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm-80.79 360.76h-29.84v-207.5h29.84zm-14.92-231.14a19.57 19.57 0 1 1 19.57-19.57 19.64 19.64 0 0 1-19.57 19.57zM300 369h-81V161.26h80.6c76.73 0 110.44 54.83 110.44 103.85C410 318.39 368.38 369 300 369z"/></svg></a></div></div><nav class="nav" aria-label="Site navigation"><ul><li><a href="/"><svg class="ui-icon " viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10H3Z"/><path d="M9 20v-7h6v7"/></svg><span>Home</span></a></li><li><a href="/blog/" class="active" aria-current="page"><svg class="ui-icon " viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21h16M6 16l10-12 4 4-10 12H5Z"/></svg><span>Capybara’s Blog</span></a></li></ul></nav><div class="sidebar-directory utility-panel"><h2>On this page</h2><nav aria-label="Page sections"><ol class="page-toc"><li><a href="#the-capybara-experience">The Capybara Experience</a></li><li><a href="#watch-and-enjoy">Watch and Enjoy</a></li><li><a href="#conclusion">Conclusion</a></li></ol></nav></div><div class="sidebar-appearance"><button type="button" class="appearance-button" data-theme-toggle><svg class="ui-icon theme-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15A9 9 0 0 1 9 4a9 9 0 1 0 11 11Z"/></svg><svg class="ui-icon theme-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5"/></svg><span data-theme-label>Dark mode</span></button><input type="checkbox" id="mode-toggle" hidden tabindex="-1" aria-hidden="true"></div></aside>
 
 
-    <main class="main-content">
+    <main class="main-content" id="main-content">
       <h1 class="visually-hidden">Yihao Wu – PhD Student in Electrical and Computer Engineering at UCSB</h1>
       <div class="content-area">
         
 <div class="blog-post-top-row content-title-row">
-  <a class="blog-back-link" href="/blog/"><i class="fa-solid fa-arrow-left-long"></i> Back to blog</a>
+  <a class="blog-back-link" href="/blog/"><i class="fa-solid fa-arrow-left-long"></i> Back to blog</a><a class="inline-post-search" href="/blog/?search=1"><svg class="ui-icon " viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg> Search posts</a>
 </div>
 
 <article class="blog-post">
@@ -199,9 +130,10 @@
       <span class="post-meta-chip"><i class="fa-regular fa-calendar"></i>March 30, 2025</span>
       <span class="post-meta-chip"><i class="fa-regular fa-clock"></i>1 min read</span>
     </div>
-  </header>
+  <div class="post-tags"><a href="/blog/?tag=Capybara">Capybara</a><a href="/blog/?tag=Life">Life</a></div></header>
 
-  <div class="post-content">
+  <details class="inline-toc"><summary>On this page</summary><nav aria-label="Page sections"><ol class="page-toc"><li><a href="#the-capybara-experience">The Capybara Experience</a></li><li><a href="#watch-and-enjoy">Watch and Enjoy</a></li><li><a href="#conclusion">Conclusion</a></li></ol></nav></details>
+<div class="post-content">
     
       <p>Welcome to my blog!</p>
 <p>In this post, I share my excitement about my first encounter with capybaras. These gentle giants have captured my heart with their calm demeanor and adorable expressions.</p>
@@ -229,6 +161,7 @@
 </footer>
 
     </main>
+<aside class="right-rail" aria-label="Blog search"><div class="utility-panel"><a class="rail-search-link" href="/blog/?search=1"><svg class="ui-icon " viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg> Search posts</a></div></aside>
   </div>
 
   <script>
@@ -236,7 +169,8 @@
   window.WYH_SITE_DATA.timelineItems = [];
 </script>
 
-<script src="/js/site.js?v=unified-liquid-20" defer></script><script src="/js/mobile-topbar.js" defer></script><script src="/js/glass.js?v=unified-liquid-20" defer></script>
+<script src="/js/site.js?v=stack-40" defer></script><script src="/js/glass.js?v=unified-liquid-20" defer></script>
 
+<script src="/js/layout.js?v=stack-40" defer></script>
 </body>
 </html>
