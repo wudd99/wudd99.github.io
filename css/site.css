@@ -3668,21 +3668,18 @@
     /* Dark-mode cursor spotlight: restrained local illumination, desktop only */
     .cursor-spotlight {
       position: fixed;
-      inset: 0;
+      top: 0;
+      left: 0;
+      width: calc(var(--spotlight-radius) * 2);
+      height: calc(var(--spotlight-radius) * 2);
       z-index: 2;
       pointer-events: none;
       opacity: 0;
-      contain: paint;
-      will-change: background, opacity;
+      contain: strict;
       mix-blend-mode: screen;
-      --spotlight-gradient: radial-gradient(
-        circle var(--spotlight-radius) at var(--spotlight-x, 50vw) var(--spotlight-y, 50vh),
-        var(--spotlight-core) 0%,
-        var(--spotlight-inner) 22%,
-        var(--spotlight-outer) 42%,
-        var(--spotlight-fade) 68%
-      );
-      background: var(--spotlight-gradient);
+      background: radial-gradient(circle var(--spotlight-radius) at center,
+        var(--spotlight-core) 0%, var(--spotlight-inner) 22%,
+        var(--spotlight-outer) 42%, var(--spotlight-fade) 68%);
       transition: opacity 0.24s ease;
     }
 

@@ -39,7 +39,12 @@ html body .skip-link{position:fixed;top:8px;left:12px;z-index:100010;padding:12p
 html body .skip-link:focus{transform:translateY(0)}
 html body>.nav,html body .ref-topbar,html body .mobile-menu-backdrop{display:none}
 html body .mobile-menu{display:none!important}
-html body .right-rail{position:sticky;top:28px;max-height:calc(100svh - 56px);overflow-y:auto;min-width:0;padding-bottom:12px;scrollbar-width:thin;scrollbar-color:var(--scrollbar-thumb) transparent}
+/* Expand the scroll viewport into the gutters, without moving its contents.
+   overflow-y:auto also clips horizontally; padding must contain focus rings and
+   the liquid controls' cast shadows on every side. */
+html body .right-rail{--rail-effect-space:48px;position:sticky;top:16px;max-height:calc(100svh - 32px);overflow-y:auto;min-width:0;width:calc(100% + var(--rail-effect-space) + var(--rail-effect-space));margin:-12px calc(0px - var(--rail-effect-space));padding:12px var(--rail-effect-space) 48px;scrollbar-width:thin;scrollbar-color:var(--scrollbar-thumb) transparent}
+/* Transparent rail padding must not cover the neighbouring article's controls. */
+html body .main-content{position:relative;z-index:1}
 html body .home-tools-rail-slot{margin-bottom:18px}
 html body .home-tools-slot:empty{display:none}
 html body .home-publication-tools{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;padding:18px;margin:0;border-radius:16px;min-width:0;max-width:100%;overflow:visible}
@@ -205,3 +210,37 @@ html body .appearance-button.liquid-pressed{background:transparent!important}
 html body .appearance-button>:not(.liquid-glass-skin){position:relative;z-index:1}
 html body .mobile-menu .close-menu{display:flex;align-items:center;justify-content:center}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){html body .appearance-button{background:var(--glass-fallback)}}
+
+/* Right-rail content sits directly on the page canvas; controls keep their faces. */
+html body .right-rail :is(.utility-panel,.pub-filter-shell){padding:0;border:0;border-radius:0;background:none!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+/* Layered important rules outrank the legacy unlayered interaction transitions.
+   Only theme switching is instantaneous; ordinary button feedback is restored. */
+@layer instant-theme{
+ html.theme-instant,html.theme-instant *,html.theme-instant::before,html.theme-instant::after,html.theme-instant *::before,html.theme-instant *::after{transition:none!important}
+}
+
+/* Stack-inspired rail widgets: a quiet icon above a clear title, generous
+   separation between independent tools, and no enclosing panel surface. */
+.rail-heading-icon,.rail-summary-heading{display:none}
+html body .home-publication-tools .pub-filter-group-label{margin:0}
+.publication-summary{display:contents}
+html body .right-rail .home-publication-tools{gap:0}
+html body .right-rail .home-publication-tools>:not(:first-child),html body .right-rail .blog-tools>.tag-filter{margin-top:32px;padding-top:28px;border-top:1px solid var(--border-strong)}
+html body .right-rail .rail-block-heading{display:grid;justify-items:start;gap:10px;margin:0 0 16px;padding:0;border:0;font-size:19px;font-weight:700;line-height:1.35;letter-spacing:0;text-transform:none;color:var(--text-heading)}
+html body .right-rail .rail-heading-icon{display:block;width:32px;height:32px;flex-basis:32px;color:var(--text-muted)}
+html body .right-rail .home-publication-tools .pub-filter-group{gap:8px}
+html body .right-rail .pub-filter-group .rail-block-heading{width:100%;flex-basis:100%}
+html body .right-rail .publication-summary{display:grid;gap:14px}
+html body .right-rail .publication-summary .rail-block-heading{margin-bottom:0}
+html body .right-rail .home-publication-tools .pub-filter-chip{font-size:12px;min-height:36px;padding:7px 11px}
+html body .right-rail .rail-search-link.rail-block-heading{font-size:19px}
+html body .right-rail .rail-search-link:hover{color:var(--primary)}
+
+/* Search is one compact strip, with its accessible label kept off canvas. */
+html body .post-search .search-field{min-height:52px;padding:0 14px;gap:12px;border-radius:12px;background:var(--glass-light);box-shadow:inset 0 1px 0 var(--glass-highlight),0 3px 12px -5px var(--glass-shadow)}
+html body .post-search .search-field input{min-height:50px;font-size:14px}
+html body .post-search .search-field>.ui-icon{order:2;width:20px;height:20px;flex-basis:20px}
+html body .blog-tools-slot .tag-filter summary{margin-top:0}
+
+/* A self-hosted Zhuque subset keeps the Chinese name consistent across devices. */
+html body .sidebar .profile-card h3[lang="zh"]{font-family:"Zhuque Profile","STFangsong","FangSong","Songti SC",serif}

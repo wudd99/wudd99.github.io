@@ -10,17 +10,21 @@ document.addEventListener('DOMContentLoaded', function () {
   const desktopToggle = document.getElementById('mode-toggle');
   const mobileToggle = document.getElementById('mobile-mode-toggle-checkbox');
 
+  const themeButtons = Array.from(document.querySelectorAll('[data-theme-toggle]'));
+  const topbarPhoto = document.querySelector('.ref-brand img');
+  let previousDark;
   function syncTheme() {
     const dark = root.classList.contains('dark-mode');
-    document.querySelectorAll('[data-theme-toggle]').forEach(button => {
+    if (dark === previousDark) return;
+    previousDark = dark;
+    themeButtons.forEach(button => {
       const label = dark ? 'Light mode' : 'Dark mode';
       button.querySelector('[data-theme-label]').textContent = label;
       button.setAttribute('aria-label', 'Switch to ' + label.toLowerCase());
     });
-    const photo = document.querySelector('.ref-brand img');
-    if (photo) photo.src = dark ? '/images/wyh_night.png' : '/images/wyh.jpg';
+    if (topbarPhoto) topbarPhoto.src = dark ? '/images/profile-dark.webp' : '/images/profile-light.webp';
   }
-  document.querySelectorAll('[data-theme-toggle]').forEach(button => {
+  themeButtons.forEach(button => {
     button.addEventListener('click', () => {
       const control = button.closest('.mobile-menu') ? mobileToggle : desktopToggle;
       if (control) control.click();
@@ -107,7 +111,10 @@ document.addEventListener('DOMContentLoaded', function () {
     function scrollPosition() {
       return window.scrollY || (document.scrollingElement || document.documentElement).scrollTop || 0;
     }
+    let paintedCurrent = null;
     function paintCurrent(current) {
+      if (current === paintedCurrent) return;
+      paintedCurrent = current;
       sectionLinks.forEach(link => {
         const selected = decodeURIComponent(link.hash.slice(1)) === current.id;
         link.classList.toggle('active', selected);

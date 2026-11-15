@@ -12,12 +12,16 @@
  // The original tactile handler uses this same resolver, avoiding parent effects.
  window.WYH_GLASS_SURFACE_FOR=surfaceFor;
  document.addEventListener('DOMContentLoaded',function(){
-  function updateGlass(){document.documentElement.classList.toggle('glass-scrolled',window.scrollY>12)}
+  let scrolled;
+  function updateGlass(){const next=window.scrollY>12;if(next!==scrolled){scrolled=next;document.documentElement.classList.toggle('glass-scrolled',next)}}
   updateGlass();window.addEventListener('scroll',updateGlass,{passive:true});
   const pending=new Map(),rebounds=new Map();let active=null,hovered=null,frame=0;
   const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
   const hoverCapability=window.matchMedia('(hover: hover) and (pointer: fine)');
-  function cancelFrame(){if(frame){cancelAnimationFrame(frame);frame=0}}
+  let frameState=null,frameX=0,frameY=0;
+  function cancelFrame(){if(frame){cancelAnimationFrame(frame);frame=0}frameState=null}
+  function paintPosition(){frame=0;const state=frameState;frameState=null;if(state&&(active===state||(!active&&hovered===state)))positionLiquid(state,frameX,frameY)}
+  function schedulePosition(state,x,y){frameState=state;frameX=x;frameY=y;if(!frame)frame=requestAnimationFrame(paintPosition)}
   function clearLiquid(surface){surface.classList.remove('liquid-pressed','liquid-releasing')}
   function clearHover(){if(hovered)hovered.surface.classList.remove('liquid-hover');hovered=null}
   function reset(){
@@ -29,8 +33,9 @@
   function cancelAll(){reset();clearHover()}
   function prepare(surface){
    if(!surface.classList.contains('liquid-ready')){
-    if(getComputedStyle(surface).position==='static')surface.classList.add('liquid-positioned');
-    if(getComputedStyle(surface).borderTopLeftRadius==='0px')surface.classList.add('liquid-rounded');
+    const computed=getComputedStyle(surface),position=computed.position,radius=computed.borderTopLeftRadius;
+    if(position==='static')surface.classList.add('liquid-positioned');
+    if(radius==='0px')surface.classList.add('liquid-rounded');
     surface.classList.add('liquid-ready',surface.matches('.clickable-card')?'liquid-card':'liquid-control');
    }
    if(!surface.querySelector(':scope > .liquid-glass-skin')){
@@ -50,7 +55,7 @@
   function setHover(surface,x,y){
    if(hovered?.surface!==surface){clearHover();if(!surface)return;prepare(surface);hovered={surface,rect:surface.getBoundingClientRect()};surface.classList.add('liquid-hover')}
    if(!hovered)return;
-   const state=hovered;cancelFrame();frame=requestAnimationFrame(()=>{frame=0;if(hovered===state&&!active)positionLiquid(state,x,y)});
+   schedulePosition(hovered,x,y);
   }
   function canHover(event){return hoverCapability.matches&&event.pointerType!=='touch'&&!event.buttons}
   function begin(target,details){
@@ -90,7 +95,7 @@
     if(Math.hypot(event.clientX-active.x,event.clientY-active.y)>10||!hit||!active.surface.contains(hit)){release(true);return}
    }else if(event.buttons===0&&!active.nativeDragging){release();return}
    // Mouse movement keeps the same press owner, even beyond the original card.
-   const press=active,x=event.clientX,y=event.clientY;cancelFrame();frame=requestAnimationFrame(()=>{frame=0;if(active===press)positionLiquid(press,x,y)});
+   schedulePosition(active,event.clientX,event.clientY);
   },{passive:true});
   document.addEventListener('pointerup',event=>{if(active?.kind==='pointer'&&event.pointerId===active.id)release()},{passive:true});
   document.addEventListener('pointercancel',()=>{if(!active?.nativeDragging)cancelAll()},{passive:true});
@@ -100,7 +105,7 @@
   },{passive:true});
   document.addEventListener('drag',event=>{
    if(!active?.nativeDragging||(!event.clientX&&!event.clientY))return;
-   const press=active;cancelFrame();frame=requestAnimationFrame(()=>{frame=0;if(active===press)positionLiquid(press,event.clientX,event.clientY)});
+   schedulePosition(active,event.clientX,event.clientY);
   },{passive:true});
   ['dragend','drop'].forEach(type=>document.addEventListener(type,()=>release(),{passive:true}));
   document.addEventListener('scroll',()=>{
@@ -109,6 +114,7 @@
    reset();
   },{capture:true,passive:true});window.addEventListener('blur',cancelAll);
   window.addEventListener('resize',cancelAll,{passive:true});
+  window.addEventListener('pagehide',cancelAll);
   document.addEventListener('visibilitychange',()=>{if(document.hidden)cancelAll()});
   hoverCapability.addEventListener?.('change',cancelAll);
   document.addEventListener('keydown',event=>{

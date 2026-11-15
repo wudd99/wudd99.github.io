@@ -108,38 +108,14 @@ document.addEventListener('DOMContentLoaded', function() {
         return document.getElementById('profilePhoto');
       }
 
-      function preloadProfilePhotos() {
+      function setProfilePhotoForMode(isDarkMode) {
         var profilePhoto = getProfilePhoto();
         if (!profilePhoto) return;
-        [profilePhoto.dataset.lightSrc, profilePhoto.dataset.darkSrc].forEach(function(src) {
-          if (!src) return;
-          var img = new Image();
-          img.src = src;
-        });
-      }
-
-      function setProfilePhotoForMode(isDarkMode, animate) {
-        var profilePhoto = getProfilePhoto();
-        if (!profilePhoto) return;
-
         var nextSrc = isDarkMode ? profilePhoto.dataset.darkSrc : profilePhoto.dataset.lightSrc;
-        if (!nextSrc || profilePhoto.getAttribute('src') === nextSrc) return;
-
-        if (!animate) {
+        if (nextSrc && profilePhoto.getAttribute('src') !== nextSrc) {
           profilePhoto.setAttribute('src', nextSrc);
-          return;
         }
-
-        profilePhoto.classList.add('profile-photo-switching');
-        window.setTimeout(function() {
-          profilePhoto.setAttribute('src', nextSrc);
-          window.setTimeout(function() {
-            profilePhoto.classList.remove('profile-photo-switching');
-          }, 130);
-        }, 100);
       }
-
-      preloadProfilePhotos();
 
       var darkModeEnabled = document.documentElement.classList.contains('dark-mode');
       document.documentElement.classList.toggle('dark-mode', darkModeEnabled);
@@ -147,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
       document.body.classList.toggle('dark-mode', darkModeEnabled);
       if (desktopToggle) desktopToggle.checked = darkModeEnabled;
       if (mobileToggle) mobileToggle.checked = darkModeEnabled;
-      setProfilePhotoForMode(darkModeEnabled, false);
+      setProfilePhotoForMode(darkModeEnabled);
 
       if (hamburger && mobileMenu) {
         var menuOpen = false;
@@ -215,20 +191,16 @@ document.addEventListener('DOMContentLoaded', function() {
         var y = window.innerHeight / 2;
 
         function canShowSpotlight() {
-          return finePointer.matches && !reduceMotion.matches;
+          return !document.hidden && document.documentElement.classList.contains('dark-mode') && finePointer.matches && !reduceMotion.matches;
         }
 
         function paintSpotlight() {
           raf = null;
-          var xValue = x + 'px';
-          var yValue = y + 'px';
-          spotlight.style.setProperty('--spotlight-x', xValue);
-          spotlight.style.setProperty('--spotlight-y', yValue);
-          document.documentElement.style.setProperty('--spotlight-x', xValue);
-          document.documentElement.style.setProperty('--spotlight-y', yValue);
+          spotlight.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) translate(-50%,-50%)';
         }
 
         function hideSpotlight() {
+          if (raf !== null) { window.cancelAnimationFrame(raf); raf = null; }
           document.body.classList.remove('cursor-spotlight-active');
         }
 
@@ -240,6 +212,7 @@ document.addEventListener('DOMContentLoaded', function() {
           if (!raf) raf = window.requestAnimationFrame(paintSpotlight);
         }, { passive: true });
 
+        document.addEventListener('visibilitychange', hideSpotlight);
         document.addEventListener('mouseleave', hideSpotlight, false);
         window.addEventListener('blur', hideSpotlight, false);
         window.addEventListener('scroll', hideSpotlight, { passive: true });
@@ -258,208 +231,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
       initDarkModeCursorSpotlight();
 
-      function createThemeTransitionOverlay(wasDarkMode) {
-        var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (reduceMotion) return;
-
-        var oldOverlay = document.querySelector('.theme-transition-overlay');
-        if (oldOverlay) oldOverlay.remove();
-
-        var overlay = document.createElement('div');
-        overlay.className = 'theme-transition-overlay ' + (wasDarkMode ? 'theme-dark' : 'theme-light');
-        overlay.setAttribute('aria-hidden', 'true');
-
-        var meteorLayer = document.querySelector('.meteor-layer');
-        if (meteorLayer && meteorLayer.parentNode) {
-          meteorLayer.parentNode.insertBefore(overlay, meteorLayer.nextSibling);
-        } else {
-          document.body.insertBefore(overlay, document.body.firstChild);
-        }
-
-        overlay.offsetHeight;
-        window.requestAnimationFrame(function() {
-          overlay.classList.add('is-fading');
-        });
-
-        window.setTimeout(function() {
-          if (overlay && overlay.parentNode) overlay.remove();
-        }, 720);
-      }
-
-
-      function getThemeSurfaceSelector() {
-        return [
-          '.publication-card',
-          '.poster-card',
-          '.blog-card',
-          '.blog-post',
-          '.post-header',
-          '.post-content',
-          '.research-timeline',
-          '.pub-filter-shell',
-          '.timeline-card',
-          '.mode-toggle',
-          '.mobile-mode-toggle',
-          '.mobile-menu'
-        ].join(', ');
-      }
-
-      function getThemeBorderSelector() {
-        return [
-          getThemeSurfaceSelector(),
-          '.pub-tag',
-          '.poster-tag',
-          '.blog-meta-pill',
-          '.post-meta-chip',
-          '.timeline-chip',
-          '.timeline-stat',
-          '.pub-filter-chip',
-          '.pub-card-meta .meta-pill',
-          '.profile-card .social-links a',
-          '.nav ul li a',
-          '.mobile-menu ul li a',
-          'section h2',
-          '.publications-section h2',
-          '.poster-section h2',
-          'footer'
-        ].join(', ');
-      }
-
-      function createSurfaceThemeFades(wasDarkMode) {
-        var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (reduceMotion) return;
-
-        var surfaces = Array.prototype.slice.call(document.querySelectorAll(getThemeSurfaceSelector()));
-        surfaces.forEach(function(surface) {
-          surface.querySelectorAll(':scope > .theme-card-fade, :scope > .theme-border-fade').forEach(function(oldFade) {
-            oldFade.remove();
-          });
-
-          var fade = document.createElement('span');
-          fade.className = 'theme-card-fade ' + (wasDarkMode ? 'theme-dark' : 'theme-light');
-          fade.setAttribute('aria-hidden', 'true');
-          surface.insertBefore(fade, surface.firstChild);
-
-          fade.offsetHeight;
-          window.requestAnimationFrame(function() {
-            fade.classList.add('is-fading');
-          });
-
-          window.setTimeout(function() {
-            if (fade && fade.parentNode) fade.remove();
-          }, 820);
-        });
-      }
-
-      function captureThemeBorderStates() {
-        var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (reduceMotion) return [];
-
-        return Array.prototype.slice.call(document.querySelectorAll(getThemeBorderSelector())).map(function(el) {
-          var computed = window.getComputedStyle(el);
-          return {
-            el: el,
-            oldTransition: el.style.transition,
-            oldInlineTop: el.style.borderTopColor,
-            oldInlineRight: el.style.borderRightColor,
-            oldInlineBottom: el.style.borderBottomColor,
-            oldInlineLeft: el.style.borderLeftColor,
-            oldTop: computed.borderTopColor,
-            oldRight: computed.borderRightColor,
-            oldBottom: computed.borderBottomColor,
-            oldLeft: computed.borderLeftColor
-          };
-        });
-      }
-
-      function animateThemeBorders(borderStates) {
-        if (!borderStates || !borderStates.length) return;
-
-        var timing = '720ms cubic-bezier(0.22, 1, 0.36, 1)';
-        var transitionValue = [
-          'border-top-color ' + timing,
-          'border-right-color ' + timing,
-          'border-bottom-color ' + timing,
-          'border-left-color ' + timing
-        ].join(', ');
-
-        var activeStates = [];
-
-        borderStates.forEach(function(state) {
-          var el = state.el;
-          if (!el || !document.documentElement.contains(el)) return;
-
-          var next = window.getComputedStyle(el);
-          var nextTop = next.borderTopColor;
-          var nextRight = next.borderRightColor;
-          var nextBottom = next.borderBottomColor;
-          var nextLeft = next.borderLeftColor;
-
-          var changed = state.oldTop !== nextTop || state.oldRight !== nextRight || state.oldBottom !== nextBottom || state.oldLeft !== nextLeft;
-          if (!changed) return;
-
-          state.nextTop = nextTop;
-          state.nextRight = nextRight;
-          state.nextBottom = nextBottom;
-          state.nextLeft = nextLeft;
-          activeStates.push(state);
-
-          el.style.transition = 'none';
-          el.style.borderTopColor = state.oldTop;
-          el.style.borderRightColor = state.oldRight;
-          el.style.borderBottomColor = state.oldBottom;
-          el.style.borderLeftColor = state.oldLeft;
-        });
-
-        if (!activeStates.length) return;
-
-        document.body.offsetHeight;
-
-        window.requestAnimationFrame(function() {
-          activeStates.forEach(function(state) {
-            var el = state.el;
-            if (!el || !document.documentElement.contains(el)) return;
-            el.style.transition = transitionValue;
-            el.style.borderTopColor = state.nextTop;
-            el.style.borderRightColor = state.nextRight;
-            el.style.borderBottomColor = state.nextBottom;
-            el.style.borderLeftColor = state.nextLeft;
-          });
-        });
-
-        window.setTimeout(function() {
-          activeStates.forEach(function(state) {
-            var el = state.el;
-            if (!el || !document.documentElement.contains(el)) return;
-            el.style.transition = state.oldTransition;
-            el.style.borderTopColor = state.oldInlineTop;
-            el.style.borderRightColor = state.oldInlineRight;
-            el.style.borderBottomColor = state.oldInlineBottom;
-            el.style.borderLeftColor = state.oldInlineLeft;
-          });
-        }, 820);
-      }
-
+      var themeFrame = 0;
       function toggleDarkMode(e) {
         var nextDarkMode = e.target.checked;
-        var wasDarkMode = document.body.classList.contains('dark-mode');
-        var borderStates = captureThemeBorderStates();
-
-        document.body.classList.add('transition-enabled', 'theme-switching');
-        createThemeTransitionOverlay(wasDarkMode);
-        createSurfaceThemeFades(wasDarkMode);
-
+        if (themeFrame) window.cancelAnimationFrame(themeFrame);
+        // Suppress transitions through the first rendered frame of the new theme,
+        // then restore ordinary hover/press feedback. Rapid toggles share this frame.
+        document.documentElement.classList.add('theme-instant');
         document.documentElement.classList.toggle('dark-mode', nextDarkMode);
         document.documentElement.dataset.theme = nextDarkMode ? 'dark' : 'light';
         document.body.classList.toggle('dark-mode', nextDarkMode);
         try { localStorage.setItem('dark-mode', nextDarkMode ? 'true' : 'false'); } catch (e) {}
-        animateThemeBorders(borderStates);
         if (desktopToggle) desktopToggle.checked = nextDarkMode;
         if (mobileToggle) mobileToggle.checked = nextDarkMode;
-        setProfilePhotoForMode(nextDarkMode, true);
-        setTimeout(function() {
-          document.body.classList.remove('transition-enabled', 'theme-switching');
-        }, 820);
+        setProfilePhotoForMode(nextDarkMode);
+        themeFrame = window.requestAnimationFrame(function() {
+          themeFrame = window.requestAnimationFrame(function() {
+            document.documentElement.classList.remove('theme-instant');
+            themeFrame = 0;
+          });
+        });
       }
 
       if (desktopToggle) {
@@ -740,11 +531,10 @@ document.addEventListener('DOMContentLoaded', function() {
         shell.id = 'publication-tools';
         shell.setAttribute('aria-label', 'Search and filter publications');
         shell.innerHTML = '<form class="post-search publication-search" role="search">' +
-          '<label for="publication-query">Search publications</label>' +
+          '<label class="visually-hidden" for="publication-query">Search publications</label>' +
           '<div class="search-field"><svg class="ui-icon tabler-icon" data-icon="tabler-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/> <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /> <path d="M21 21l-6 -6" /></svg>' +
           '<input id="publication-query" type="search" placeholder="Search papers…" aria-controls="publication-results" aria-describedby="publication-search-help"></div>' +
-          '<p class="search-help" id="publication-search-help">Titles, authors &amp; venues</p></form>' +
-          '<span class="pub-filter-heading">Filter publications</span>';
+          '<p class="search-help visually-hidden" id="publication-search-help">Titles, authors &amp; venues</p></form>';
         grid.id = 'publication-results';
 
         var state = {
@@ -760,9 +550,9 @@ document.addEventListener('DOMContentLoaded', function() {
           group.className = 'pub-filter-group';
           group.setAttribute('role', 'group');
           group.setAttribute('aria-label', name === 'type' ? 'Publication type' : 'Research topic');
-          var groupLabel = document.createElement('span');
-          groupLabel.className = 'pub-filter-group-label';
-          groupLabel.textContent = name === 'type' ? 'Type' : 'Topic';
+          var groupLabel = document.createElement('h3');
+          groupLabel.className = 'pub-filter-group-label rail-block-heading';
+          groupLabel.innerHTML = name === 'type' ? '<svg class="ui-icon tabler-icon rail-heading-icon" data-icon="tabler-category-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/> <path d="M14 4h6v6h-6z" /> <path d="M4 14h6v6h-6z" /> <path d="M17 17m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /> <path d="M7 7m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /></svg><span class="rail-heading-title">Publication type</span>' : '<svg class="ui-icon tabler-icon rail-heading-icon" data-icon="tabler-atom-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/> <path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /> <path d="M12 21l0 .01" /> <path d="M3 9l0 .01" /> <path d="M21 9l0 .01" /> <path d="M8 20.1a9 9 0 0 1 -5 -7.1" /> <path d="M16 20.1a9 9 0 0 0 5 -7.1" /> <path d="M6.2 5a9 9 0 0 1 11.4 0" /></svg><span class="rail-heading-title">Research topic</span>';
           group.appendChild(groupLabel);
 
           var allChip = document.createElement('button');
@@ -799,11 +589,16 @@ document.addEventListener('DOMContentLoaded', function() {
         resultStatus.className = 'publication-filter-status';
         resultStatus.setAttribute('role', 'status');
         resultStatus.setAttribute('aria-live', 'polite');
-        shell.appendChild(resultStatus);
+        var summary = document.createElement('section');
+        summary.className = 'publication-summary';
+        summary.setAttribute('aria-label', 'Filter results');
+        summary.innerHTML = '<h3 class="rail-block-heading rail-summary-heading"><svg class="ui-icon tabler-icon rail-heading-icon" data-icon="tabler-list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/> <path d="M3.5 5.5l1.5 1.5l2.5 -2.5" /> <path d="M3.5 11.5l1.5 1.5l2.5 -2.5" /> <path d="M3.5 17.5l1.5 1.5l2.5 -2.5" /> <path d="M11 6l9 0" /> <path d="M11 12l9 0" /> <path d="M11 18l9 0" /></svg><span class="rail-heading-title">Results</span></h3>';
+        summary.appendChild(resultStatus);
+        shell.appendChild(summary);
         var actions = document.createElement('div');
         actions.className = 'publication-tool-actions';
         actions.innerHTML = '<a href="#publications">View results ↓</a><button type="button" class="text-button" data-publication-clear>Clear filters</button>';
-        shell.appendChild(actions);
+        summary.appendChild(actions);
         var empty = document.createElement('div');
         empty.className = 'publication-empty utility-panel';
         empty.hidden = true;
@@ -1062,13 +857,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     (function initNaturalMeteorAmbience() {
       var layer = document.querySelector('.meteor-layer');
-      if (!layer || !window.requestAnimationFrame) return;
+      if (!layer || typeof layer.animate !== 'function') return;
 
       var reduceMotionQuery = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
-      if (reduceMotionQuery && reduceMotionQuery.matches) return;
 
       var scheduleTimer = null;
-      var activeMeteors = 0;
+      var activeMeteors = new Set();
       var stopped = false;
 
       function random(min, max) {
@@ -1095,7 +889,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       function scheduleNext(delay) {
-        if (stopped) return;
+        if (stopped || document.hidden) return;
         window.clearTimeout(scheduleTimer);
         scheduleTimer = window.setTimeout(function() {
           scheduleTimer = null;
@@ -1109,9 +903,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         var vp = viewport();
         var maxActive = vp.width < 768 ? 1 : 3;
-        if (activeMeteors >= maxActive) return;
-
-        activeMeteors += 1;
+        if (activeMeteors.size >= maxActive) return;
 
         var meteor = document.createElement('span');
         meteor.className = 'meteor';
@@ -1148,43 +940,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
         layer.appendChild(meteor);
 
-        var startTime = performance.now();
-
-        function frame(now) {
-          var t = clamp((now - startTime) / duration, 0, 1);
-
+        // Sample the existing curved trajectory once; animate only compositor
+        // properties instead of changing four inherited CSS variables per frame.
+        var keyframes = [];
+        for (var step = 0; step <= 24; step++) {
+          var t = step / 24 * 0.82;
           var progress = 0.60 * t - 0.7317073171 * t * t + 1.1461629982 * t * t * t;
           var drift = Math.sin(t * Math.PI) * driftAmount;
-
           var x = moveX * progress + perpX * drift;
           var y = moveY * progress + perpY * drift;
-
           var fadeIn = clamp(t / 0.12, 0, 1);
           var fadeOut = clamp((0.74 - t) / 0.34, 0, 1);
-          var shimmer = 0.985 + 0.015 * Math.sin(t * Math.PI * 1.6);
-          var opacity = maxOpacity * Math.min(fadeIn, fadeOut) * shimmer;
-
+          var opacity = maxOpacity * Math.min(fadeIn, fadeOut) * (0.985 + 0.015 * Math.sin(t * Math.PI * 1.6));
           var scale = 0.28 + 0.58 * clamp(t / 0.30, 0, 1) - 0.14 * clamp((t - 0.56) / 0.28, 0, 1);
-
-          meteor.style.setProperty('--meteor-x', x.toFixed(1) + 'px');
-          meteor.style.setProperty('--meteor-y', y.toFixed(1) + 'px');
-          meteor.style.setProperty('--meteor-opacity', opacity.toFixed(3));
-          meteor.style.setProperty('--meteor-scale', scale.toFixed(3));
-
-          if (t < 0.82) {
-            window.requestAnimationFrame(frame);
-          } else {
-            meteor.remove();
-            activeMeteors = Math.max(0, activeMeteors - 1);
-          }
+          keyframes.push({
+            transform: 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,0) rotate(' + angle.toFixed(1) + 'deg) scaleX(' + scale.toFixed(3) + ')',
+            opacity: opacity,
+            offset: step / 24
+          });
         }
-
-        window.requestAnimationFrame(frame);
+        var animation = meteor.animate(keyframes, {duration: duration * 0.82, easing: 'linear'});
+        activeMeteors.add(animation);
+        function cleanup() {
+          animation.onfinish = animation.oncancel = null;
+          activeMeteors.delete(animation);
+          meteor.remove();
+          animation.cancel();
+        }
+        animation.onfinish = animation.oncancel = cleanup;
       }
 
       function startMeteors() {
-        if (stopped) stopped = false;
-        if (scheduleTimer || (reduceMotionQuery && reduceMotionQuery.matches)) return;
+        if (document.hidden || scheduleTimer || (reduceMotionQuery && reduceMotionQuery.matches)) return;
+        stopped = false;
         scheduleNext(random(700, 2200));
       }
 
@@ -1192,14 +980,17 @@ document.addEventListener('DOMContentLoaded', function() {
         stopped = true;
         window.clearTimeout(scheduleTimer);
         scheduleTimer = null;
-        activeMeteors = 0;
-        layer.innerHTML = '';
+        // Cancel synchronously, including detached nodes and retained keyframes.
+        activeMeteors.forEach(function(animation) {
+          var cleanup = animation.oncancel;
+          if (cleanup) cleanup();
+        });
+        activeMeteors.clear();
       }
 
       document.addEventListener('visibilitychange', function() {
         if (document.hidden) {
-          window.clearTimeout(scheduleTimer);
-          scheduleTimer = null;
+          stopMeteors();
         } else {
           startMeteors();
         }
@@ -1222,5 +1013,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       }
 
+      window.addEventListener('pagehide', stopMeteors);
+      window.addEventListener('pageshow', startMeteors);
       startMeteors();
     })();
