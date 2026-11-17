@@ -1,0 +1,4 @@
+Font Awesome Free Brands 6.7.2
+Source: https://github.com/FortAwesome/Font-Awesome/tree/6.7.2/svgs/brands
+Icons: CC BY 4.0. Copyright 2024 Fonticons, Inc.
+Original SVG attribution comments are retained in every inline copy.

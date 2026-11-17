@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="720" viewBox="0 0 960 720" fill="none">
+<defs>
+ <linearGradient id="fiber" x1="0" y1="0" x2="960" y2="720" gradientUnits="userSpaceOnUse"><stop stop-color="#6aaddb"/><stop offset=".48" stop-color="#82bdc6"/><stop offset="1" stop-color="#a49bcf"/></linearGradient>
+ <radialGradient id="a"><stop stop-color="#71c6dc" stop-opacity=".18"/><stop offset="1" stop-color="#71c6dc" stop-opacity="0"/></radialGradient>
+ <radialGradient id="b"><stop stop-color="#b1a3e7" stop-opacity=".16"/><stop offset="1" stop-color="#b1a3e7" stop-opacity="0"/></radialGradient>
+</defs>
+<g stroke="url(#fiber)" stroke-width=".85" stroke-linecap="round" opacity=".32">
+ <path d="M0 108C80 62 150 62 230 108S390 154 470 108 630 62 710 108 870 154 960 108"/>
+ <path d="M0 118C80 72 150 72 230 118S390 164 470 118 630 72 710 118 870 164 960 118" opacity=".55"/>
+ <path d="M0 124C80 78 150 78 230 124S390 170 470 124 630 78 710 124 870 170 960 124" opacity=".28"/>
+ <path d="M0 408h114c18 0 28-8 40-20l51-51c12-12 22-20 40-20h103c18 0 29 8 41 20l55 55c12 12 23 16 39 16h477"/>
+ <path d="M0 416h114c21 0 32-9 46-23l51-51c10-10 19-17 34-17h103c15 0 24 7 35 17l55 55c14 14 26 19 45 19h477" opacity=".38"/>
+ <path d="M0 610C130 664 182 570 304 570S486 650 608 650 814 548 960 610" opacity=".72"/>
+ <path d="M0 622C130 676 182 582 304 582S486 662 608 662 814 560 960 622" opacity=".3"/>
+</g>
+<g stroke="#8bafd0" stroke-width=".8" opacity=".32">
+ <path d="m580 230 52 24 44-31 55 17m-55-17 12-43"/>
+ <circle cx="580" cy="230" r="2.2" fill="#edf7ff"/><circle cx="632" cy="254" r="3.2" fill="#edf7ff"/><circle cx="676" cy="223" r="2.4" fill="#edf7ff"/><circle cx="731" cy="240" r="2.2" fill="#edf7ff"/><circle cx="688" cy="180" r="2" fill="#edf7ff"/>
+ <circle cx="114" cy="408" r="2.3" fill="#edf7ff"/><circle cx="348" cy="317" r="2.5" fill="#edf7ff"/><circle cx="608" cy="650" r="2.2" fill="#edf7ff"/>
+ <circle cx="190" cy="213" r="11" stroke-dasharray="28 14"/><circle cx="190" cy="213" r="2.2"/>
+</g>
+<circle cx="632" cy="254" r="82" fill="url(#a)"/><circle cx="348" cy="317" r="72" fill="url(#b)"/><circle cx="608" cy="650" r="64" fill="url(#a)"/>
+<g fill="#8faecc" opacity=".25"><circle cx="68" cy="238" r="1"/><circle cx="304" cy="196" r="1.1"/><circle cx="450" cy="512" r="1"/><circle cx="848" cy="354" r="1.2"/><circle cx="790" cy="552" r="1"/><circle cx="220" cy="545" r="1"/></g>
+</svg>

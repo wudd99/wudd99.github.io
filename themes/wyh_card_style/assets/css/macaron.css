@@ -1,0 +1,319 @@
+/* Seaside macaron palette: sea salt / rose / vanilla / pistachio.
+   Opaque text colors pair with pastel fills. Glass optics keep existing gestures.
+   This file loads after legacy theme rules and changes no layout or scripts. */
+html:not(.dark-mode), html body:not(.dark-mode) {
+  --bg-main: #f7f9fb;
+  --bg-soft: #fdfefe;
+  --card-bg: #fdfefe;
+  --card-bg-soft: #f0f4f7;
+  --text-main: #343b42;
+  --text-heading: #303942;
+  --text-muted: #626d78;
+  --text-subtle: #66717c;
+  --border-soft: #dfe6ea;
+  --border-strong: #b8c7d1;
+  --primary: #4c657f;
+  --primary-strong: #3c536b;
+  --primary-soft: rgba(76,101,127,.07);
+  --primary-soft-hover: rgba(76,101,127,.12);
+  --primary-border-soft: rgba(76,101,127,.17);
+  --primary-border-hover: rgba(76,101,127,.28);
+  --glass-panel: rgba(253,254,254,.60);
+  --glass-inset: rgba(253,254,254,.22);
+  --glass-thin: rgba(247,249,251,.55);
+  --glass-thick: rgba(253,254,254,.94);
+  --glass-light: rgba(253,254,254,.54);
+  --glass-edge: rgba(114,141,160,.22);
+  --glass-highlight: rgba(255,254,247,.82);
+  --glass-shadow: rgba(45,55,65,.08);
+  --glass-fallback: #fdfefe;
+  --active-filter-bg: #45647d;
+  --active-filter-press-bg: #39566d;
+  --active-filter-color: #ffffff;
+  --spotlight-core: rgba(223,237,247,.08);
+  --spotlight-inner: rgba(244,225,233,.035);
+  --spotlight-outer: rgba(248,238,203,.01);
+  --macaron-white: rgba(255,253,241,.85);
+  --band-opacity: .58;
+  --band-shadow-alpha: .14;
+  --recess-rgb: 38,47,55;
+  --recess-alpha: .24;
+  --rim-core-alpha: .66;
+  --rim-secondary-alpha: .5;
+  --sea-surface: #dfedf7;
+  --sea-ink: #45647d;
+  --sea-border: #b6d0e2;
+  --sea-rgb: 138,181,211;
+  --rose-surface: #f4e1e9;
+  --rose-ink: #825369;
+  --rose-border: #dfb9ca;
+  --rose-rgb: 211,154,177;
+  --vanilla-surface: #f8eecb;
+  --vanilla-ink: #786223;
+  --vanilla-border: #dfcf96;
+  --vanilla-rgb: 220,196,126;
+  --pistachio-surface: #e5eedb;
+  --pistachio-ink: #546b3d;
+  --pistachio-border: #c5d6b1;
+  --pistachio-rgb: 164,188,135;
+}
+html.dark-mode, html body.dark-mode {
+  --bg-main: #282b30;
+  --bg-soft: #343941;
+  --card-bg: #343941;
+  --card-bg-soft: #3b444d;
+  --text-main: #e5e8ed;
+  --text-heading: #e5e8ed;
+  --text-muted: #b4bfcc;
+  --text-subtle: #afbbc9;
+  --border-soft: #454e59;
+  --border-strong: #677b8b;
+  --primary: #b3cbe3;
+  --primary-strong: #c9ddef;
+  --primary-soft: rgba(184,211,234,.08);
+  --primary-soft-hover: rgba(184,211,234,.14);
+  --primary-border-soft: rgba(184,211,234,.18);
+  --primary-border-hover: rgba(184,211,234,.30);
+  --glass-panel: rgba(52,57,65,.74);
+  --glass-inset: rgba(180,191,204,.04);
+  --glass-thin: rgba(40,43,48,.65);
+  --glass-thick: rgba(52,57,65,.95);
+  --glass-light: rgba(52,57,65,.72);
+  --glass-edge: rgba(184,211,234,.18);
+  --glass-highlight: rgba(235,241,244,.15);
+  --glass-shadow: rgba(8,12,17,.24);
+  --glass-fallback: #343941;
+  --active-filter-bg: #b8d3ea;
+  --active-filter-press-bg: #a7c4df;
+  --active-filter-color: #282b30;
+  --spotlight-core: rgba(223,237,247,.055);
+  --spotlight-inner: rgba(244,225,233,.025);
+  --spotlight-outer: rgba(248,238,203,.01);
+  --macaron-white: rgba(235,241,244,.42);
+  --band-opacity: .38;
+  --band-shadow-alpha: .07;
+  --recess-rgb: 8,12,17;
+  --recess-alpha: .55;
+  --rim-core-alpha: .42;
+  --rim-secondary-alpha: .30;
+  --sea-surface: #324554;
+  --sea-ink: #b8d3ea;
+  --sea-border: #577c98;
+  --sea-rgb: 135,175,204;
+  --rose-surface: #4b3744;
+  --rose-ink: #e5bccd;
+  --rose-border: #93667f;
+  --rose-rgb: 204,149,174;
+  --vanilla-surface: #49422e;
+  --vanilla-ink: #e5d39b;
+  --vanilla-border: #948452;
+  --vanilla-rgb: 207,185,117;
+  --pistachio-surface: #3a4630;
+  --pistachio-ink: #cadab2;
+  --pistachio-border: #768a59;
+  --pistachio-rgb: 157,180,129;
+}
+:root, html body {
+  --body-bg: var(--bg-main);
+  --body-gradient: var(--bg-main);
+  --page-bg-decorated: var(--bg-main);
+  --text-heading-soft: var(--text-muted);
+  --link-color: var(--primary);
+  --section-border: var(--border-soft);
+  --section-accent-gradient: linear-gradient(90deg,var(--border-strong),transparent);
+  --section-accent-shadow: none;
+  --card-hover-bg: var(--card-bg-soft);
+  --card-hover-gradient: var(--card-bg-soft);
+  --card-hover-border: var(--border-strong);
+  --card-hover-shadow: 0 10px 24px var(--glass-shadow);
+  --card-focus-ring: 0 0 0 2px var(--primary-border-hover);
+  --card-pressed-bg: var(--glass-inset);
+  --card-pressed-border: var(--border-strong);
+  --nav-link-color: var(--text-muted);
+  --nav-link-active: var(--primary-strong);
+  --nav-link-hover-bg: var(--primary-soft);
+  --nav-link-hover-border: var(--primary-border-soft);
+  --nav-link-active-bg: var(--primary-soft-hover);
+  --nav-link-active-border: var(--primary-border-hover);
+  --hamburger-color: var(--text-main);
+  --hamburger-border: var(--glass-edge);
+  --toggle-bg: var(--glass-inset);
+  --toggle-border: var(--glass-edge);
+  --scrollbar-thumb: var(--primary-border-hover);
+  --scrollbar-thumb-hover: var(--text-muted);
+  --social-link-color: var(--text-muted);
+  --social-link-bg: var(--glass-inset);
+  --social-link-border: var(--glass-edge);
+  --social-link-hover-color: var(--primary);
+  --social-link-hover-bg: var(--primary-soft);
+  --social-link-hover-border: var(--border-strong);
+  --social-link-hover-shadow: 0 5px 12px var(--glass-shadow);
+  --social-link-active-bg: var(--glass-inset);
+  --social-link-active-border: var(--border-strong);
+  --pub-surface: var(--card-bg);
+  --pub-surface-end: var(--card-bg-soft);
+  --pub-surface-glow: transparent;
+  --pub-border: var(--glass-edge);
+  --pub-title-color: var(--text-heading);
+  --pub-author-color: var(--text-muted);
+  --pub-source-color: var(--text-muted);
+  --pub-author-underline: var(--border-strong);
+  --pub-shadow: 0 5px 18px var(--glass-shadow);
+  --poster-surface: var(--card-bg);
+  --poster-surface-end: var(--card-bg-soft);
+  --poster-border: var(--glass-edge);
+  --card-rim-light: var(--liquid-rim-light);
+  --card-rim-blue: var(--liquid-rim-blue);
+  --card-rim-violet: var(--liquid-rim-violet);
+  --press-bg: var(--primary-soft);
+  --press-border: var(--border-strong);
+  --sci-cyan: var(--primary);
+  --sci-glow-soft: transparent;
+  --sci-glow-mid: transparent;
+  --sci-line: var(--border-soft);
+  --timeline-surface: var(--glass-panel);
+  --timeline-border: var(--glass-edge);
+  --timeline-shadow: 0 5px 18px var(--glass-shadow);
+  --timeline-overlay: none;
+  --pub-pdf-bg: var(--sea-surface);
+  --pub-pdf-hover-bg: var(--sea-surface);
+  --pub-pdf-color: var(--sea-ink);
+  --pub-pdf-shadow: 0 3px 10px var(--glass-shadow);
+  --glass-down-surface: transparent;
+  --theme-switch-duration: 0s;
+  --pub-journal-color: var(--sea-ink);
+  --pub-journal-bg: var(--sea-surface);
+  --pub-journal-border: var(--sea-border);
+  --pub-conference-color: var(--rose-ink);
+  --pub-conference-bg: var(--rose-surface);
+  --pub-conference-border: var(--rose-border);
+  --poster-color: var(--vanilla-ink);
+  --poster-badge-bg: var(--vanilla-surface);
+  --poster-badge-border: var(--vanilla-border);
+  --type-journal-color: var(--sea-ink);
+  --type-journal-bg: var(--sea-surface);
+  --type-journal-border: var(--sea-border);
+  --type-conference-color: var(--rose-ink);
+  --type-conference-bg: var(--rose-surface);
+  --type-conference-border: var(--rose-border);
+  --type-other-color: var(--pistachio-ink);
+  --type-other-bg: var(--pistachio-surface);
+  --type-other-border: var(--pistachio-border);
+  --tag-source-color: var(--sea-ink);
+  --tag-source-bg: var(--sea-surface);
+  --tag-source-bg-hover: var(--sea-surface);
+  --tag-source-bg-active: var(--sea-surface);
+  --tag-source-border: var(--sea-border);
+  --tag-link-color: var(--rose-ink);
+  --tag-link-bg: var(--rose-surface);
+  --tag-link-bg-hover: var(--rose-surface);
+  --tag-link-bg-active: var(--rose-surface);
+  --tag-link-border: var(--rose-border);
+  --tag-remark-color: var(--pistachio-ink);
+  --tag-remark-bg: var(--pistachio-surface);
+  --tag-remark-border: var(--pistachio-border);
+}
+
+/* Default optics: pearl highlight, sea-salt edge and rose return light. */
+html body{--macaron-rgb:var(--sea-rgb);--macaron-secondary-rgb:var(--rose-rgb);--macaron-surface:var(--sea-surface);--macaron-ink:var(--sea-ink);--macaron-border:var(--sea-border);--liquid-rim-light:var(--macaron-white);--liquid-rim-blue:rgba(var(--sea-rgb),var(--rim-core-alpha));--liquid-rim-violet:rgba(var(--rose-rgb),var(--rim-secondary-alpha));--glass-pressed-edge:var(--glass-edge)}
+html body .publication-card[data-pub-type="journal"]{--macaron-rgb:var(--sea-rgb);--macaron-secondary-rgb:var(--pistachio-rgb);--macaron-surface:var(--sea-surface);--macaron-ink:var(--sea-ink);--macaron-border:var(--sea-border)}
+html body .publication-card[data-pub-type="conference"]{--macaron-rgb:var(--rose-rgb);--macaron-secondary-rgb:var(--sea-rgb);--macaron-surface:var(--rose-surface);--macaron-ink:var(--rose-ink);--macaron-border:var(--rose-border)}
+html body :is(.poster-card,.blog-card,.blog-post){--macaron-rgb:var(--vanilla-rgb);--macaron-secondary-rgb:var(--rose-rgb);--macaron-surface:var(--vanilla-surface);--macaron-ink:var(--vanilla-ink);--macaron-border:var(--vanilla-border)}
+html body :is(.research-timeline,.timeline-card){--macaron-rgb:var(--pistachio-rgb);--macaron-secondary-rgb:var(--sea-rgb);--macaron-surface:var(--pistachio-surface);--macaron-ink:var(--pistachio-ink);--macaron-border:var(--pistachio-border)}
+html body :is(.publication-card,.poster-card,.blog-card,.blog-post,.research-timeline,.timeline-card){--card-glow:rgba(var(--macaron-rgb),.035);--pub-accent:linear-gradient(180deg,rgba(var(--macaron-rgb),.8),rgba(var(--macaron-secondary-rgb),.55));--pub-pdf-bg:var(--macaron-surface);--pub-pdf-hover-bg:var(--macaron-surface);--pub-pdf-color:var(--macaron-ink);--pub-pdf-shadow:0 3px 10px var(--glass-shadow)}
+/* The existing mask bands follow the pointer. Change only their color and strength. */
+html body .liquid-ready:is(.liquid-card,.liquid-control){--liquid-rim-light:var(--macaron-white);--liquid-rim-blue:rgba(var(--macaron-rgb),var(--rim-core-alpha));--liquid-rim-violet:rgba(var(--macaron-secondary-rgb),var(--rim-secondary-alpha));--card-rim-light:var(--macaron-white);--card-rim-blue:var(--liquid-rim-blue);--card-rim-violet:var(--liquid-rim-violet);--liquid-edge-opacity:var(--band-opacity);--liquid-hover-shadow:inset 0 1px 7px var(--glass-highlight),var(--liquid-cast-x,0px) 12px 30px -9px var(--glass-shadow),0 0 18px -5px rgba(var(--macaron-rgb),var(--band-shadow-alpha));--glass-pressed-shadow:inset var(--liquid-shadow-x,0px) 7px 22px -4px rgba(var(--recess-rgb),var(--recess-alpha)),inset 0 -3px 12px -3px rgba(var(--macaron-rgb),.30),0 1px 4px var(--glass-shadow)}
+html body .liquid-ready.liquid-control:not(.blog-cover-link){--glass-pressed-shadow:inset 0 3px 9px -2px rgba(var(--recess-rgb),var(--recess-alpha)),inset 0 -2px 6px -2px rgba(var(--macaron-rgb),.32),0 1px 3px var(--glass-shadow)}
+html body .liquid-card.liquid-pressed{--liquid-edge-top:rgba(var(--recess-rgb),.22);--liquid-edge-bottom:rgba(var(--macaron-rgb),.45)}
+html.dark-mode body .liquid-card.liquid-pressed{--liquid-edge-top:rgba(var(--recess-rgb),.5);--liquid-edge-bottom:rgba(var(--macaron-rgb),.32)}
+html body:is(.dark-mode,:not(.dark-mode)) .sidebar{--liquid-hover-shadow:inset 0 1px 0 var(--glass-highlight),0 3px 8px -4px var(--glass-shadow)}
+/* Readable colored labels and controls, with a distinct selected state. */
+html body .pub-filter-chip[data-filter-type="topic"],html body .timeline-chip{--macaron-rgb:var(--pistachio-rgb);--macaron-secondary-rgb:var(--sea-rgb);--macaron-surface:var(--pistachio-surface);--macaron-ink:var(--pistachio-ink);--macaron-border:var(--pistachio-border);background:var(--pistachio-surface);color:var(--pistachio-ink);border-color:var(--pistachio-border)}
+html body .pub-filter-chip[data-filter-value="journal"]{background:var(--sea-surface);color:var(--sea-ink);border-color:var(--sea-border)}
+html body .pub-filter-chip[data-filter-value="conference"]{--macaron-surface:var(--rose-surface);--macaron-ink:var(--rose-ink);--macaron-border:var(--rose-border);--macaron-rgb:var(--rose-rgb);--macaron-secondary-rgb:var(--sea-rgb);background:var(--rose-surface);color:var(--rose-ink);border-color:var(--rose-border)}
+html body:is(.dark-mode,:not(.dark-mode)) .pub-filter-chip.active{background:var(--active-filter-bg);color:var(--active-filter-color);border-color:var(--sea-border);box-shadow:0 4px 10px var(--glass-shadow)}
+html body .page-toc a[aria-current="location"],html body :is(.sidebar .nav,.mobile-menu) ul li a[aria-current="page"]{background:var(--sea-surface);color:var(--sea-ink);border-color:var(--sea-border);box-shadow:0 4px 10px var(--glass-shadow)}
+html body .page-toc a[aria-current="location"]{border-left-color:var(--sea-ink)}
+html body .nav ul li a[aria-current="page"]{box-shadow:inset 3px 0 0 var(--sea-ink)}
+html body .tag-option{background:var(--vanilla-surface);color:var(--vanilla-ink);border-color:var(--vanilla-border)}
+html body .tag-option[aria-pressed="true"]{background:var(--sea-surface);color:var(--sea-ink);border-color:var(--sea-border);box-shadow:inset 0 -2px 0 var(--sea-ink)}
+/* Decorative layers remain local; no new animated filters or frame loops. */
+html:not([data-background="image"]) body:not(.dark-mode)::before{opacity:.62;filter:saturate(.35)}
+html body.dark-mode::before{opacity:.30;filter:grayscale(.75)}
+html body.dark-mode::after{background:none;opacity:0}
+html[data-background="image"] body:not(.dark-mode)::before{filter:saturate(.4)}
+html body ::selection{background:var(--rose-surface);color:var(--rose-ink)}
+html body .meteor-layer{opacity:.6}
+html body .meteor-layer .meteor{filter:grayscale(.6)}
+html body .timeline-marker-dot{animation:none!important;filter:none!important;background:var(--pistachio-ink)!important;box-shadow:none!important}
+html body .timeline-marker:is(.active,.current,:hover,:focus-visible) .timeline-marker-dot{box-shadow:0 0 0 3px var(--pistachio-surface)!important}
+
+/* Keep broad rim light softer at night, including the masked skin path. */
+html body .liquid-card>.liquid-glass-skin::after{opacity:var(--band-opacity)}
+html body .pub-filter-chip:not(.active):is(:hover,:focus-visible){background:var(--macaron-surface);color:var(--macaron-ink);border-color:var(--macaron-border);box-shadow:0 4px 10px var(--glass-shadow)}
+
+/* Filter states retain each button's own hue in both themes. */
+html:not(.dark-mode), html body:not(.dark-mode) {
+  --sea-filter-hover: #d0e4f2;
+  --sea-filter-selected: #c2dcec;
+  --sea-filter-pressed: #b5d2e4;
+  --sea-filter-ink: #344f64;
+  --rose-filter-hover: #eed3df;
+  --rose-filter-selected: #e8c4d4;
+  --rose-filter-pressed: #e0b6c9;
+  --rose-filter-ink: #693b51;
+  --vanilla-filter-hover: #f3e5b6;
+  --vanilla-filter-selected: #eddda6;
+  --vanilla-filter-pressed: #e5d192;
+  --vanilla-filter-ink: #634d16;
+  --pistachio-filter-hover: #dce9cc;
+  --pistachio-filter-selected: #d1e2bd;
+  --pistachio-filter-pressed: #c4d8ab;
+  --pistachio-filter-ink: #40562c;
+}
+html.dark-mode, html body.dark-mode {
+  --sea-filter-hover: #3a5062;
+  --sea-filter-selected: #405a70;
+  --sea-filter-pressed: #374f63;
+  --sea-filter-ink: #b8d3ea;
+  --rose-filter-hover: #56404e;
+  --rose-filter-selected: #644756;
+  --rose-filter-pressed: #533b49;
+  --rose-filter-ink: #e5bccd;
+  --vanilla-filter-hover: #554c32;
+  --vanilla-filter-selected: #625735;
+  --vanilla-filter-pressed: #52492f;
+  --vanilla-filter-ink: #e5d39b;
+  --pistachio-filter-hover: #455137;
+  --pistachio-filter-selected: #4f6040;
+  --pistachio-filter-pressed: #414f32;
+  --pistachio-filter-ink: #cadab2;
+}
+html body:is(.dark-mode,:not(.dark-mode)) :is(.pub-filter-chip,.tag-option){--filter-fill:var(--sea-surface);--filter-base-ink:var(--sea-ink);--filter-edge:var(--sea-border);--filter-rgb:var(--sea-rgb);--filter-hover:var(--sea-filter-hover);--filter-selected:var(--sea-filter-selected);--filter-pressed:var(--sea-filter-pressed);--filter-ink:var(--sea-filter-ink);
+ --active-filter-bg:var(--filter-selected);--active-filter-press-bg:var(--filter-pressed);--active-filter-color:var(--filter-ink);
+ --press-bg:var(--filter-pressed);--press-border:var(--filter-ink);
+ --glass-edge:transparent;--glass-pressed-edge:transparent;
+ --macaron-rgb:var(--filter-rgb);--macaron-secondary-rgb:var(--filter-rgb);
+ background:var(--filter-fill);color:var(--filter-base-ink);border-color:transparent;
+}
+html body:is(.dark-mode,:not(.dark-mode)) .pub-filter-chip[data-filter-type="topic"]{--filter-fill:var(--pistachio-surface);--filter-base-ink:var(--pistachio-ink);--filter-edge:var(--pistachio-border);--filter-rgb:var(--pistachio-rgb);--filter-hover:var(--pistachio-filter-hover);--filter-selected:var(--pistachio-filter-selected);--filter-pressed:var(--pistachio-filter-pressed);--filter-ink:var(--pistachio-filter-ink);}
+html body:is(.dark-mode,:not(.dark-mode)) .pub-filter-chip[data-filter-value="conference"]{--filter-fill:var(--rose-surface);--filter-base-ink:var(--rose-ink);--filter-edge:var(--rose-border);--filter-rgb:var(--rose-rgb);--filter-hover:var(--rose-filter-hover);--filter-selected:var(--rose-filter-selected);--filter-pressed:var(--rose-filter-pressed);--filter-ink:var(--rose-filter-ink);}
+html body:is(.dark-mode,:not(.dark-mode)) :is(.tag-option,.pub-filter-chip[data-filter-value="other"]){--filter-fill:var(--vanilla-surface);--filter-base-ink:var(--vanilla-ink);--filter-edge:var(--vanilla-border);--filter-rgb:var(--vanilla-rgb);--filter-hover:var(--vanilla-filter-hover);--filter-selected:var(--vanilla-filter-selected);--filter-pressed:var(--vanilla-filter-pressed);--filter-ink:var(--vanilla-filter-ink);}
+html body:is(.dark-mode,:not(.dark-mode)) :is(.pub-filter-chip,.tag-option).liquid-ready{
+ --liquid-rim-blue:rgba(var(--filter-rgb),var(--rim-core-alpha));--liquid-rim-violet:rgba(var(--filter-rgb),var(--rim-secondary-alpha));
+ --liquid-hover-shadow:inset 0 1px 7px var(--glass-highlight),var(--liquid-cast-x,0px) 12px 30px -9px var(--glass-shadow),0 0 18px -5px rgba(var(--filter-rgb),var(--band-shadow-alpha));
+ --glass-pressed-shadow:inset 0 3px 8px -2px rgba(var(--recess-rgb),var(--recess-alpha)),inset 0 -2px 5px -2px rgba(var(--filter-rgb),.32);
+}
+html body:is(.dark-mode,:not(.dark-mode)) :is(.pub-filter-chip,.tag-option):is(:hover,.liquid-hover,:focus-visible){background:var(--filter-hover);color:var(--filter-ink);border-color:transparent;--glass-edge:transparent}
+html body:is(.dark-mode,:not(.dark-mode)) :is(.pub-filter-chip,.tag-option):is(.active,[aria-pressed="true"]){background:var(--filter-selected);color:var(--filter-ink);border-color:transparent;--glass-edge:transparent;box-shadow:none}
+html body:is(.dark-mode,:not(.dark-mode)) :is(.pub-filter-chip,.tag-option):is(.active,[aria-pressed="true"]):is(:hover,.liquid-hover,:focus-visible){background:var(--filter-selected);box-shadow:var(--liquid-hover-shadow)}
+html body:is(.dark-mode,:not(.dark-mode)) :is(.pub-filter-chip,.tag-option):is(:active,.liquid-pressed,.glass-pressed,.press-active){background:var(--filter-pressed)!important;color:var(--filter-ink)!important;border-color:transparent!important}
+html body:is(.dark-mode,:not(.dark-mode)) :is(.pub-filter-chip,.tag-option):focus-visible{outline:2px solid var(--filter-ink);outline-offset:3px}
+
+/* Navigation-like filter faces: no perimeter stroke or inset bottom outline. */
+html body:is(.dark-mode,:not(.dark-mode)) :is(.pub-filter-chip,.tag-option){border-radius:12px}
+/* Important layered rules also cover legacy hover/press declarations. */
+@layer control-optics{
+ html body :is(button,.liquid-control,.pub-tag[href],.poster-tag[href],.tag-option,.nav ul li a,.mobile-menu ul li a,.blog-back-link,.read-more,.profile-card .social-links a,label.switch){-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+ html body :is(.pub-filter-chip,.tag-option,.nav ul li a,.mobile-menu ul li a){border-color:transparent!important}
+}

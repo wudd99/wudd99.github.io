@@ -1,6 +1,24 @@
-<meta charset="UTF-8">
-<title>{{ .Site.Title }}</title>
+
+  <meta charset="UTF-8">
+<title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Params.name_en }}{{ end }}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script id="background-choice">
+(function(){
+ var root=document.documentElement;
+ var requested=new URLSearchParams(location.search).get('bg');
+ var mode=requested==='image'||requested==='pattern'?requested:'pattern';
+ if(!requested){try{var saved=sessionStorage.getItem('yihao-background');if(saved==='image'||saved==='pattern')mode=saved;}catch(e){}}
+ root.dataset.background=mode;
+ try{sessionStorage.setItem('yihao-background',mode);}catch(e){}
+ if(mode==='image'){
+  var image=new Image();image.decoding='async';image.fetchPriority='high';
+  image.onload=function(){var ready=image.decode?image.decode().catch(function(){}):Promise.resolve();ready.then(function(){root.dataset.wallpaperReady='true';});};
+  image.onerror=function(){root.dataset.wallpaperReady='error';};
+  image.src='/images/soft-haze.webp?v=backgrounds-7';
+ }
+})();
+</script>
+{{ with resources.Get "js/starfield.js" | fingerprint }}<script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" defer></script>{{ end }}
 <script>
   (function() {
     try {
@@ -14,27 +32,28 @@
     }
   })();
 </script>
-<link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-      crossorigin="anonymous" referrerpolicy="no-referrer">
-<link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.4/css/academicons.min.css"
-      crossorigin="anonymous" referrerpolicy="no-referrer">
-<meta name="description" content="Yihao Wu (吴逸豪) is a PhD student in Electrical and Computer Engineering at UCSB. His research focuses on Ising and Potts machines, integrated circuits, and hardware accelerators. Explore his publications, academic papers, and research projects.">
+<meta name="description" content="{{ .Description | default .Site.Params.description }}">
 <meta name="keywords" content="Yihao Wu, 吴逸豪, UCSB, University of California Santa Barbara, Electrical and Computer Engineering, Ising machine, Potts machine, IC design, ASIC, hardware accelerators, publications, academic papers, research articles">
-<meta property="og:title" content="{{ .Site.Title }}">
-<meta property="og:description" content="Welcome come to {{ .Site.Title }}，learn more about {{ .Site.Params.name_en }}.">
-<meta property="og:image" content="{{ .Site.Params.profilePhoto | relURL }}">
-<meta property="og:url" content="{{ .Site.BaseURL }}">
+<meta property="og:title" content="{{ .Title | default .Site.Title }}">
+<meta property="og:description" content="{{ .Description | default .Site.Params.description }}">
+<meta property="og:image" content="{{ .Site.Params.profilePhoto | absURL }}">
+<meta property="og:url" content="{{ .Permalink }}">
 <meta property="og:type" content="website">
 <meta property="profile:first_name" content="Yihao">
 <meta property="profile:last_name" content="Wu">
-<link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+<link rel="preload" href="/fonts/lato-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+{{ with resources.Get "css/fonts.css" | fingerprint }}<link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">{{ end }}
 
-{{ $tokensCSS := resources.Get "css/tokens.css" }}
-<link rel="stylesheet" href="{{ $tokensCSS.RelPermalink }}">
 
-{{ $siteCSS := resources.Get "css/site.css" }}
-<link rel="stylesheet" href="{{ $siteCSS.RelPermalink }}">
+{{ with resources.Get "css/tokens.css" | fingerprint }}<link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">{{ end }}
+
+
+{{ with resources.Get "css/site.css" | fingerprint }}<link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">{{ end }}{{ with resources.Get "css/glass.css" | fingerprint }}<link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">{{ end }}{{ with resources.Get "css/canvas.css" | fingerprint }}<link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">{{ end }}
 
 {{ partial "structured-data.html" . }}
+
+
+{{ with resources.Get "css/layout.css" | fingerprint }}<link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">{{ end }}
+{{ with resources.Get "css/macaron.css" | fingerprint }}<link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">{{ end }}
+
+<link rel="canonical" href="{{ .Permalink }}">

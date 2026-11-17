@@ -16,119 +16,114 @@ document.addEventListener('DOMContentLoaded', function() {
       applyRemarkTagColors();
 
 
-      function placeDesktopToggleInTitleRow() {
-        var toggleShell = desktopToggle ? desktopToggle.closest('.mode-toggle') : null;
-        if (!toggleShell) return;
+      function initSidebarScrolling() {
+        var sidebar = document.querySelector('.sidebar');
+        if (!sidebar || !window.matchMedia) return;
 
-        function markToggleReady() {
-          toggleShell.classList.add('mode-toggle-ready');
+        var desktop = window.matchMedia('(min-width: 768px)');
+        var hideTimer = null;
+        var resizeFrame = null;
+        var draggingScrollbar = false;
+
+        function hideScrollbar() {
+          window.clearTimeout(hideTimer);
+          sidebar.classList.remove('is-scrolling');
         }
 
-        var blogPostTopRow = document.querySelector('.content-area .blog-post-top-row');
-        if (blogPostTopRow) {
-          blogPostTopRow.appendChild(toggleShell);
-          markToggleReady();
-          return;
-        }
-
-        var existingTitleRow = document.querySelector('.content-area .content-title-row');
-        if (existingTitleRow) {
-          if (!existingTitleRow.contains(toggleShell)) {
-            existingTitleRow.appendChild(toggleShell);
+        function scheduleHide() {
+          window.clearTimeout(hideTimer);
+          if (!draggingScrollbar) {
+            hideTimer = window.setTimeout(hideScrollbar, 800);
           }
-          markToggleReady();
-          return;
         }
 
-        var targetTitle = null;
-        var titleParent = null;
-        var ariaLabel = 'Page title and display mode';
-
-        var aboutSection = document.getElementById('about');
-        if (aboutSection) {
-          targetTitle = aboutSection.querySelector('h2');
-          titleParent = aboutSection;
-          ariaLabel = 'Welcome and display mode';
+        function updateOverflow() {
+          resizeFrame = null;
+          var scrollbarWidth = desktop.matches ? sidebar.offsetWidth - sidebar.clientWidth : 0;
+          sidebar.style.setProperty('--sidebar-scrollbar-width', scrollbarWidth + 'px');
+          var overflowing = desktop.matches && sidebar.scrollHeight > sidebar.clientHeight + 1;
+          sidebar.classList.toggle('has-overflow', overflowing);
+          if (overflowing) {
+            sidebar.setAttribute('tabindex', '0');
+          } else {
+            sidebar.removeAttribute('tabindex');
+            draggingScrollbar = false;
+            hideScrollbar();
+          }
         }
 
-        if (!targetTitle) {
-          targetTitle = document.querySelector('.content-area .blog-list > h2');
-          titleParent = targetTitle ? targetTitle.parentElement : null;
-          ariaLabel = 'Blog title and display mode';
+        function requestOverflowUpdate() {
+          if (resizeFrame === null) {
+            resizeFrame = window.requestAnimationFrame(updateOverflow);
+          }
         }
 
-        if (!targetTitle) {
-          targetTitle = document.querySelector('.content-area .post-header > h1');
-          titleParent = targetTitle ? targetTitle.parentElement : null;
-          ariaLabel = 'Post title and display mode';
+        sidebar.addEventListener('scroll', function() {
+          if (!desktop.matches || !sidebar.classList.contains('has-overflow')) return;
+          sidebar.classList.add('is-scrolling');
+          scheduleHide();
+        }, { passive: true });
+
+        sidebar.addEventListener('pointerdown', function(event) {
+          if (!sidebar.classList.contains('has-overflow')) return;
+          var rect = sidebar.getBoundingClientRect();
+          if (event.clientX >= rect.left + sidebar.clientLeft + sidebar.clientWidth) {
+            draggingScrollbar = true;
+            window.clearTimeout(hideTimer);
+          }
+        }, { passive: true });
+
+        function finishDrag() {
+          if (!draggingScrollbar) return;
+          draggingScrollbar = false;
+          scheduleHide();
         }
 
-        if (!targetTitle) {
-          targetTitle = document.querySelector('.content-area section > h2, .content-area article h1, .content-area h2, .content-area h1');
-          titleParent = targetTitle ? targetTitle.parentElement : null;
+        document.addEventListener('pointerup', finishDrag, { passive: true });
+        document.addEventListener('pointercancel', finishDrag, { passive: true });
+        window.addEventListener('blur', finishDrag);
+        window.addEventListener('resize', requestOverflowUpdate, { passive: true });
+        sidebar.addEventListener('load', requestOverflowUpdate, true);
+        if (desktop.addEventListener) {
+          desktop.addEventListener('change', requestOverflowUpdate);
+        } else {
+          desktop.addListener(requestOverflowUpdate);
         }
-
-        if (!targetTitle || !titleParent) {
-          toggleShell.classList.add('mode-toggle-ready', 'mode-toggle-fallback');
-          return;
+        if (window.ResizeObserver) {
+          var observer = new ResizeObserver(requestOverflowUpdate);
+          observer.observe(sidebar);
+          Array.prototype.forEach.call(sidebar.children, function(child) {
+            observer.observe(child);
+          });
         }
-
-        var titleRow = document.createElement('div');
-        titleRow.className = 'content-title-row';
-        titleRow.setAttribute('aria-label', ariaLabel);
-
-        titleParent.insertBefore(titleRow, targetTitle);
-        titleRow.appendChild(targetTitle);
-        titleRow.appendChild(toggleShell);
-        markToggleReady();
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(requestOverflowUpdate);
+        }
+        updateOverflow();
       }
 
-      placeDesktopToggleInTitleRow();
+      initSidebarScrolling();
 
       function getProfilePhoto() {
         return document.getElementById('profilePhoto');
       }
 
-      function preloadProfilePhotos() {
+      function setProfilePhotoForMode(isDarkMode) {
         var profilePhoto = getProfilePhoto();
         if (!profilePhoto) return;
-        [profilePhoto.dataset.lightSrc, profilePhoto.dataset.darkSrc].forEach(function(src) {
-          if (!src) return;
-          var img = new Image();
-          img.src = src;
-        });
-      }
-
-      function setProfilePhotoForMode(isDarkMode, animate) {
-        var profilePhoto = getProfilePhoto();
-        if (!profilePhoto) return;
-
         var nextSrc = isDarkMode ? profilePhoto.dataset.darkSrc : profilePhoto.dataset.lightSrc;
-        if (!nextSrc || profilePhoto.getAttribute('src') === nextSrc) return;
-
-        if (!animate) {
+        if (nextSrc && profilePhoto.getAttribute('src') !== nextSrc) {
           profilePhoto.setAttribute('src', nextSrc);
-          return;
         }
-
-        profilePhoto.classList.add('profile-photo-switching');
-        window.setTimeout(function() {
-          profilePhoto.setAttribute('src', nextSrc);
-          window.setTimeout(function() {
-            profilePhoto.classList.remove('profile-photo-switching');
-          }, 130);
-        }, 100);
       }
 
-      preloadProfilePhotos();
-
-      var darkModeEnabled = localStorage.getItem('dark-mode') === 'true';
+      var darkModeEnabled = document.documentElement.classList.contains('dark-mode');
       document.documentElement.classList.toggle('dark-mode', darkModeEnabled);
       document.documentElement.dataset.theme = darkModeEnabled ? 'dark' : 'light';
       document.body.classList.toggle('dark-mode', darkModeEnabled);
       if (desktopToggle) desktopToggle.checked = darkModeEnabled;
       if (mobileToggle) mobileToggle.checked = darkModeEnabled;
-      setProfilePhotoForMode(darkModeEnabled, false);
+      setProfilePhotoForMode(darkModeEnabled);
 
       if (hamburger && mobileMenu) {
         var menuOpen = false;
@@ -139,6 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
           mobileMenu.classList.toggle('open', open);
           document.body.classList.toggle('mobile-menu-open', open);
           hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+          hamburger.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
         }
 
         hamburger.setAttribute('aria-controls', 'mobileMenu');
@@ -195,20 +191,16 @@ document.addEventListener('DOMContentLoaded', function() {
         var y = window.innerHeight / 2;
 
         function canShowSpotlight() {
-          return finePointer.matches && !reduceMotion.matches;
+          return !document.hidden && document.documentElement.classList.contains('dark-mode') && finePointer.matches && !reduceMotion.matches;
         }
 
         function paintSpotlight() {
           raf = null;
-          var xValue = x + 'px';
-          var yValue = y + 'px';
-          spotlight.style.setProperty('--spotlight-x', xValue);
-          spotlight.style.setProperty('--spotlight-y', yValue);
-          document.documentElement.style.setProperty('--spotlight-x', xValue);
-          document.documentElement.style.setProperty('--spotlight-y', yValue);
+          spotlight.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) translate(-50%,-50%)';
         }
 
         function hideSpotlight() {
+          if (raf !== null) { window.cancelAnimationFrame(raf); raf = null; }
           document.body.classList.remove('cursor-spotlight-active');
         }
 
@@ -220,6 +212,7 @@ document.addEventListener('DOMContentLoaded', function() {
           if (!raf) raf = window.requestAnimationFrame(paintSpotlight);
         }, { passive: true });
 
+        document.addEventListener('visibilitychange', hideSpotlight);
         document.addEventListener('mouseleave', hideSpotlight, false);
         window.addEventListener('blur', hideSpotlight, false);
         window.addEventListener('scroll', hideSpotlight, { passive: true });
@@ -238,209 +231,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
       initDarkModeCursorSpotlight();
 
-      function createThemeTransitionOverlay(wasDarkMode) {
-        var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (reduceMotion) return;
-
-        var oldOverlay = document.querySelector('.theme-transition-overlay');
-        if (oldOverlay) oldOverlay.remove();
-
-        var overlay = document.createElement('div');
-        overlay.className = 'theme-transition-overlay ' + (wasDarkMode ? 'theme-dark' : 'theme-light');
-        overlay.setAttribute('aria-hidden', 'true');
-
-        var meteorLayer = document.querySelector('.meteor-layer');
-        if (meteorLayer && meteorLayer.parentNode) {
-          meteorLayer.parentNode.insertBefore(overlay, meteorLayer.nextSibling);
-        } else {
-          document.body.insertBefore(overlay, document.body.firstChild);
-        }
-
-        overlay.offsetHeight;
-        window.requestAnimationFrame(function() {
-          overlay.classList.add('is-fading');
-        });
-
-        window.setTimeout(function() {
-          if (overlay && overlay.parentNode) overlay.remove();
-        }, 720);
-      }
-
-
-      function getThemeSurfaceSelector() {
-        return [
-          '.profile-card',
-          '.publication-card',
-          '.poster-card',
-          '.blog-card',
-          '.blog-post',
-          '.post-header',
-          '.post-content',
-          '.research-timeline',
-          '.pub-filter-shell',
-          '.timeline-card',
-          '.mode-toggle',
-          '.mobile-mode-toggle',
-          '.mobile-menu'
-        ].join(', ');
-      }
-
-      function getThemeBorderSelector() {
-        return [
-          getThemeSurfaceSelector(),
-          '.pub-tag',
-          '.poster-tag',
-          '.blog-meta-pill',
-          '.post-meta-chip',
-          '.timeline-chip',
-          '.timeline-stat',
-          '.pub-filter-chip',
-          '.pub-card-meta .meta-pill',
-          '.profile-card .social-links a',
-          '.nav ul li a',
-          '.mobile-menu ul li a',
-          'section h2',
-          '.publications-section h2',
-          '.poster-section h2',
-          'footer'
-        ].join(', ');
-      }
-
-      function createSurfaceThemeFades(wasDarkMode) {
-        var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (reduceMotion) return;
-
-        var surfaces = Array.prototype.slice.call(document.querySelectorAll(getThemeSurfaceSelector()));
-        surfaces.forEach(function(surface) {
-          surface.querySelectorAll(':scope > .theme-card-fade, :scope > .theme-border-fade').forEach(function(oldFade) {
-            oldFade.remove();
-          });
-
-          var fade = document.createElement('span');
-          fade.className = 'theme-card-fade ' + (wasDarkMode ? 'theme-dark' : 'theme-light');
-          fade.setAttribute('aria-hidden', 'true');
-          surface.insertBefore(fade, surface.firstChild);
-
-          fade.offsetHeight;
-          window.requestAnimationFrame(function() {
-            fade.classList.add('is-fading');
-          });
-
-          window.setTimeout(function() {
-            if (fade && fade.parentNode) fade.remove();
-          }, 820);
-        });
-      }
-
-      function captureThemeBorderStates() {
-        var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (reduceMotion) return [];
-
-        return Array.prototype.slice.call(document.querySelectorAll(getThemeBorderSelector())).map(function(el) {
-          var computed = window.getComputedStyle(el);
-          return {
-            el: el,
-            oldTransition: el.style.transition,
-            oldInlineTop: el.style.borderTopColor,
-            oldInlineRight: el.style.borderRightColor,
-            oldInlineBottom: el.style.borderBottomColor,
-            oldInlineLeft: el.style.borderLeftColor,
-            oldTop: computed.borderTopColor,
-            oldRight: computed.borderRightColor,
-            oldBottom: computed.borderBottomColor,
-            oldLeft: computed.borderLeftColor
-          };
-        });
-      }
-
-      function animateThemeBorders(borderStates) {
-        if (!borderStates || !borderStates.length) return;
-
-        var timing = '720ms cubic-bezier(0.22, 1, 0.36, 1)';
-        var transitionValue = [
-          'border-top-color ' + timing,
-          'border-right-color ' + timing,
-          'border-bottom-color ' + timing,
-          'border-left-color ' + timing
-        ].join(', ');
-
-        var activeStates = [];
-
-        borderStates.forEach(function(state) {
-          var el = state.el;
-          if (!el || !document.documentElement.contains(el)) return;
-
-          var next = window.getComputedStyle(el);
-          var nextTop = next.borderTopColor;
-          var nextRight = next.borderRightColor;
-          var nextBottom = next.borderBottomColor;
-          var nextLeft = next.borderLeftColor;
-
-          var changed = state.oldTop !== nextTop || state.oldRight !== nextRight || state.oldBottom !== nextBottom || state.oldLeft !== nextLeft;
-          if (!changed) return;
-
-          state.nextTop = nextTop;
-          state.nextRight = nextRight;
-          state.nextBottom = nextBottom;
-          state.nextLeft = nextLeft;
-          activeStates.push(state);
-
-          el.style.transition = 'none';
-          el.style.borderTopColor = state.oldTop;
-          el.style.borderRightColor = state.oldRight;
-          el.style.borderBottomColor = state.oldBottom;
-          el.style.borderLeftColor = state.oldLeft;
-        });
-
-        if (!activeStates.length) return;
-
-        document.body.offsetHeight;
-
-        window.requestAnimationFrame(function() {
-          activeStates.forEach(function(state) {
-            var el = state.el;
-            if (!el || !document.documentElement.contains(el)) return;
-            el.style.transition = transitionValue;
-            el.style.borderTopColor = state.nextTop;
-            el.style.borderRightColor = state.nextRight;
-            el.style.borderBottomColor = state.nextBottom;
-            el.style.borderLeftColor = state.nextLeft;
-          });
-        });
-
-        window.setTimeout(function() {
-          activeStates.forEach(function(state) {
-            var el = state.el;
-            if (!el || !document.documentElement.contains(el)) return;
-            el.style.transition = state.oldTransition;
-            el.style.borderTopColor = state.oldInlineTop;
-            el.style.borderRightColor = state.oldInlineRight;
-            el.style.borderBottomColor = state.oldInlineBottom;
-            el.style.borderLeftColor = state.oldInlineLeft;
-          });
-        }, 820);
-      }
-
+      var themeFrame = 0;
       function toggleDarkMode(e) {
         var nextDarkMode = e.target.checked;
-        var wasDarkMode = document.body.classList.contains('dark-mode');
-        var borderStates = captureThemeBorderStates();
-
-        document.body.classList.add('transition-enabled', 'theme-switching');
-        createThemeTransitionOverlay(wasDarkMode);
-        createSurfaceThemeFades(wasDarkMode);
-
+        if (themeFrame) window.cancelAnimationFrame(themeFrame);
+        // Suppress transitions through the first rendered frame of the new theme,
+        // then restore ordinary hover/press feedback. Rapid toggles share this frame.
+        document.documentElement.classList.add('theme-instant');
         document.documentElement.classList.toggle('dark-mode', nextDarkMode);
         document.documentElement.dataset.theme = nextDarkMode ? 'dark' : 'light';
         document.body.classList.toggle('dark-mode', nextDarkMode);
-        localStorage.setItem('dark-mode', nextDarkMode ? 'true' : 'false');
-        animateThemeBorders(borderStates);
+        try { localStorage.setItem('dark-mode', nextDarkMode ? 'true' : 'false'); } catch (e) {}
         if (desktopToggle) desktopToggle.checked = nextDarkMode;
         if (mobileToggle) mobileToggle.checked = nextDarkMode;
-        setProfilePhotoForMode(nextDarkMode, true);
-        setTimeout(function() {
-          document.body.classList.remove('transition-enabled', 'theme-switching');
-        }, 820);
+        setProfilePhotoForMode(nextDarkMode);
+        themeFrame = window.requestAnimationFrame(function() {
+          themeFrame = window.requestAnimationFrame(function() {
+            document.documentElement.classList.remove('theme-instant');
+            themeFrame = 0;
+          });
+        });
       }
 
       if (desktopToggle) {
@@ -452,59 +262,86 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
       function bindTactilePressFeedback() {
-        var selectors = [
-          '.pub-tag', '.poster-tag', '.pub-filter-chip', '.timeline-marker',
-          '.timeline-chip', '.timeline-stat', '.pub-card-meta .meta-pill',
-          '.blog-meta-pill', '.post-meta-chip', '.profile-card .social-links a',
-          '.nav ul li a', '.mobile-menu ul li a', '.blog-back-link',
-          '.blog-card .read-more', '.clickable-card'
-        ].join(', ');
-        var pressed = new Set();
+        // Liquid glass owns its complete gesture lifecycle; do not add a second press state.
+        if (typeof window.WYH_GLASS_SURFACE_FOR === 'function') return;
+        var pressed = new Map();
+        var releases = new Map();
 
-        function skipPress(target, eventTarget) {
-          if (!target.classList.contains('clickable-card')) return false;
-          if (eventTarget.closest('a, button, input, label, select, textarea')) return true;
-          return !!eventTarget.closest('.pub-card-meta') && !eventTarget.closest('.publication-type-pill');
+        function targetsFor(eventTarget) {
+          if (typeof window.WYH_GLASS_SURFACE_FOR === 'function') {
+            var surface = window.WYH_GLASS_SURFACE_FOR(eventTarget);
+            return surface ? [surface] : [];
+          }
+          if (!(eventTarget instanceof Element)) return [];
+          var target = eventTarget.closest('a[href],button,input,label.switch,[role="button"],.clickable-card[tabindex]');
+          return target && !target.matches('[disabled],[aria-disabled="true"]') ? [target] : [];
         }
 
-        function clearOne(target, delay) {
-          if (!target) return;
+        function begin(target) {
+          window.clearTimeout(releases.get(target));
+          releases.delete(target);
+          if (!pressed.has(target)) pressed.set(target, performance.now());
+          target.classList.add('press-active');
+        }
+
+        function clearOne(target, immediate) {
+          if (!pressed.has(target) && !releases.has(target)) return;
+          var started = pressed.get(target);
           pressed.delete(target);
-          window.setTimeout(function() { target.classList.remove('press-active'); }, delay == null ? 70 : delay);
+          window.clearTimeout(releases.get(target));
+          // Give even a quick click enough time to show the inset surface.
+          var delay = immediate ? 0 : Math.max(70, 160 - (performance.now() - (started || 0)));
+          if (!delay) {
+            target.classList.remove('press-active');
+            releases.delete(target);
+            return;
+          }
+          var timer = window.setTimeout(function() {
+            if (releases.get(target) !== timer) return;
+            target.classList.remove('press-active');
+            releases.delete(target);
+          }, delay);
+          releases.set(target, timer);
         }
 
-        function clearAll(delay) {
-          Array.from(pressed).forEach(function(target) { clearOne(target, delay); });
-        }
-
-        function isPointerInside(target, e) {
-          var el = document.elementFromPoint(e.clientX, e.clientY);
-          return !!(el && target.contains(el));
+        function clearAll(immediate) {
+          var targets = Array.from(pressed.keys());
+          if (immediate) targets = targets.concat(Array.from(releases.keys()));
+          targets.forEach(function(target) { clearOne(target, immediate); });
         }
 
         document.addEventListener('pointerdown', function(e) {
-          if (e.button !== undefined && e.button !== 0) return;
-          var target = e.target.closest(selectors);
-          if (!target || skipPress(target, e.target)) return;
-          target.classList.add('press-active');
-          pressed.add(target);
+          if ((e.button !== undefined && e.button !== 0) || e.isPrimary === false) return;
+          targetsFor(e.target).forEach(begin);
         }, { passive: true });
 
         document.addEventListener('pointermove', function(e) {
           if (!pressed.size) return;
-          Array.from(pressed).forEach(function(target) {
-            if (!isPointerInside(target, e)) clearOne(target, 0);
+          var hit = document.elementFromPoint(e.clientX, e.clientY);
+          Array.from(pressed.keys()).forEach(function(target) {
+            if (!hit || !target.contains(hit)) clearOne(target, true);
           });
         }, { passive: true });
 
-        ['pointerup', 'pointercancel', 'dragstart'].forEach(function(type) {
-          document.addEventListener(type, function() { clearAll(); }, { passive: true });
+        document.addEventListener('pointerup', function() { clearAll(false); }, { passive: true });
+        ['pointercancel', 'dragstart'].forEach(function(type) {
+          document.addEventListener(type, function() { clearAll(true); }, { passive: true });
         });
-        ['blur', 'mouseup', 'touchend', 'touchcancel'].forEach(function(type) {
-          window.addEventListener(type, function() { clearAll(0); }, { passive: true });
+        window.addEventListener('blur', function() { clearAll(false); }, { passive: true });
+        document.addEventListener('visibilitychange', function() {
+          if (document.hidden) clearAll(false);
         });
-        document.addEventListener('visibilitychange', function() { if (document.hidden) clearAll(0); });
-        document.addEventListener('scroll', function() { clearAll(0); }, true);
+        document.addEventListener('scroll', function() { clearAll(true); }, true);
+        document.addEventListener('keydown', function(e) {
+          if (e.key !== 'Enter' && e.key !== ' ') return;
+          // Apply keyboard feedback only to genuine, focused interactive elements.
+          var target = e.target;
+          if (!(target instanceof Element) || !target.matches('a[href], button, .clickable-card[tabindex]')) return;
+          targetsFor(target).forEach(begin);
+        }, true);
+        document.addEventListener('keyup', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') clearAll(false);
+        }, true);
       }
 
       bindTactilePressFeedback();
@@ -551,9 +388,10 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       function iconForPubType(type) {
-        if (type === 'journal') return 'fa-solid fa-book-open';
-        if (type === 'conference') return 'fa-solid fa-users';
-        return 'fa-solid fa-layer-group';
+        if (type === 'journal' || type === 'conference') {
+          return '<span class="publication-type-icon" aria-hidden="true"></span>';
+        }
+        return '<svg class="ui-icon tabler-icon" data-icon="tabler-layers-intersect" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/> <path d="M8 4m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z" /> <path d="M4 8m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z" /></svg>';
       }
 
       function escapeHTML(value) {
@@ -601,11 +439,15 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         }
 
-        holder.innerHTML =
-          '<span class="meta-pill publication-type-pill type-' + escapeHTML(meta.type) + '">' +
-            '<i class="' + escapeHTML(iconForPubType(meta.type)) + '"></i>' +
-            '<span>' + escapeHTML(meta.typeLabel) + '</span>' +
-          '</span>';
+        var pill = holder.querySelector('.publication-type-pill');
+        if (!pill) {
+          pill = document.createElement('span');
+          holder.insertBefore(pill, holder.firstChild);
+        }
+        pill.className = 'meta-pill publication-type-pill type-' + meta.type;
+        pill.innerHTML =
+          '<span>' + escapeHTML(meta.typeLabel) + '</span>' +
+          iconForPubType(meta.type);
       }
 
       function resolveSectionAndGrid(id, gridClass) {
@@ -623,7 +465,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         var root = null;
         if (grid) {
-          root = grid.closest('section') || anchor.closest('section') || anchor.parentElement || anchor;
+          root = grid.closest('.publications-section, .poster-section, section') || anchor.closest('section') || anchor.parentElement || anchor;
         } else {
           root = anchor.closest('section') || anchor.parentElement || anchor;
         }
@@ -685,12 +527,20 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         var shell = document.createElement('div');
-        shell.className = 'pub-filter-shell';
-        shell.innerHTML = '<span class="pub-filter-heading">Filter publications</span>';
+        shell.className = 'pub-filter-shell home-publication-tools';
+        shell.id = 'publication-tools';
+        shell.setAttribute('aria-label', 'Search and filter publications');
+        shell.innerHTML = '<form class="post-search publication-search" role="search">' +
+          '<label class="visually-hidden" for="publication-query">Search publications</label>' +
+          '<div class="search-field"><svg class="ui-icon tabler-icon" data-icon="tabler-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/> <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /> <path d="M21 21l-6 -6" /></svg>' +
+          '<input id="publication-query" type="search" placeholder="Search papers…" aria-controls="publication-results" aria-describedby="publication-search-help"></div>' +
+          '<p class="search-help visually-hidden" id="publication-search-help">Titles, authors &amp; venues</p></form>';
+        grid.id = 'publication-results';
 
         var state = {
           type: '',
-          topic: ''
+          topic: '',
+          query: ''
         };
 
         function makeGroup(name, options, allLabel) {
@@ -698,6 +548,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
           var group = document.createElement('div');
           group.className = 'pub-filter-group';
+          group.setAttribute('role', 'group');
+          group.setAttribute('aria-label', name === 'type' ? 'Publication type' : 'Research topic');
+          var groupLabel = document.createElement('h3');
+          groupLabel.className = 'pub-filter-group-label rail-block-heading';
+          groupLabel.innerHTML = name === 'type' ? '<svg class="ui-icon tabler-icon rail-heading-icon" data-icon="tabler-category-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/> <path d="M14 4h6v6h-6z" /> <path d="M4 14h6v6h-6z" /> <path d="M17 17m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /> <path d="M7 7m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /></svg><span class="rail-heading-title">Publication type</span>' : '<svg class="ui-icon tabler-icon rail-heading-icon" data-icon="tabler-atom-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/> <path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /> <path d="M12 21l0 .01" /> <path d="M3 9l0 .01" /> <path d="M21 9l0 .01" /> <path d="M8 20.1a9 9 0 0 1 -5 -7.1" /> <path d="M16 20.1a9 9 0 0 0 5 -7.1" /> <path d="M6.2 5a9 9 0 0 1 11.4 0" /></svg><span class="rail-heading-title">Research topic</span>';
+          group.appendChild(groupLabel);
 
           var allChip = document.createElement('button');
           allChip.type = 'button';
@@ -705,6 +561,7 @@ document.addEventListener('DOMContentLoaded', function() {
           allChip.textContent = allLabel;
           allChip.dataset.filterType = name;
           allChip.dataset.filterValue = '';
+          allChip.setAttribute('aria-controls', 'publication-results');
           group.appendChild(allChip);
 
           options.forEach(function(option) {
@@ -714,6 +571,7 @@ document.addEventListener('DOMContentLoaded', function() {
             chip.textContent = option.label;
             chip.dataset.filterType = name;
             chip.dataset.filterValue = option.value;
+            chip.setAttribute('aria-controls', 'publication-results');
             group.appendChild(chip);
           });
 
@@ -727,24 +585,77 @@ document.addEventListener('DOMContentLoaded', function() {
           shell.appendChild(group);
         });
 
+        var resultStatus = document.createElement('p');
+        resultStatus.className = 'publication-filter-status';
+        resultStatus.setAttribute('role', 'status');
+        resultStatus.setAttribute('aria-live', 'polite');
+        var summary = document.createElement('section');
+        summary.className = 'publication-summary';
+        summary.setAttribute('aria-label', 'Filter results');
+        summary.innerHTML = '<h3 class="rail-block-heading rail-summary-heading"><svg class="ui-icon tabler-icon rail-heading-icon" data-icon="tabler-list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/> <path d="M3.5 5.5l1.5 1.5l2.5 -2.5" /> <path d="M3.5 11.5l1.5 1.5l2.5 -2.5" /> <path d="M3.5 17.5l1.5 1.5l2.5 -2.5" /> <path d="M11 6l9 0" /> <path d="M11 12l9 0" /> <path d="M11 18l9 0" /></svg><span class="rail-heading-title">Results</span></h3>';
+        summary.appendChild(resultStatus);
+        shell.appendChild(summary);
+        var actions = document.createElement('div');
+        actions.className = 'publication-tool-actions';
+        actions.innerHTML = '<a href="#publications">View results ↓</a><button type="button" class="text-button" data-publication-clear>Clear filters</button>';
+        summary.appendChild(actions);
+        var empty = document.createElement('div');
+        empty.className = 'publication-empty utility-panel';
+        empty.hidden = true;
+        empty.innerHTML = '<h3>No publications found</h3><p>Try another title, author or venue, or clear your filters.</p><button type="button" class="text-button" data-publication-clear>Clear filters</button>';
+        grid.parentNode.insertBefore(empty, grid);
+
         function refreshFilterUI() {
           shell.querySelectorAll('.pub-filter-chip').forEach(function(chip) {
             var type = chip.dataset.filterType;
             var value = chip.dataset.filterValue;
             chip.classList.toggle('active', state[type] === value);
+            chip.setAttribute('aria-pressed', String(state[type] === value));
           });
         }
 
+        function normalizeSearch(value) {
+          return String(value || '').normalize('NFKC').toLocaleLowerCase();
+        }
+        var searchTexts = cards.map(function(card, index) {
+          return normalizeSearch(card.textContent + ' ' + metas[index].source + ' ' + metas[index].topics.join(' '));
+        });
         function applyFilters() {
-          cards.forEach(function(card) {
+          var words = normalizeSearch(state.query).trim().split(/\s+/).filter(Boolean);
+          var visible = 0;
+          cards.forEach(function(card, index) {
             var cardTopics = (card.dataset.pubTopics || '').split('|').filter(Boolean);
 
             var matchType = !state.type || card.dataset.pubType === state.type;
             var matchTopic = !state.topic || cardTopics.indexOf(state.topic) >= 0;
-
-            card.classList.toggle('is-filtered-out', !(matchType && matchTopic));
+            var matchQuery = words.every(function(word) { return searchTexts[index].indexOf(word) >= 0; });
+            var matches = matchType && matchTopic && matchQuery;
+            card.classList.toggle('is-filtered-out', !matches);
+            card.hidden = !matches;
+            if (matches) visible += 1;
           });
+          resultStatus.textContent = visible + ' of ' + cards.length + ' publications';
+          empty.hidden = visible !== 0;
         }
+
+        var searchInput = shell.querySelector('#publication-query');
+        searchInput.addEventListener('input', function() {
+          state.query = searchInput.value;
+          applyFilters();
+        });
+        shell.querySelector('form').addEventListener('submit', function(e) {
+          e.preventDefault();
+          state.query = searchInput.value;
+          applyFilters();
+          document.getElementById('publications').scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+        });
+        [shell, empty].forEach(function(container) {
+          container.querySelector('[data-publication-clear]').addEventListener('click', function() {
+            state.type = ''; state.topic = ''; state.query = '';
+            searchInput.value = '';
+            refreshFilterUI(); applyFilters(); searchInput.focus({ preventScroll: true });
+          });
+        });
 
         shell.addEventListener('click', function(e) {
           var chip = e.target.closest('.pub-filter-chip');
@@ -907,7 +818,8 @@ document.addEventListener('DOMContentLoaded', function() {
       var publicationMetas = buildPublicationFilters();
       buildResearchTimeline(publicationMetas);
 
-      var allNavLinks = Array.prototype.slice.call(document.querySelectorAll('.nav ul li a, .mobile-menu ul li a'));
+      // Page navigation and in-page section navigation have independent current states.
+      var allNavLinks = Array.prototype.slice.call(document.querySelectorAll('.sidebar > .nav a, .mobile-menu > ul a'));
 
       function normalizePath(path) {
         if (!path) return '/';
@@ -939,57 +851,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }, false);
       });
 
-      var sections = ['about', 'publications', 'poster', 'contact']
-        .map(function(id) { return document.getElementById(id); })
-        .filter(Boolean);
+      setActiveLinks(normalizePath(window.location.pathname).indexOf('/blog') === 0 ? '/blog/' : '/');
 
-      var currentPath = normalizePath(window.location.pathname);
-
-      if (currentPath.indexOf('/blog') === 0) {
-        setActiveLinks('/blog/');
-      } else if (sections.length > 0 && currentPath === '/') {
-        setActiveLinks('/');
-        var observer = new IntersectionObserver(function(entries) {
-          var visibleEntries = entries
-            .filter(function(entry) { return entry.isIntersecting; })
-            .sort(function(a, b) { return b.intersectionRatio - a.intersectionRatio; });
-
-          if (window.scrollY < 80) {
-            setActiveLinks('/');
-            return;
-          }
-
-          if (visibleEntries.length > 0) {
-            setActiveLinks('/#' + visibleEntries[0].target.id);
-          }
-        }, {
-          rootMargin: '-20% 0px -55% 0px',
-          threshold: [0.2, 0.35, 0.5, 0.7]
-        });
-
-        sections.forEach(function(section) {
-          observer.observe(section);
-        });
-
-        window.addEventListener('scroll', function() {
-          if (window.scrollY < 80) {
-            setActiveLinks('/');
-          }
-        }, { passive: true });
-      } else {
-        setActiveLinks('/');
-      }
     });
 
     (function initNaturalMeteorAmbience() {
       var layer = document.querySelector('.meteor-layer');
-      if (!layer || !window.requestAnimationFrame) return;
+      if (!layer || typeof layer.animate !== 'function') return;
 
       var reduceMotionQuery = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
-      if (reduceMotionQuery && reduceMotionQuery.matches) return;
 
       var scheduleTimer = null;
-      var activeMeteors = 0;
+      var activeMeteors = new Set();
       var stopped = false;
 
       function random(min, max) {
@@ -1016,7 +889,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       function scheduleNext(delay) {
-        if (stopped) return;
+        if (stopped || document.hidden) return;
         window.clearTimeout(scheduleTimer);
         scheduleTimer = window.setTimeout(function() {
           scheduleTimer = null;
@@ -1030,9 +903,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         var vp = viewport();
         var maxActive = vp.width < 768 ? 1 : 3;
-        if (activeMeteors >= maxActive) return;
-
-        activeMeteors += 1;
+        if (activeMeteors.size >= maxActive) return;
 
         var meteor = document.createElement('span');
         meteor.className = 'meteor';
@@ -1069,43 +940,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
         layer.appendChild(meteor);
 
-        var startTime = performance.now();
-
-        function frame(now) {
-          var t = clamp((now - startTime) / duration, 0, 1);
-
+        // Sample the existing curved trajectory once; animate only compositor
+        // properties instead of changing four inherited CSS variables per frame.
+        var keyframes = [];
+        for (var step = 0; step <= 24; step++) {
+          var t = step / 24 * 0.82;
           var progress = 0.60 * t - 0.7317073171 * t * t + 1.1461629982 * t * t * t;
           var drift = Math.sin(t * Math.PI) * driftAmount;
-
           var x = moveX * progress + perpX * drift;
           var y = moveY * progress + perpY * drift;
-
           var fadeIn = clamp(t / 0.12, 0, 1);
           var fadeOut = clamp((0.74 - t) / 0.34, 0, 1);
-          var shimmer = 0.985 + 0.015 * Math.sin(t * Math.PI * 1.6);
-          var opacity = maxOpacity * Math.min(fadeIn, fadeOut) * shimmer;
-
+          var opacity = maxOpacity * Math.min(fadeIn, fadeOut) * (0.985 + 0.015 * Math.sin(t * Math.PI * 1.6));
           var scale = 0.28 + 0.58 * clamp(t / 0.30, 0, 1) - 0.14 * clamp((t - 0.56) / 0.28, 0, 1);
-
-          meteor.style.setProperty('--meteor-x', x.toFixed(1) + 'px');
-          meteor.style.setProperty('--meteor-y', y.toFixed(1) + 'px');
-          meteor.style.setProperty('--meteor-opacity', opacity.toFixed(3));
-          meteor.style.setProperty('--meteor-scale', scale.toFixed(3));
-
-          if (t < 0.82) {
-            window.requestAnimationFrame(frame);
-          } else {
-            meteor.remove();
-            activeMeteors = Math.max(0, activeMeteors - 1);
-          }
+          keyframes.push({
+            transform: 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,0) rotate(' + angle.toFixed(1) + 'deg) scaleX(' + scale.toFixed(3) + ')',
+            opacity: opacity,
+            offset: step / 24
+          });
         }
-
-        window.requestAnimationFrame(frame);
+        var animation = meteor.animate(keyframes, {duration: duration * 0.82, easing: 'linear'});
+        activeMeteors.add(animation);
+        function cleanup() {
+          animation.onfinish = animation.oncancel = null;
+          activeMeteors.delete(animation);
+          meteor.remove();
+          animation.cancel();
+        }
+        animation.onfinish = animation.oncancel = cleanup;
       }
 
       function startMeteors() {
-        if (stopped) stopped = false;
-        if (scheduleTimer || (reduceMotionQuery && reduceMotionQuery.matches)) return;
+        if (document.hidden || scheduleTimer || (reduceMotionQuery && reduceMotionQuery.matches)) return;
+        stopped = false;
         scheduleNext(random(700, 2200));
       }
 
@@ -1113,14 +980,17 @@ document.addEventListener('DOMContentLoaded', function() {
         stopped = true;
         window.clearTimeout(scheduleTimer);
         scheduleTimer = null;
-        activeMeteors = 0;
-        layer.innerHTML = '';
+        // Cancel synchronously, including detached nodes and retained keyframes.
+        activeMeteors.forEach(function(animation) {
+          var cleanup = animation.oncancel;
+          if (cleanup) cleanup();
+        });
+        activeMeteors.clear();
       }
 
       document.addEventListener('visibilitychange', function() {
         if (document.hidden) {
-          window.clearTimeout(scheduleTimer);
-          scheduleTimer = null;
+          stopMeteors();
         } else {
           startMeteors();
         }
@@ -1143,5 +1013,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       }
 
+      window.addEventListener('pagehide', stopMeteors);
+      window.addEventListener('pageshow', startMeteors);
       startMeteors();
     })();

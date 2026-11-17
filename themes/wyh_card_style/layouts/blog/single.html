@@ -1,6 +1,11 @@
 {{ define "main" }}
 <div class="blog-post-top-row content-title-row">
-  <a class="blog-back-link" href="{{ "/blog/" | relURL }}"><i class="fa-solid fa-arrow-left-long"></i> Back to blog</a>
+  <a class="blog-back-link" href="{{ "/blog/" | relURL }}"><svg class="ui-icon meta-icon tabler-icon" data-icon="tabler-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M5 12l14 0" />
+  <path d="M5 12l6 6" />
+  <path d="M5 12l6 -6" /></svg> Back to blog</a><a class="inline-post-search" href="/blog/?search=1"><svg class="ui-icon tabler-icon" data-icon="tabler-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+  <path d="M21 21l-6 -6" /></svg> Search posts</a>
 </div>
 
 <article class="blog-post">
@@ -11,14 +16,25 @@
   {{ end }}
 
   <header class="post-header">
-    <span class="post-eyebrow"><i class="fa-solid fa-feather-pointed"></i> Capybara's Blog</span>
+    <span class="post-eyebrow"><svg class="ui-icon meta-icon tabler-icon" data-icon="tabler-feather" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 20l10 -10m0 -5v5h5m-9 -1v5h5m-9 -1v5h5m-5 -5l4 -4l4 -4" />
+  <path d="M19 10c.638 -.636 1 -1.515 1 -2.486a3.515 3.515 0 0 0 -3.517 -3.514c-.97 0 -1.847 .367 -2.483 1m-3 13l4 -4l4 -4" /></svg> Capybara's Blog</span>
     <h1>{{ .Title }}</h1>
     <div class="post-meta-row">
-      <span class="post-meta-chip"><i class="fa-regular fa-calendar"></i>{{ .Date.Format "January 2, 2006" }}</span>
-      <span class="post-meta-chip"><i class="fa-regular fa-clock"></i>{{ .ReadingTime }} min read</span>
+      <span class="post-meta-chip"><svg class="ui-icon meta-icon tabler-icon" data-icon="tabler-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" />
+  <path d="M16 3v4" />
+  <path d="M8 3v4" />
+  <path d="M4 11h16" />
+  <path d="M11 15h1" />
+  <path d="M12 15v3" /></svg>{{ .Date.Format "January 2, 2006" }}</span>
+      <span class="post-meta-chip"><svg class="ui-icon meta-icon tabler-icon" data-icon="tabler-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+  <path d="M12 7v5l3 3" /></svg>{{ .ReadingTime }} min read</span>
     </div>
-  </header>
+  {{ partial "base/post-tags.html" . }}</header>
 
+  <details class="inline-toc"><summary>On this page</summary><nav aria-label="Page sections"></nav></details>
   <div class="post-content">
     {{ with .Content }}
       {{ . }}

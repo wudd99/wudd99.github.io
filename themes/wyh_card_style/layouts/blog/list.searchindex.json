@@ -1,0 +1,5 @@
+{{- $posts := slice -}}
+{{- range .RegularPages.ByDate.Reverse -}}
+{{- $posts = $posts | append (dict "url" .RelPermalink "title" .Title "summary" (.Params.summary | default (.Summary | plainify)) "content" (.Plain | htmlUnescape) "tags" (.Params.tags | default slice)) -}}
+{{- end -}}
+{{- $posts | jsonify -}}

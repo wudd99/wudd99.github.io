@@ -53,7 +53,7 @@ Outside of academia, I enjoy playing badminton, swimming, photography, and gamin
 {{< /section >}}
 
 {{< pubs title="Publications" >}}
-<div id="publications" class="publication-grid">
+<div class="publication-grid">
 
 {{< publication-card title="A CMOS Probabilistic Computing Chip with Hardware-Aware Learning" authors="Jinesh Jhonsa, William Whitehead, <strong><ins>Yihao Wu</ins></strong>, David McCarthy, Shuvro Chowdhury, Kerem Y Camsari, Luke Theogarajan" type="journal" topic="Ising Machines" sourcelink="https://ieeexplore.ieee.org/xpl/RecentIssue.jsp?punumber=6570653" source="JxCDC'26" pagelink="https://ieeexplore.ieee.org/abstract/document/11503224" pdf="/files/papers/A_CMOS_Probabilistic_Computing_Chip_with_Hardware-Aware_Learning.pdf">}}
 
@@ -71,7 +71,7 @@ Outside of academia, I enjoy playing badminton, swimming, photography, and gamin
 {{< /pubs >}}
 
 {{< poster title="Poster Presentations" >}}
-<div id="poster" class="poster-grid">
+<div class="poster-grid">
 
 {{< poster-card title="m-Zephyr: a Digital In-Memory Ising Chip with 240 Spins with Improved Connectivity with a Modified Zephyr Topology" authors="<strong><ins>Yihao Wu</ins></strong>, Jooyoung Bae, Chaeyun Shim, Bongjin Kim" sourcelink="https://www.isscc.org/student-research-preview" source="ISSCC'25 SRP" remark="📰 Poster Session" remarkcolor="#FCE4EC" >}}
 

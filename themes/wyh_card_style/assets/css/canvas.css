@@ -1,0 +1,22 @@
+/* Two lightweight background studies share exactly the same card materials. */
+html:not(.dark-mode){--page-bg-decorated:#f5f5fa}
+html:not([data-background="image"]) body:not(.dark-mode)::before,html:not([data-background="image"]) .theme-transition-overlay.theme-light::before{background-image:var(--starfield-image,url('/images/soft-tile.svg?v=starlight-9'));background-size:var(--starfield-size,720px 600px);background-repeat:repeat;background-position:var(--starfield-position,0 0);opacity:1;mix-blend-mode:normal}
+html[data-background="image"] body:not(.dark-mode)::before,html[data-background="image"] .theme-transition-overlay.theme-light::before{background-image:linear-gradient(rgba(255,255,255,.22),rgba(255,255,255,.22)),url('/images/soft-haze.webp?v=backgrounds-7');background-size:cover;background-repeat:no-repeat;background-position:center;opacity:0;mix-blend-mode:normal;transition:opacity .18s ease}
+html[data-background="image"][data-wallpaper-ready="true"] body:not(.dark-mode)::before,html[data-background="image"][data-wallpaper-ready="true"] .theme-transition-overlay.theme-light::before{opacity:1}
+html body:not(.dark-mode)::after,.theme-transition-overlay.theme-light::after{background:none;opacity:0}
+.theme-transition-overlay.theme-light{background:#f5f5fa}
+@media(max-width:767px){html[data-background="image"] body:not(.dark-mode)::before,html[data-background="image"] .theme-transition-overlay.theme-light::before{background-position:58% center}html:not([data-background="image"]) body:not(.dark-mode)::before,html:not([data-background="image"]) .theme-transition-overlay.theme-light::before{background-size:var(--starfield-mobile-size,600px 500px);background-position:var(--starfield-position,-30px 0)}}
+@media(prefers-reduced-motion:reduce){html[data-background="image"] body::before{transition:none}}
+
+/* Keep a single document scroll owner; hide its visual rail, not scrolling. */
+html{overflow-x:hidden;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar{display:none;width:0;height:0}
+html body,html body.mobile-menu-open{overflow:visible;touch-action:auto}
+html .sidebar,html .sidebar.has-overflow.is-scrolling{scrollbar-width:none}
+html .sidebar::-webkit-scrollbar{display:none;width:0;height:0}
+
+/* The desktop dark canvas must include the content's top breathing room.
+   A first-child margin must not expose a separately painted root strip. */
+@media(min-width:1024px){
+ html.dark-mode body{display:flow-root;background:transparent}
+}

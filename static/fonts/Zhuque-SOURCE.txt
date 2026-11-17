@@ -1,0 +1,7 @@
+Zhuque Fangsong v0.212, by TrionesType
+https://github.com/TrionesType/zhuque
+Source: https://github.com/TrionesType/zhuque/releases/download/v0.212/ZhuqueFangsong-v0.212.zip
+Source TTF SHA256: 558c62730844fe54ba220146ed62f859d4e2880188d92d985f8921c6e3743bc4
+License: SIL OFL 1.1 (see Zhuque-OFL.txt)
+Web subset contains only 吴逸豪.
+Built with fontTools pyftsubset --text=吴逸豪 --flavor=woff2 --name-IDs=0,1,2,3,4,5,6,13,14 --name-languages=*

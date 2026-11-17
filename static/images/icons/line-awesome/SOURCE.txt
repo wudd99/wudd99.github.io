@@ -1,0 +1,4 @@
+Line Awesome 1.3.0 by Icons8
+https://github.com/icons8/line-awesome
+Source: https://cdn.jsdelivr.net/npm/line-awesome@1.3.0/svg/orcid.svg
+See LICENSE.md for license.

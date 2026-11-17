@@ -5,7 +5,23 @@ theme = 'wyh_card_style'
 
 disableKinds = ["taxonomy", "term"]
 
+[markup.goldmark.renderer]
+  unsafe = true
+
+[outputFormats.SearchIndex]
+  mediaType = "application/json"
+  baseName = "search-index"
+  isPlainText = true
+
+[outputs]
+  home = ["HTML", "RSS"]
+  section = ["HTML", "RSS", "SearchIndex"]
+
 [params]
+  description = "Yihao Wu (吴逸豪) is a PhD student in Electrical and Computer Engineering at UCSB. His research focuses on Ising and Potts machines, integrated circuits, and hardware accelerators."
+  profileLight = "/images/profile-light.webp"
+  profileDark = "/images/profile-dark.webp"
+  profileSubtitle = "PhD Student · UCSB"
   profilePhoto = "/images/wyh.jpg"
   name_cn = "吴逸豪"
   name_en = "Yihao Wu"

@@ -1,8 +1,6 @@
-<ul>
-  <li><a href="/">Home</a></li>
-  <li><a href="/#about">About</a></li>
-  <li><a href="/#publications">Publications</a></li>
-  <li><a href="/#poster">Posters</a></li>
-  <li><a href="/#contact">Contact</a></li>
-  <li><a href="/blog/">Capybara's blog</a></li>
-</ul>
+<ul><li><a href="/" {{ if .IsHome }}class="active" aria-current="page"{{ end }}><svg class="ui-icon tabler-icon" data-icon="tabler-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg><span>Home</span></a></li><li><a href="/blog/"{{ if eq .Section "blog" }} class="active" aria-current="page"{{ end }}><svg class="ui-icon tabler-icon" data-icon="tabler-pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+  <path d="M13.5 6.5l4 4" /></svg><span>Capybara’s Blog</span></a></li></ul>

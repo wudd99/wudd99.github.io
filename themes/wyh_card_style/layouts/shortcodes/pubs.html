@@ -1,4 +1,5 @@
-<div class="publications-section">
+<details class="inline-toc"><summary>On this page</summary><nav aria-label="Page sections"><ol class="page-toc"><li><a href="#about">About</a></li><li><a href="#publications">Publications</a></li><li><a href="#poster">Posters</a></li><li><a href="#service">Academic Service</a></li><li><a href="#contact">Contact</a></li></ol></nav></details>
+<div class="publications-section" id="publications">
   <h2>{{ .Get "title" }}</h2>
-  {{ .Inner | safeHTML }}
+  <div class="home-tools-slot"></div>{{ .Inner | safeHTML }}
 </div>

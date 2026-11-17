@@ -3,6 +3,6 @@
   {{ if eq $id "publications" }}
     {{ .Inner | safeHTML }}
   {{ else }}
-    {{ .Inner | markdownify }}
+    {{ .Inner | markdownify | replaceRE (printf " id=\"%s\"" $id) "" | safeHTML }}
   {{ end }}
 </section>

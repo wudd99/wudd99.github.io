@@ -1,6 +1,7 @@
 ---
 title: "My First Capybara Adventure"
 date: 2025-03-30T12:00:00+00:00
+aliases: ["/blog/test-copy/"]
 cover: "/images/capybara1.jpg"
 summary: "A glimpse into my first encounter with the charming capybaras."
 tags: ["capybara", "animals", "video", "photos"]

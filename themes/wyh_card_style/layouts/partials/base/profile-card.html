@@ -1,28 +1,9 @@
-<div class="profile-card">
-  {{ $profilePhoto := .Site.Params.profilePhoto }}
-  {{ $profileNightPhoto := replaceRE "[^/]+$" "wyh_night.png" $profilePhoto }}
-  <img
-    id="profilePhoto"
-    src="{{ $profilePhoto | relURL }}"
-    data-light-src="{{ $profilePhoto | relURL }}"
-    data-dark-src="{{ $profileNightPhoto | relURL }}"
-    alt="Profile Photo">
-  <h2>{{ .Site.Params.name_en }}</h2>
-  <h3>{{ .Site.Params.name_cn }}</h3>
-  <p>{{ .Site.Params.position }}</p>
-  <p>{{ .Site.Params.company }}</p>
-  <div class="social-links" aria-label="Social links">
-    <a href="mailto:{{ .Site.Params.social.email }}" aria-label="Email">
-      <i class="fa-solid fa-envelope"></i>
-    </a>
-    <a href="{{ .Site.Params.social.scholar }}" target="_blank" rel="noopener" aria-label="Google Scholar">
-      <i class="fa-brands fa-google fa-xl align-middle"></i>
-    </a>
-    <a href="{{ .Site.Params.social.linkedin }}" target="_blank" rel="noopener" aria-label="LinkedIn">
-      <i class="fa-brands fa-linkedin"></i>
-    </a>
-    <a href="{{ .Site.Params.social.orcid }}" target="_blank" rel="noopener" aria-label="ORCID">
-      <i class="ai ai-orcid"></i>
-    </a>
-  </div>
-</div>
+<div class="profile-card"><a class="profile-home" href="/" aria-label="{{ .Site.Params.name_en }} home"><img id="profilePhoto" src="{{ .Site.Params.profileLight | relURL }}" data-light-src="{{ .Site.Params.profileLight | relURL }}" data-dark-src="{{ .Site.Params.profileDark | relURL }}" alt="{{ .Site.Params.name_en }}" width="144" height="144"></a><h2>{{ .Site.Params.name_en }}</h2><h3 lang="zh">{{ .Site.Params.name_cn }}</h3><p>{{ .Site.Params.profileSubtitle }}</p><div class="social-links" role="group" aria-label="Social links"><a href="mailto:{{ .Site.Params.social.email }}" aria-label="Email {{ .Site.Params.name_en }}" title="Email"><svg class="brand-icon ui-icon tabler-icon" data-icon="tabler-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z" />
+  <path d="M3 7l9 6l9 -6" /></svg></a><a href="{{ .Site.Params.social.scholar }}" target="_blank" rel="noopener" aria-label="Google Scholar" title="Google Scholar"><svg class="brand-icon ui-icon tabler-icon" data-icon="tabler-brand-google" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M20.945 11a9 9 0 1 1 -3.284 -5.997l-2.655 2.392a5.5 5.5 0 1 0 2.119 6.605h-4.125v-3h7.945z" /></svg></a><a href="{{ .Site.Params.social.linkedin }}" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn"><svg class="brand-icon ui-icon tabler-icon" data-icon="tabler-brand-linkedin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M8 11v5" />
+  <path d="M8 8v.01" />
+  <path d="M12 16v-5" />
+  <path d="M16 16v-3a2 2 0 1 0 -4 0" />
+  <path d="M3 7a4 4 0 0 1 4 -4h10a4 4 0 0 1 4 4v10a4 4 0 0 1 -4 4h-10a4 4 0 0 1 -4 -4z" /></svg></a><a href="{{ .Site.Params.social.orcid }}" target="_blank" rel="noopener" aria-label="ORCID" title="ORCID"><svg class="brand-icon" data-icon="line-awesome-orcid" fill="currentColor" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M 16 3 C 8.8321388 3 3 8.832144 3 16 C 3 23.167856 8.8321388 29 16 29 C 23.167861 29 29 23.167856 29 16 C 29 8.832144 23.167861 3 16 3 z M 16 5 C 22.086982 5 27 9.9130223 27 16 C 27 22.086978 22.086982 27 16 27 C 9.9130183 27 5 22.086978 5 16 C 5 9.9130223 9.9130183 5 16 5 z M 11 8 A 1 1 0 0 0 11 10 A 1 1 0 0 0 11 8 z M 10 11 L 10 22 L 12 22 L 12 11 L 10 11 z M 14 11 L 14 12 L 14 22 L 18.5 22 C 21.525577 22 24 19.525577 24 16.5 C 24 13.474423 21.525577 11 18.5 11 L 14 11 z M 16 13 L 18.5 13 C 20.444423 13 22 14.555577 22 16.5 C 22 18.444423 20.444423 20 18.5 20 L 16 20 L 16 13 z"/></svg></a></div></div>

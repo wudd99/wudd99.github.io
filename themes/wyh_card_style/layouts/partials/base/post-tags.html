@@ -1,0 +1,1 @@
+{{ with .Params.tags }}<div class="post-tags">{{ range . }}<a href="{{ printf "/blog/?tag=%s" (. | urlquery) }}" onclick="event.stopPropagation();">{{ . }}</a>{{ end }}</div>{{ end }}

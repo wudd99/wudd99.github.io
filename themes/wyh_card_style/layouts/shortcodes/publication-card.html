@@ -18,14 +18,11 @@
 {{ end }}
 
 {{ $typeLabel := "Other" }}
-{{ $typeIcon := "fa-solid fa-layer-group" }}
 
 {{ if eq $pubType "journal" }}
   {{ $typeLabel = "Journal" }}
-  {{ $typeIcon = "fa-solid fa-book-journal-whills" }}
 {{ else if eq $pubType "conference" }}
   {{ $typeLabel = "Conference" }}
-  {{ $typeIcon = "fa-solid fa-users" }}
 {{ end }}
 
 {{ $topics := or (.Get "topic") (.Get "topics") "Research" }}
@@ -35,63 +32,22 @@
   class='publication-card{{ if $pageLink }} clickable-card{{ end }}'
   data-pub-type="{{ $pubType }}"
   data-pub-type-label="{{ $typeLabel }}"
-  data-pub-topics="{{ $topics | plainify | htmlEscape }}"
-  data-pub-source="{{ .Get "source" | plainify | htmlEscape }}"
+  data-pub-topics="{{ $topics | plainify }}"
+  data-pub-source="{{ .Get "source" | plainify }}"
   {{ with $pageLink }}
     tabindex="0"
     role="link"
     aria-label='Open publication page: {{ $.Get "title" | plainify }}'
     onclick="window.open('{{ . }}', '_blank', 'noopener');"
-    onkeydown="if(event.key==='Enter' || event.key===' '){ event.preventDefault(); window.open('{{ . }}', '_blank', 'noopener'); }"
-    onpointerdown="if (!event.target.closest('a, .pub-tag, .pub-card-meta')) { this.classList.add('card-pressed'); }"
-    onpointerup="this.classList.remove('card-pressed');"
-    onpointerleave="this.classList.remove('card-pressed');"
-    onpointercancel="this.classList.remove('card-pressed');"
+    onkeydown="if(event.target===this && (event.key==='Enter' || event.key===' ')){ event.preventDefault(); window.open('{{ . }}', '_blank', 'noopener'); }"
   {{ end }}
 >
-  <div class="pub-card-meta">
-    <span class="meta-pill publication-type-pill type-{{ $pubType }}">
-      <i class="{{ $typeIcon }}"></i>
-      <span>{{ $typeLabel }}</span>
-    </span>
-  </div>
-
-  <h3>{{ $counter }}. {{ .Get "title" | safeHTML }}</h3>
-  <p>{{ .Get "authors" | safeHTML }}</p>
-
-  <div class="pub-tags">
-    {{ with $sourceLink }}
-      <a
-        class="pub-tag source"
-        href='{{ . }}'
-        target="_blank"
-        rel="noopener"
-        onclick="event.stopPropagation();"
-      >
-        {{ $.Get "source" }}
-      </a>
-    {{ end }}
-
-    {{ with $pdf }}
-      <a
-        class="pub-tag link"
-        href='{{ . }}'
-        target="_blank"
-        rel="noopener"
-        onclick="event.stopPropagation();"
-      >
-        📓 PDF
-      </a>
-    {{ end }}
-
-    {{ with .Get "remark" }}
-      {{ $remarkColor := $.Get "remarkcolor" | default "#d1ffd1" }}
-      <span
-        class="pub-tag remark"
-        data-remark-color="{{ $remarkColor | safeHTMLAttr }}"
-      >
-        {{ . | safeHTML }}
-      </span>
-    {{ end }}
-  </div>
+  <div class="pub-card-header"><div class="pub-card-meta"><div class="card-type-group">
+<span class="card-index">{{ $counter }}</span><span class="meta-pill publication-type-pill type-{{ $pubType }}"><span>{{ $typeLabel }}</span><span class="publication-type-icon" aria-hidden="true"></span></span></div>
+{{ with $sourceLink }}<a class="pub-tag source" href="{{ . }}" target="_blank" rel="noopener" onclick="event.stopPropagation();">{{ $.Get "source" }}</a>{{ end }}
+</div>
+{{ with $pdf }}<a class="pub-tag link" aria-label="Read PDF: {{ $.Get "title" | plainify }}" href="{{ . }}" target="_blank" rel="noopener" onclick="event.stopPropagation();"><span class="pub-pdf-icon" aria-hidden="true"></span><span>PDF</span></a>{{ end }}
+</div>
+<h3>{{ .Get "title" | safeHTML }}</h3><p class="pub-authors">{{ .Get "authors" | safeHTML }}</p>
+{{ with .Get "remark" }}<div class="pub-tags"><span class="pub-tag remark" data-remark-color="{{ $.Get "remarkcolor" | default "#d1ffd1" }}">{{ . | safeHTML }}</span></div>{{ end }}
 </section>

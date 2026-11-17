@@ -1,19 +1,8 @@
-<section id='poster_{{ .Get "title" | urlize }}' class='poster-card'> 
-  {{ $counter := .Page.Scratch.Get "posterCounter" | default 0 }}
-  {{ $counter = add $counter 1 }}
-  {{ .Page.Scratch.Set "posterCounter" $counter }}
-  <h3>{{ $counter }}. {{ .Get "title" | safeHTML }}</h3>
-  <p> {{ .Get "authors" | safeHTML }}</p>
-  <div class="poster-tags">
-    <a class="poster-tag source" href='{{ .Get "sourcelink" }}'>{{ .Get "source" }}</a>
-    {{ $pdf := .Get "pdf" }}
-    {{ if $pdf }}
-      <a class="poster-tag link" href='{{ $pdf }}'>📄 PDF</a>
-    {{ end }}
-    {{ $remark := .Get "remark" }}
-    {{ if $remark }}
-      {{ $remarkColor := .Get "remarkcolor" | default "#d1ffd1" }}
-      <a class="poster-tag remark" data-remark-color="{{ $remarkColor | safeHTMLAttr }}">{{ $remark | safeHTML }}</a>
-    {{ end }}
-  </div>
+{{ $counter := add (.Page.Scratch.Get "posterCounter" | default 0) 1 }}{{ .Page.Scratch.Set "posterCounter" $counter }}
+<section id="poster_{{ .Get "title" | urlize }}" class="poster-card">
+<div class="pub-card-header"><div class="pub-card-meta"><div class="card-type-group"><span class="card-index">{{ $counter }}</span><span class="meta-pill publication-type-pill type-poster"><span>Poster</span><span class="publication-type-icon" aria-hidden="true"></span></span></div>
+{{ with .Get "sourcelink" }}<a class="pub-tag source" href="{{ . }}">{{ $.Get "source" }}</a>{{ end }}</div>
+{{ with .Get "pdf" }}<a class="pub-tag link" href="{{ . }}"><span class="pub-pdf-icon" aria-hidden="true"></span>PDF</a>{{ end }}</div>
+<h3>{{ .Get "title" | safeHTML }}</h3><p class="pub-authors">{{ .Get "authors" | safeHTML }}</p>
+{{ with .Get "remark" }}<div class="poster-tags"><span class="pub-tag remark" data-remark-color="{{ $.Get "remarkcolor" | default "#d1ffd1" }}">{{ . | safeHTML }}</span></div>{{ end }}
 </section>

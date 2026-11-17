@@ -1,0 +1,37 @@
+
+<a class="skip-link" href="#main-content">Skip to content</a>
+  <div class="meteor-layer" aria-hidden="true"></div>
+<div class="cursor-spotlight" aria-hidden="true"></div>
+<script>
+  (function() {
+    try {
+      var isDark = localStorage.getItem('dark-mode') === 'true';
+      document.documentElement.classList.toggle('dark-mode', isDark);
+      document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
+      document.body.classList.toggle('dark-mode', isDark);
+    } catch (e) {}
+  })();
+</script>
+
+  <header class="ref-topbar"><a class="ref-brand" href="/"><img src="/images/profile-light.webp" alt="" width="42" height="42"><span>{{ .Site.Params.name_en }}<small>{{ .Site.Params.profileSubtitle }}</small></span></a><button type="button" class="hamburger" id="retainedMenu" aria-label="Open navigation menu" aria-controls="mobileMenu" aria-expanded="false"><svg class="ui-icon tabler-icon" data-icon="tabler-menu-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 6l16 0" />
+  <path d="M4 12l16 0" />
+  <path d="M4 18l16 0" /></svg></button></header>
+
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation" aria-hidden="true" inert><button type="button" class="close-menu" id="closeMenu" aria-label="Close navigation menu"><svg class="ui-icon tabler-icon" data-icon="tabler-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M18 6l-12 12" />
+  <path d="M6 6l12 12" /></svg></button><ul><li><a href="/" {{ if .IsHome }}class="active" aria-current="page"{{ end }}><svg class="ui-icon tabler-icon" data-icon="tabler-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg><span>Home</span></a></li><li><a href="/blog/"{{ if eq .Section "blog" }} class="active" aria-current="page"{{ end }}><svg class="ui-icon tabler-icon" data-icon="tabler-pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+  <path d="M13.5 6.5l4 4" /></svg><span>Capybara’s Blog</span></a></li></ul><div class="mobile-home-sections"><p>Home sections</p><ul><li><a href="/#about">About</a></li><li><a href="/#publications">Publications</a></li><li><a href="/#poster">Posters</a></li><li><a href="/#service">Academic Service</a></li><li><a href="/#contact">Contact</a></li></ul></div><div class="mobile-appearance"><button type="button" class="appearance-button" data-theme-toggle><svg class="ui-icon theme-moon tabler-icon" data-icon="tabler-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" /></svg><svg class="ui-icon theme-sun tabler-icon" data-icon="tabler-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+  <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" /></svg><span data-theme-label>Dark mode</span></button><input type="checkbox" id="mobile-mode-toggle-checkbox" hidden tabindex="-1" aria-hidden="true"></div></nav>
+<div class="mobile-menu-backdrop" id="mobileMenuBackdrop" aria-hidden="true"></div>
+
+
+  
+
+  
