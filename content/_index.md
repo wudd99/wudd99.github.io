@@ -83,6 +83,7 @@ Outside of academia, I enjoy playing badminton, swimming, photography, and gamin
 {{< section id="service" >}}
 ## Academic Service
 
+- **Reviewer** IEEE International Symposium on Circuits and Systems (ISCAS), 2027.
 - **Reviewer** IEEE Transactions on Circuits and Systems I: Regular Papers (TCAS-I), 2026.
 
 {{< /section >}}
