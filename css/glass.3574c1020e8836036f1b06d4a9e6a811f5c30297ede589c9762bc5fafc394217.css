@@ -86,8 +86,8 @@ html body .liquid-ready>.liquid-glass-skin::after{padding:0;filter:none;-webkit-
 html.dark-mode body .liquid-card.liquid-pressed{--liquid-edge-top:rgba(13,22,38,.60);--liquid-edge-bottom:rgba(210,236,255,.42)}
 @supports ((mask-composite:exclude) or (-webkit-mask-composite:xor)){
  html body .liquid-ready>.liquid-glass-skin::before{padding:var(--liquid-rim-width,2px);background:linear-gradient(var(--liquid-angle,135deg),var(--liquid-rim-light),var(--liquid-rim-blue) 32%,transparent 52%,var(--liquid-rim-violet) 74%,var(--liquid-rim-light));-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
- /* Restore the v20 hard-cut card ring, with no feathering on the broad band. */
- html body .liquid-card>.liquid-glass-skin::after{padding:var(--liquid-halo-width,12px);filter:none;opacity:.75;background:linear-gradient(var(--liquid-angle,135deg),var(--card-rim-light),var(--card-rim-blue) 32%,transparent 52%,var(--card-rim-violet) 74%,var(--card-rim-light));-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+ /* Cards and controls use the same hard-cut mask, without a feathered band. */
+ html body :is(.liquid-card,.liquid-control)>.liquid-glass-skin::after{padding:var(--liquid-halo-width,12px);filter:none;opacity:var(--liquid-edge-opacity,.75);background:linear-gradient(var(--liquid-angle,135deg),var(--card-rim-light),var(--card-rim-blue) 32%,transparent 52%,var(--card-rim-violet) 74%,var(--card-rim-light));-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
 }
 /* Old hover lift must not animate a card when its nested button owns the pointer. */
 html body :is(.clickable-card:hover:not(.liquid-hover),.poster-card:not(.clickable-card):hover,#service li:not(.clickable-card):hover):not(.liquid-pressed):not(.liquid-releasing){transform:none!important}
@@ -124,3 +124,8 @@ html.dark-mode body .liquid-control:not(.blog-cover-link){--glass-pressed-shadow
 
 /* Dragging a card manipulates its glass surface without selecting its labels. */
 html body :is(.profile-card,.publication-card,.poster-card,.blog-card,.research-timeline,.timeline-card,.pub-filter-shell,.liquid-control,#service li){-webkit-user-select:none;user-select:none}
+
+/* No-mask fallback also has an abrupt inner edge rather than a fading band. */
+@supports not ((mask-composite:exclude) or (-webkit-mask-composite:xor)){
+ html body .liquid-control>.liquid-glass-skin::after{background:none;filter:none;box-shadow:inset 0 0 0 var(--liquid-halo-width,5px) var(--liquid-rim-blue)}
+}

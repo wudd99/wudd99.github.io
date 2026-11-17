@@ -18,7 +18,7 @@ html body .sidebar .profile-card img#profilePhoto{display:block;width:144px!impo
 html body .sidebar .profile-card h2{font-size:23px;line-height:1.2;margin:0 0 2px}
 html body .sidebar .profile-card h3{font-size:16px;line-height:1.2;margin:0 0 4px;font-weight:400;color:var(--text-muted)}
 html body .sidebar .profile-card p{font-size:13px;line-height:1.4;margin:0;color:var(--text-muted)}
-html body .sidebar .profile-card .social-links{display:flex;justify-content:flex-start;gap:6px;margin:12px 0 0}
+html body .sidebar .profile-card .social-links{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:5px;margin:12px 0 0}
 html body .sidebar .profile-card .social-links a{display:flex;align-items:center;justify-content:center;width:40px;height:40px;margin:0;padding:0}
 html body .brand-icon{display:block;width:20px;height:20px;flex:0 0 20px;fill:currentColor;stroke:none}
 html body .sidebar>.nav{display:block!important;width:100%;margin:18px 0 0;padding:0;position:static}
@@ -244,3 +244,9 @@ html body .blog-tools-slot .tag-filter summary{margin-top:0}
 
 /* A self-hosted Zhuque subset keeps the Chinese name consistent across devices. */
 html body .sidebar .profile-card h3[lang="zh"]{font-family:"Zhuque Profile","STFangsong","FangSong","Songti SC",serif}
+
+/* Keep all four contact links on one row in the narrower tablet sidebar. */
+@media(min-width:768px) and (max-width:1199px){
+ html body .sidebar .profile-card .social-links{gap:4px}
+ html body .sidebar .profile-card .social-links a{width:36px;height:36px}
+}
