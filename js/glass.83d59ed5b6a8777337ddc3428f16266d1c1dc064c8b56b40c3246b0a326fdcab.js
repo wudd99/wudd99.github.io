@@ -1,8 +1,16 @@
 (function(){
- // Only a genuine action owns feedback. Decorative containers never inherit it.
- const surfaceSelector='button.tag-option,a.tag-option[href],button.text-button,button.search-submit,button.close-menu,button.appearance-button,.clickable-card[tabindex],.clickable-card[onclick],a.pub-tag[href],a.poster-tag[href],button.pub-filter-chip,button.timeline-marker,.profile-card .social-links a[href],.nav ul li a[href],.mobile-menu ul li a[href],a.blog-back-link[href],.blog-card a.read-more[href],.blog-card a.blog-cover-link[href],.ref-topbar button,a.ref-brand[href],label.switch,.close-menu[role="button"]';
- function surfaceFor(target){
+ // Text links use a small press offset, without preparing a glass surface.
+ const buttonLinkSelector='a.pub-tag.link,a.poster-tag,a.tag-option,.post-tags a,.social-links a,.nav a,.mobile-menu a,a.blog-cover-link,a.profile-home,a.ref-brand,a.skip-link';
+ function textLinkFor(target){
   if(!(target instanceof Element))return null;
+  const link=target.closest('a[href]');
+  if(!link||link.matches(buttonLinkSelector)||link.matches('[disabled],[aria-disabled="true"]')||link.closest('[inert]'))return null;
+  return link;
+ }
+ // Only a genuine action owns feedback. Decorative containers never inherit it.
+ const surfaceSelector='button.tag-option,a.tag-option[href],button.text-button,button.search-submit,button.close-menu,button.appearance-button,.clickable-card[tabindex],.clickable-card[onclick],a.pub-tag.link[href],a.poster-tag[href],button.pub-filter-chip,button.timeline-marker,.profile-card .social-links a[href],.nav ul li a[href],.mobile-menu ul li a[href],.blog-card a.blog-cover-link[href],.ref-topbar button,a.ref-brand[href],label.switch,.close-menu[role="button"]';
+ function surfaceFor(target){
+  if(!(target instanceof Element)||textLinkFor(target))return null;
   const surface=target.closest(surfaceSelector);if(!surface)return null;
   if(surface.matches('[disabled],[aria-disabled="true"]')||surface.closest('[inert]')||surface.querySelector('input:disabled'))return null;
   const control=target.closest('a,button,input,label,select,textarea,[role="button"]');
@@ -12,6 +20,7 @@
  // The original tactile handler uses this same resolver, avoiding parent effects.
  window.WYH_GLASS_SURFACE_FOR=surfaceFor;
  document.addEventListener('DOMContentLoaded',function(){
+  document.querySelectorAll('a[href]').forEach(link=>{if(textLinkFor(link))link.classList.add('text-link')});
   let scrolled;
   function updateGlass(){const next=window.scrollY>12;if(next!==scrolled){scrolled=next;document.documentElement.classList.toggle('glass-scrolled',next)}}
   updateGlass();window.addEventListener('scroll',updateGlass,{passive:true});
@@ -26,8 +35,8 @@
   function clearHover(){if(hovered)hovered.surface.classList.remove('liquid-hover');hovered=null}
   function reset(){
    cancelFrame();
-   if(active){active.surface.classList.remove('glass-pressed');clearLiquid(active.surface)}active=null;
-   pending.forEach((timer,surface)=>{clearTimeout(timer);surface.classList.remove('glass-pressed');clearLiquid(surface)});pending.clear();
+   if(active){active.surface.classList.remove('glass-pressed','text-pressed');clearLiquid(active.surface)}active=null;
+   pending.forEach((timer,surface)=>{clearTimeout(timer);surface.classList.remove('glass-pressed','text-pressed');clearLiquid(surface)});pending.clear();
    rebounds.forEach((timer,surface)=>{clearTimeout(timer);clearLiquid(surface)});rebounds.clear();
   }
   function cancelAll(){reset();clearHover()}
@@ -59,7 +68,11 @@
   }
   function canHover(event){return hoverCapability.matches&&event.pointerType!=='touch'&&!event.buttons}
   function begin(target,details){
-   reset();const surface=surfaceFor(target);if(!surface){clearHover();return}
+   reset();const text=textLinkFor(target),surface=text||surfaceFor(target);if(!surface){clearHover();return}
+   if(text){
+    clearHover();active={surface,text:true,started:performance.now(),...details};
+    surface.classList.add('text-link','text-pressed');return;
+   }
    if(details.kind==='pointer'&&details.pointerType!=='touch'&&hoverCapability.matches){setHover(surface,details.x,details.y)}else clearHover();
    prepare(surface);const rect=surface.getBoundingClientRect();
    active={surface,rect,started:performance.now(),...details};
@@ -75,7 +88,7 @@
    if(immediate){cancelAll();return}if(!active)return;
    const press=active;active=null;cancelFrame();
    const delay=Math.max(70,160-(performance.now()-press.started)),surface=press.surface;
-   pending.set(surface,setTimeout(()=>{surface.classList.remove('glass-pressed');rebound(surface);pending.delete(surface)},delay));
+   pending.set(surface,setTimeout(()=>{surface.classList.remove('glass-pressed','text-pressed');if(!press.text)rebound(surface);pending.delete(surface)},delay));
   }
   document.addEventListener('pointerover',event=>{if(!active&&canHover(event))setHover(surfaceFor(event.target),event.clientX,event.clientY)},{passive:true});
   document.addEventListener('pointerout',event=>{
@@ -95,7 +108,7 @@
     if(Math.hypot(event.clientX-active.x,event.clientY-active.y)>10||!hit||!active.surface.contains(hit)){release(true);return}
    }else if(event.buttons===0&&!active.nativeDragging){release();return}
    // Mouse movement keeps the same press owner, even beyond the original card.
-   schedulePosition(active,event.clientX,event.clientY);
+   if(!active.text)schedulePosition(active,event.clientX,event.clientY);
   },{passive:true});
   document.addEventListener('pointerup',event=>{if(active?.kind==='pointer'&&event.pointerId===active.id)release()},{passive:true});
   document.addEventListener('pointercancel',()=>{if(!active?.nativeDragging)cancelAll()},{passive:true});
@@ -105,12 +118,12 @@
   },{passive:true});
   document.addEventListener('drag',event=>{
    if(!active?.nativeDragging||(!event.clientX&&!event.clientY))return;
-   schedulePosition(active,event.clientX,event.clientY);
+   if(!active.text)schedulePosition(active,event.clientX,event.clientY);
   },{passive:true});
   ['dragend','drop'].forEach(type=>document.addEventListener(type,()=>release(),{passive:true}));
   document.addEventListener('scroll',()=>{
    clearHover();
-   if(active?.kind==='pointer'&&active.pointerType!=='touch'){cancelFrame();active.rect=active.surface.getBoundingClientRect();return}
+   if(active?.kind==='pointer'&&active.pointerType!=='touch'){cancelFrame();if(!active.text)active.rect=active.surface.getBoundingClientRect();return}
    reset();
   },{capture:true,passive:true});window.addEventListener('blur',cancelAll);
   window.addEventListener('resize',cancelAll,{passive:true});
@@ -120,6 +133,7 @@
   document.addEventListener('keydown',event=>{
    if(event.key==='Escape'){cancelAll();return}
    if(event.repeat||(event.key!=='Enter'&&event.key!==' '))return;
+   if(event.key===' '&&event.target instanceof Element&&event.target.matches('a[href]:not([role="button"])'))return;
    if(!(event.target instanceof Element)||!event.target.matches('a[href],button,input[type="checkbox"],input[type="radio"],[role="button"],.clickable-card[tabindex]'))return;
    begin(event.target,{kind:'keyboard',key:event.key});
   },true);
