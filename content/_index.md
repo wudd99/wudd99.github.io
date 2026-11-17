@@ -73,9 +73,9 @@ Outside of academia, I enjoy playing badminton, swimming, photography, and gamin
 {{< poster title="Poster Presentations" >}}
 <div class="poster-grid">
 
-{{< poster-card title="m-Zephyr: a Digital In-Memory Ising Chip with 240 Spins with Improved Connectivity with a Modified Zephyr Topology" authors="<strong><ins>Yihao Wu</ins></strong>, Jooyoung Bae, Chaeyun Shim, Bongjin Kim" sourcelink="https://www.isscc.org/student-research-preview" source="ISSCC'25 SRP" remark="📰 Poster Session" remarkcolor="#FCE4EC" >}}
+{{< poster-card title="m-Zephyr: a Digital In-Memory Ising Chip with 240 Spins with Improved Connectivity with a Modified Zephyr Topology" authors="<strong><ins>Yihao Wu</ins></strong>, Jooyoung Bae, Chaeyun Shim, Bongjin Kim" sourcelink="https://www.isscc.org/student-research-preview" source="ISSCC'25 SRP" >}}
 
-{{< poster-card title="Low-cost human posture monitoring system based on infrared array sensor" authors="<strong><ins>Yihao Wu</ins></strong>, Tahmid Kaisar, Hui Zhang, Philip X.-L. Feng" sourcelink="https://www.eng.ufl.edu/nimet/events/nanoday/" source="Nano Day'22" remark="📰 Poster Session" remarkcolor="#FCE4EC" >}}
+{{< poster-card title="Low-cost human posture monitoring system based on infrared array sensor" authors="<strong><ins>Yihao Wu</ins></strong>, Tahmid Kaisar, Hui Zhang, Philip X.-L. Feng" sourcelink="https://www.eng.ufl.edu/nimet/events/nanoday/" source="Nano Day'22" >}}
 
 </div>
 {{< /poster >}}
