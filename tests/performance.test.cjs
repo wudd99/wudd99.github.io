@@ -28,7 +28,7 @@ function runtime() {
     cancelAnimationFrame: key => frames.delete(key),
     setTimeout: fn => {timers.set(++id, fn); return id;},
     clearTimeout: key => timers.delete(key)});
-  const document = events({hidden: false, documentElement: {classList: classes()}, body: {classList: classes()}});
+  const document = events({querySelectorAll: () => [], hidden: false, documentElement: {classList: classes()}, body: {classList: classes()}});
   const flushFrames = () => {const list = [...frames.values()]; frames.clear(); list.forEach(fn => fn(16));};
   const nextTimer = () => {const [key, fn] = timers.entries().next().value; timers.delete(key); fn();};
   const context = {window, document, performance: {now: () => 0}, requestAnimationFrame: window.requestAnimationFrame,
@@ -147,4 +147,63 @@ test('unrelated root class mutations do not rewrite theme labels or reload the p
   assert.equal(writes, 3);
   r.document.documentElement.classList.add('dark-mode'); r.context.syncTheme();
   assert.equal(writes, 6);
+});
+test('text links inside cards use text-only feedback and never allocate glass or animation frames', () => {
+  const r = runtime(); let allocations = 0, reads = 0, writes = 0;
+  class Element {
+    constructor(kind, parent) {
+      this.kind = kind; this.parent = parent; this.classList = classes(); this.isConnected = true;
+      this.style = {setProperty() {writes++;}};
+    }
+    closest(selector) {
+      if (selector === '[inert]') return null;
+      if (selector === 'a[href]') return this.kind === 'child' ? this.parent : this.kind === 'card' ? null : this;
+      if (selector === 'a,button,input,label,select,textarea,[role="button"]') return this.closest('a[href]');
+      if (this.kind === 'child') return this.parent.closest(selector);
+      if (selector.includes('.clickable-card')) return this.kind === 'pdf' ? this : card;
+      return null;
+    }
+    matches(selector) {
+      if (selector === '.clickable-card') return this.kind === 'card';
+      if (selector.startsWith('[disabled]')) return false;
+      if (selector === 'a[href]:not([role="button"])') return this.kind !== 'card' && this.kind !== 'child';
+      if (selector.includes('a.pub-tag.link')) return this.kind === 'pdf';
+      if (selector.startsWith('a[href],button')) return this.kind !== 'card' && this.kind !== 'child';
+      return false;
+    }
+    querySelector() {return this.skin || null;}
+    appendChild(node) {this.skin = node;}
+    setAttribute() {}
+    contains(target) {return target === this || target.parent === this;}
+    getBoundingClientRect() {reads++; return {left: 0, top: 0, width: 100, height: 30};}
+  }
+  const card = new Element('card'), link = new Element('source', card), child = new Element('child', link), pdf = new Element('pdf', card);
+  r.document.querySelectorAll = () => [link, pdf];
+  r.document.createElement = () => {allocations++; return new Element('skin');};
+  Object.assign(r.context, {Element, getComputedStyle() {reads++; return {position: 'relative', borderTopLeftRadius: '10px'};}});
+  vm.runInNewContext(read('js/glass.js'), r.context); r.document.emit('DOMContentLoaded');
+  assert.equal(link.classList.contains('text-link'), true);
+  assert.equal(pdf.classList.contains('text-link'), false);
+  assert.equal(r.window.WYH_GLASS_SURFACE_FOR(child), null);
+  for (let i = 0; i < 50; i++) r.document.emit('pointermove', {target: child, pointerType: 'mouse', buttons: 0, clientX: i, clientY: 10});
+  r.document.emit('pointerdown', {target: child, button: 0, pointerId: 1, pointerType: 'mouse', clientX: 10, clientY: 10});
+  assert.equal(link.classList.contains('text-pressed'), true);
+  assert.equal(card.classList.contains('glass-pressed'), false);
+  assert.equal(link.classList.contains('liquid-ready'), false);
+  r.document.emit('pointermove', {target: child, pointerId: 1, pointerType: 'mouse', buttons: 1, clientX: 20, clientY: 10});
+  assert.deepEqual([allocations, reads, writes, r.frames.size], [0, 0, 0, 0]);
+  r.document.emit('pointerup', {pointerId: 1}); r.nextTimer();
+  assert.equal(link.classList.contains('text-pressed'), false);
+  r.document.emit('keydown', {target: link, key: ' '});
+  assert.equal(link.classList.contains('text-pressed'), false, 'Space must keep its normal page-scroll behavior');
+  r.document.emit('keydown', {target: link, key: 'Enter'});
+  assert.equal(link.classList.contains('text-pressed'), true);
+  r.document.emit('keyup', {key: 'Enter'}); r.window.emit('pagehide');
+  assert.equal(link.classList.contains('text-pressed'), false); assert.equal(r.timers.size, 0);
+  r.document.emit('pointerdown', {target: link, button: 0, pointerId: 2, pointerType: 'touch', clientX: 10, clientY: 10});
+  r.document.emit('scroll'); assert.equal(link.classList.contains('text-pressed'), false);
+  r.document.emit('pointerdown', {target: pdf, button: 0, pointerId: 3, pointerType: 'mouse', clientX: 10, clientY: 10});
+  assert.equal(pdf.classList.contains('liquid-pressed'), true, 'PDF buttons retain their glass feedback');
+  assert.equal(allocations, 1);
+  r.window.emit('pagehide'); assert.equal(r.frames.size, 0); assert.equal(r.timers.size, 0);
 });
