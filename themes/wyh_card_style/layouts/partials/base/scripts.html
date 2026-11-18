@@ -5,3 +5,8 @@ window.WYH_SITE_DATA.timelineItems = {{ with .Params.timeline.items }}{{ . | jso
 {{ range slice "site" "glass" "layout" }}
 {{ with resources.Get (printf "js/%s.js" .) | fingerprint }}<script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" defer></script>{{ end }}
 {{ end }}
+
+{{ $vendor := resources.Get "vendor/liquidgl/liquidGL.v3.js" | fingerprint }}
+{{ with resources.Get "js/liquidgl-prototype.js" | resources.ExecuteAsTemplate "js/liquidgl-adapter.js" $vendor | fingerprint }}
+<script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" defer></script>
+{{ end }}

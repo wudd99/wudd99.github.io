@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const wide = window.matchMedia('(min-width: 1200px)');
   const menu = document.getElementById('mobileMenu');
   const trigger = document.getElementById('retainedMenu');
-  const legacyTrigger = document.getElementById('hamburger');
   const desktopToggle = document.getElementById('mode-toggle');
   const mobileToggle = document.getElementById('mobile-mode-toggle-checkbox');
 
@@ -38,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (desktopToggle.checked !== dark) desktopToggle.click();
   });
 
-  if (menu && trigger && legacyTrigger) {
+  if (menu && trigger) {
     let wasOpen = false;
     function syncMenu() {
       const open = menu.classList.contains('open') && mobile.matches;
@@ -50,10 +49,9 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!open && wasOpen && mobile.matches) trigger.focus();
       wasOpen = open;
     }
-    trigger.addEventListener('click', () => legacyTrigger.click());
     new MutationObserver(syncMenu).observe(menu, {attributes: true, attributeFilter: ['class']});
     mobile.addEventListener('change', () => {
-      if (!mobile.matches && menu.classList.contains('open')) legacyTrigger.click();
+      if (!mobile.matches && menu.classList.contains('open')) trigger.click();
       syncMenu();
     });
     document.addEventListener('keydown', event => {
@@ -70,19 +68,25 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function initDirectory() {
+    const page = document.body.dataset.page;
+    const byId = ids => ids.map(id => document.getElementById(id)).filter(Boolean);
     let targets = [];
-    if (document.body.dataset.page === 'home') {
-      targets = ['about', 'publications', 'poster', 'service', 'contact'].map(id => document.getElementById(id)).filter(Boolean);
-    } else if (document.body.dataset.page === 'blog-post') {
+    let names = {};
+    if (page === 'home') {
+      names = {about: 'About', publications: 'Publications', poster: 'Posters', service: 'Academic Service', contact: 'Contact'};
+      targets = byId(Object.keys(names));
+    } else if (page === 'blog-list') {
+      targets = byId(['blog', 'blog-results']);
+      names = {blog: document.querySelector('#blog .blog-title-row h2')?.textContent.trim() || 'Blog',
+        'blog-results': 'Posts'};
+    } else if (page === 'blog-post') {
       targets = Array.from(document.querySelectorAll('.post-content h2,.post-content h3'));
-    } else return;
-    const navs = document.querySelectorAll('.sidebar-directory nav,.inline-toc nav');
-    if (!targets.length) {
-      document.querySelectorAll('.inline-toc,.sidebar-directory').forEach(el => el.hidden = true);
-      return;
     }
-    const names = {about: 'About', publications: 'Publications', poster: 'Posters', service: 'Academic Service', contact: 'Contact'};
-    targets.forEach((target, index) => {
+    const directories = document.querySelectorAll('.sidebar-directory,.inline-toc,.mobile-home-sections');
+    directories.forEach(directory => {directory.hidden = !targets.length;});
+    if (!targets.length) return;
+    const navs = document.querySelectorAll('.sidebar-directory nav,.inline-toc nav,.mobile-home-sections nav');
+    targets.forEach(target => {
       if (!target.id) {
         const stem = target.textContent.trim().toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-|-$/g, '') || 'section';
         let id = stem, count = 2;
@@ -103,10 +107,7 @@ document.addEventListener('DOMContentLoaded', function () {
       });
       nav.replaceChildren(list);
     });
-    const sectionLinks = Array.from(document.querySelectorAll('.page-toc a,.mobile-home-sections a')).filter(link => {
-      const url = new URL(link.href);
-      return url.origin === location.origin && url.pathname.replace(/\/$/, '') === location.pathname.replace(/\/$/, '') && targets.some(target => '#' + encodeURIComponent(target.id) === url.hash);
-    });
+    const sectionLinks = document.querySelectorAll('.page-toc a');
     let frame = 0, anchorTarget = null, anchorScroll = null, settleTimer = 0;
     function scrollPosition() {
       return window.scrollY || (document.scrollingElement || document.documentElement).scrollTop || 0;

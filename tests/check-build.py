@@ -7,6 +7,7 @@ import base64
 import hashlib
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -59,9 +60,16 @@ def validate(output):
         assert page.with_class('social-links'), f'Missing profile on {path}'
         assert any(a.get('href') == 'mailto:yihao_wu@ucsb.edu' for _, a in page.nodes), 'Missing email action'
     for css in (output / 'css').glob('*.css'):
-        import re
         for ref in re.findall(r'url\([\'"]?(/[^)\'"\s]+)', css.read_text()):
             assert (output / unquote(urlsplit(ref).path).lstrip('/')).is_file(), f'Missing CSS resource {ref}'
+    adapters = list((output / 'js').glob('liquidgl-adapter.*.js'))
+    assert len(adapters) == 1, 'Expected one fingerprinted liquidGL adapter'
+    adapter = adapters[0].read_text()
+    vendor_url = re.search(r"script.src = '(/vendor/liquidgl/[^']+)'", adapter)
+    assert vendor_url, 'The adapter must reference a local vendor asset'
+    vendor = output / vendor_url[1].lstrip('/')
+    integrity = base64.b64encode(hashlib.sha256(vendor.read_bytes()).digest()).decode()
+    assert f"script.integrity = 'sha256-{integrity}'" in adapter
     home = Page(output / 'index.html')
     assert any(a.get('data-page') == 'home' for t, a in home.nodes if t == 'body')
     assert home.with_class('publication-card') and home.with_class('poster-card')

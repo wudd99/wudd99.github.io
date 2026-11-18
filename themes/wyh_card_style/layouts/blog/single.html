@@ -34,7 +34,7 @@
     </div>
   {{ partial "base/post-tags.html" . }}</header>
 
-  <details class="inline-toc"><summary>On this page</summary><nav aria-label="Page sections"></nav></details>
+  <details class="inline-toc"><summary>On this page</summary>{{ partial "base/page-directory.html" . }}</details>
   <div class="post-content">
     {{ with .Content }}
       {{ . }}

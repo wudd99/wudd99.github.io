@@ -7,6 +7,7 @@
   {{ $pages := .RegularPages }}
   {{ if not $pages }}{{ $pages = .Pages }}{{ end }}
 
+<details class="inline-toc"><summary>On this page</summary>{{ partial "base/page-directory.html" . }}</details>
 <div class="blog-tools-slot"></div><p class="blog-results-status" role="status" aria-live="polite" aria-atomic="true" hidden></p><div class="blog-empty utility-panel" hidden><h3>No posts found</h3><p>Try another search or clear your filters.</p><button type="button" class="text-button" data-clear-filters>Clear filters</button></div>
   <div class="blog-grid" id="blog-results">
   {{ if $pages }}

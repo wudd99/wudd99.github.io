@@ -1,0 +1,9 @@
+<nav aria-label="Page sections">
+{{ if .IsHome }}
+<ol class="page-toc"><li><a href="#about">About</a></li><li><a href="#publications">Publications</a></li><li><a href="#poster">Posters</a></li><li><a href="#service">Academic Service</a></li><li><a href="#contact">Contact</a></li></ol>
+{{ else if eq .Kind "section" }}
+<ol class="page-toc"><li><a href="#blog">Capybara's Blog</a></li><li><a href="#blog-results">Posts</a></li></ol>
+{{ else }}
+  {{ .Fragments.ToHTML 2 3 true | replaceRE "(?s)^<nav[^>]*>\\s*|\\s*</nav>$" "" | replaceRE "^<ol>" "<ol class=\"page-toc\">" | safeHTML }}
+{{ end }}
+</nav>

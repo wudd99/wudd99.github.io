@@ -14,7 +14,7 @@ Keep the existing shortcodes (`section`, `pubs`, `publication-card`, `poster`, `
 
 ## Theme and validation
 
-Theme templates are in `themes/wyh_card_style/layouts/`. CSS and JavaScript live in `themes/wyh_card_style/assets/`; Hugo fingerprints them for cache invalidation. `macaron.css` supplies the current sea-salt blue, rose, vanilla and pistachio colors in both modes. The existing instant theme switching, hard-mask buttons, sidebar layout and animation performance improvements are retained.
+Theme templates are in `themes/wyh_card_style/layouts/`. CSS and JavaScript live in `themes/wyh_card_style/assets/`; Hugo fingerprints them for cache invalidation. `macaron.css` supplies mint, lavender, apricot, and cream colors. The liquidGL adapter adds decorative refraction over the prism wallpaper. The vendor script is fingerprinted by Hugo and loaded on demand. Open `/?glass=off` to use the baseline material.
 
 ```sh
 hugo server

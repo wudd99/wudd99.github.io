@@ -1,11 +1,16 @@
-
+{{ with resources.Get "css/liquidgl-prototype.css" | fingerprint }}<link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">{{ end }}
   <meta charset="UTF-8">
 <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Params.name_en }}{{ end }}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script id="background-choice">
 (function(){
  var root=document.documentElement;
- var requested=new URLSearchParams(location.search).get('bg');
+ var params=new URLSearchParams(location.search);
+ var requested=params.get('bg');
+ if (requested==='prism' || (!requested && params.get('glass')!=='off')) {
+  root.dataset.background='prism';
+  return;
+ }
  var mode=requested==='image'||requested==='pattern'?requested:'pattern';
  if(!requested){try{var saved=sessionStorage.getItem('yihao-background');if(saved==='image'||saved==='pattern')mode=saved;}catch(e){}}
  root.dataset.background=mode;
@@ -59,3 +64,5 @@
 <link rel="canonical" href="{{ .Permalink }}">
 
 {{ with resources.Get "css/text-links.css" | fingerprint }}<link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">{{ end }}
+
+{{ with resources.Get "css/mobile-menu-glass.css" | fingerprint }}<link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">{{ end }}

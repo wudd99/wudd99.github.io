@@ -1,0 +1,315 @@
+/* One material system for the Sites preview. The GPU layer is purely decorative. */
+#liquidgl-snapshot, #liquidgl-host {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+#liquidgl-snapshot { z-index: -1; }
+#liquidgl-host { z-index: 0; }
+.liquidgl-snapshot-pattern { position: absolute; inset: 0; }
+.liquidgl-pane { position: absolute; pointer-events: none; }
+
+@layer site-liquidgl {
+  /* Temporary wallpaper. Broad colored bands give the refraction visible edges to bend. */
+  html[data-background="prism"] body::before {
+    background-image:
+      radial-gradient(ellipse at 91% 14%, #f4d4c7 0%, transparent 42%),
+      radial-gradient(ellipse at 10% 77%, #c5dfd6 0%, transparent 48%),
+      linear-gradient(147deg, #e9e7f5 0%, #dee3f6 24%, #c2cdec 31%, #d0daf0 38%,
+        #e9e0f1 51%, #eddae5 62%, #d7dff1 71%, #c6d9e9 83%, #e1eaf2 100%) !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+  html.dark-mode[data-background="prism"] body::before {
+    background-image:
+      radial-gradient(ellipse at 91% 14%, #604354 0%, transparent 46%),
+      radial-gradient(ellipse at 10% 78%, #2b5254 0%, transparent 48%),
+      linear-gradient(147deg, #202941 0%, #29385a 24%, #465580 31%, #354166 39%, #48415f 51%, #5b4159 63%, #343b59 73%, #344f67 84%, #203345 100%) !important;
+  }
+  html.liquidgl-prototype body::before { visibility: hidden !important; }
+
+  /* Secondary labels need solid ink where the wallpaper shows through. */
+  html[data-background="prism"] { --prism-secondary-ink: #41464d; }
+  html.dark-mode[data-background="prism"] { --prism-secondary-ink: #d0d3db; }
+  html[data-background="prism"] body :is(
+    .page-toc a:not([aria-current="location"]),
+    .right-rail .utility-panel:has(.page-toc) h2,
+    .inline-toc > summary,
+    .mobile-home-sections > p,
+    .blog-meta-pill,
+    .post-meta-chip,
+    .research-timeline .timeline-marker:not(:is(.active,:hover,:focus-visible)) .timeline-marker-label
+  ) {
+    color: var(--prism-secondary-ink) !important;
+  }
+  html[data-background="prism"] body .research-timeline .timeline-marker-label {
+    opacity: 1 !important;
+  }
+  html[data-background="prism"] body .research-timeline .timeline-marker:is(.active,:hover,:focus-visible) .timeline-marker-label {
+    color: var(--text-heading) !important;
+  }
+
+  html body [data-liquidgl-material] {
+    --lg-pigment: var(--card-bg);
+    --lg-edge: rgb(255 255 255 / .84);
+    --lg-rim: rgb(255 255 255 / .42);
+    --lg-base: var(--card-bg);
+    --lg-shade: rgb(41 47 59 / .13);
+    --lg-opacity: 62%;
+    --lg-gpu-opacity: 24%;
+    --lg-frost: blur(9px) saturate(118%);
+    --lg-sheen: linear-gradient(151deg, rgb(255 255 255 / .26), transparent 44%, rgb(255 255 255 / .11));
+    --lg-glint: linear-gradient(transparent, transparent);
+    --lg-motion: none;
+    --lg-motion-timing: .29s cubic-bezier(.22,.78,.25,1.24);
+    --lg-glint-color: rgb(255 255 255 / .56);
+    --lg-material-shadow: inset 0 1px 1px var(--lg-edge), inset 0 -1px 0 var(--lg-rim),
+      0 4px 14px -7px var(--lg-shade);
+    --lg-color: color-mix(in srgb, var(--lg-pigment) 42%, var(--lg-base));
+    --lg-wash: color-mix(in srgb, var(--lg-color) var(--lg-paint-opacity, var(--lg-opacity)), transparent);
+  }
+  html.dark-mode body [data-liquidgl-material] {
+    --lg-edge: rgb(243 241 255 / .24);
+    --lg-rim: rgb(243 241 255 / .10);
+    --lg-shade: rgb(0 0 0 / .62);
+    --lg-glint-color: rgb(214 226 255 / .25);
+    --lg-sheen: linear-gradient(151deg, rgb(255 255 255 / .08), transparent 48%, rgb(255 255 255 / .035));
+  }
+  html body [data-liquidgl-tone="mint"] { --lg-pigment: var(--mint-surface); }
+  html body [data-liquidgl-tone="cream"] { --lg-pigment: var(--cream-surface); }
+  html body [data-liquidgl-tone="lavender"] { --lg-pigment: var(--lavender-surface); }
+  html body [data-liquidgl-tone="apricot"] { --lg-pigment: var(--apricot-surface); }
+
+  html body [data-liquidgl-material]:not([data-liquidgl-material="media"]) {
+    background: var(--lg-glint), var(--lg-sheen), var(--lg-wash) !important;
+    border-color: color-mix(in srgb, var(--lg-pigment) 70%, var(--border-strong)) !important;
+    box-shadow: var(--lg-material-shadow) !important;
+    -webkit-backdrop-filter: var(--lg-frost) !important;
+    backdrop-filter: var(--lg-frost) !important;
+    filter: none !important;
+    transform: var(--lg-accessible-motion, var(--lg-motion)) !important;
+    transition: transform var(--lg-motion-timing), box-shadow .16s ease-out,
+      background-color .15s ease-out !important;
+  }
+  html body [data-liquidgl-material="panel"] {
+    --lg-material-shadow: inset 0 1px 1px var(--lg-edge), inset 0 -1px 0 var(--lg-rim),
+      0 12px 25px -13px var(--lg-shade);
+    border-radius: 22px !important;
+  }
+  html body [data-liquidgl-material="overlay"] {
+    --lg-opacity: 71%;
+    --lg-gpu-opacity: 55%;
+    --lg-frost: blur(20px) saturate(127%);
+    --lg-material-shadow: inset 0 1px 1px var(--lg-edge), inset 0 -1px 0 var(--lg-rim),
+      0 16px 32px -12px var(--lg-shade);
+  }
+  /* The details element owns the glass surface. Its summary is an inline trigger. */
+  html body .inline-toc > summary:is(:hover,:focus-visible) { color: var(--primary-strong); }
+  /* Directory links keep their selected surface alongside the plain-link press feedback. */
+  html body .page-toc a[aria-current="location"] {
+    background: var(--mint-surface) !important;
+    color: var(--mint-ink) !important;
+    border-radius: 8px !important;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html body .inline-toc > summary:active { transform: translateY(1px); }
+  }
+  html body :is([data-liquidgl-material="control"],[data-liquidgl-material="field"]):not(.inline-toc) {
+    --lg-frost: blur(7px) saturate(120%);
+    --lg-material-shadow: inset 0 1px 4px var(--lg-edge), inset 0 -1px 3px var(--lg-rim),
+      0 2px 7px -2px var(--lg-shade);
+    border-radius: 999px !important;
+  }
+  html body :is(.nav a,.mobile-menu a)[data-liquidgl-material]:not([aria-current="page"]):not(:hover):not(:focus-visible):not(:active):not([data-liquidgl-pressed]) {
+    --lg-opacity: 25%;
+    --lg-gpu-opacity: 9%;
+    --lg-material-shadow: inset 0 1px 4px var(--lg-rim), 0 2px 6px -3px var(--lg-shade);
+  }
+  html body [data-liquidgl-material]:is([aria-current="page"],[aria-pressed="true"],.pub-filter-chip.active,.pub-tag.link,.poster-tag.link) {
+    --lg-color: var(--lg-pigment);
+    --lg-gpu-opacity: 58%;
+    --lg-opacity: 96%;
+  }
+
+  html body [data-liquidgl-material="media"]:active { opacity: .83; }
+  html body [data-liquidgl-material][data-liquidgl-active] {
+    --lg-pressed-opacity: 29%;
+    --lg-paint-opacity: var(--lg-gpu-opacity);
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  html body [data-liquidgl-material] > .liquid-glass-skin { display: none !important; }
+
+  html body [data-liquidgl-material="field"]:focus-within,
+  html body [data-liquidgl-material]:focus-visible,
+  html body .timeline-marker:focus-visible .timeline-marker-label[data-liquidgl-material] {
+    outline: 2px solid var(--primary) !important;
+    outline-offset: 3px;
+  }
+  html body [data-liquidgl-material="field"] input:focus-visible {
+    outline: none !important;
+  }
+
+  html body [data-liquidgl-material][data-liquidgl-hover],
+  html body [data-liquidgl-material="control"]:focus-visible {
+    --lg-glint: radial-gradient(ellipse 65% 115% at var(--lg-hot-x, 50%) var(--lg-hot-y, 20%),
+      var(--lg-glint-color) 0%, transparent 75%);
+    --lg-frost: blur(9px) saturate(131%);
+    --lg-material-shadow: inset 0 1px 5px var(--lg-edge), inset 0 -1px 5px var(--lg-rim),
+      0 1px 10px -1px color-mix(in srgb, var(--lg-pigment) 65%, var(--lg-glint-color)),
+      0 6px 15px -7px var(--lg-shade);
+  }
+  /* Keep the native marker position and restore the year label's own centering. */
+  html body .timeline-marker-label[data-liquidgl-material] {
+    left: 50%;
+    transform: translateX(-50%) var(--lg-accessible-motion, var(--lg-marker-motion, scale(1))) !important;
+  }
+
+  html body [data-liquidgl-material]:is([data-liquidgl-pressed], [data-liquidgl-material="control"]:where(:active)) {
+    --lg-motion: translateY(1px) scale(.96);
+    --lg-marker-motion: scale(.96);
+    --lg-motion-timing: .105s cubic-bezier(.2,.7,.35,1);
+    --lg-glint: radial-gradient(ellipse 70% 125% at var(--lg-hot-x, 50%) var(--lg-hot-y, 80%),
+      var(--lg-glint-color) 0%, transparent 75%);
+    --lg-sheen: linear-gradient(158deg, rgb(22 35 57 / .19), transparent 42%, rgb(255 255 255 / .27));
+    --lg-paint-opacity: var(--lg-pressed-opacity, var(--lg-opacity));
+    --lg-frost: blur(12px) saturate(139%);
+    --lg-material-shadow:
+      inset 0 2px 7px rgb(22 35 57 / .26),
+      inset 0 -2px 7px rgb(255 255 255 / .86),
+      0 0 0 1px rgb(255 255 255 / .42),
+      0 1px 9px 1px color-mix(in srgb, var(--lg-pigment) 69%, rgb(156 178 233 / .69));
+  }
+  html.dark-mode body [data-liquidgl-material]:is([data-liquidgl-pressed], [data-liquidgl-material="control"]:where(:active)) {
+    --lg-material-shadow:
+      inset 0 2px 7px rgb(6 11 25 / .61),
+      inset 0 -2px 6px rgb(204 220 255 / .48),
+      0 0 0 1px rgb(211 224 255 / .24),
+      0 1px 9px 1px rgb(160 181 247 / .44);
+  }
+  html body [data-liquidgl-rim-anchor] {
+    position: relative !important;
+    inset: auto !important;
+  }
+  html body [data-liquidgl-material="control"] {
+    transform-origin: var(--lg-pivot-x, 50%) var(--lg-pivot-y, 50%);
+    --lg-press-light: rgb(255 255 255 / .94);
+    --lg-press-reflection: rgb(255 255 255 / .17);
+    --lg-motion-timing: .205s cubic-bezier(.18,.76,.25,1.1);
+  }
+  html.dark-mode body [data-liquidgl-material="control"] {
+    --lg-press-light: rgb(221 234 255 / .76);
+    --lg-press-reflection: rgb(198 213 255 / .12);
+  }
+  html body [data-liquidgl-material="control"][data-liquidgl-pressed],
+  html body [data-liquidgl-material="control"]:where(:active) {
+    --lg-glint: linear-gradient(transparent, transparent);
+    --lg-motion: translateY(1px) scale(.983,.961);
+    --lg-marker-motion: scale(.975);
+    --lg-motion-timing: .085s cubic-bezier(.2,.7,.35,1);
+    --lg-frost: blur(10px) saturate(131%);
+    --lg-material-shadow: inset 0 2px 6px var(--lg-shade), inset 0 -1px 3px var(--lg-rim),
+      0 2px 5px -3px var(--lg-shade);
+  }
+  html.dark-mode body [data-liquidgl-material="control"][data-liquidgl-pressed],
+  html.dark-mode body [data-liquidgl-material="control"]:where(:active) {
+    --lg-material-shadow: inset 0 2px 6px rgb(6 11 25 / .46), inset 0 -1px 3px var(--lg-rim),
+      0 2px 5px -3px var(--lg-shade);
+  }
+  @supports ((mask-composite: exclude) or (-webkit-mask-composite: xor)) {
+    html body [data-liquidgl-material="control"]::after {
+      content: "";
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+      padding: 2.5px;
+      border-radius: inherit;
+      background:
+        radial-gradient(ellipse 34% 85% at var(--lg-rim-x, 50%) var(--lg-rim-y, 0%),
+          var(--lg-press-light), transparent 79%),
+        radial-gradient(ellipse 42% 100% at calc(100% - var(--lg-rim-x, 50%)) calc(100% - var(--lg-rim-y, 0%)),
+          var(--lg-press-reflection), transparent 80%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity .19s ease-out;
+    }
+    html body [data-liquidgl-material="control"][data-liquidgl-rim]::after {
+      opacity: 1;
+      transition: opacity .045s ease-out;
+    }
+  }
+  @supports not ((mask-composite: exclude) or (-webkit-mask-composite: xor)) {
+    html body [data-liquidgl-material="control"][data-liquidgl-rim] {
+      --lg-glint: radial-gradient(ellipse 28% 60% at var(--lg-rim-x, 50%) var(--lg-rim-y, 0%),
+        var(--lg-press-reflection), transparent 85%);
+    }
+  }
+  html body [data-liquidgl-material="panel"][data-liquidgl-pressed] {
+    --lg-motion: translateY(4px) scale(.978, .954);
+    --lg-material-shadow:
+      inset 0 3px 13px var(--lg-shade),
+      inset 0 -2px 8px var(--lg-edge),
+      0 2px 5px -2px var(--lg-shade);
+  }
+  html.dark-mode body [data-liquidgl-material="panel"][data-liquidgl-pressed] {
+    --lg-material-shadow:
+      inset 0 3px 13px rgb(6 11 25 / .65),
+      inset 0 -2px 8px var(--lg-edge),
+      0 2px 5px -2px var(--lg-shade);
+  }
+  /* These controls use their label and indicator as the visual affordance. */
+  html body :is(.right-rail .tag-filter > summary, .research-timeline .timeline-marker-label) {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  html body :is(.right-rail .tag-filter > summary, .research-timeline .timeline-marker-label)::after {
+    content: none !important;
+  }
+  html body .research-timeline .timeline-marker-dot {
+    --timeline-dot-fill: var(--cream-surface);
+    background: var(--timeline-dot-fill) !important;
+    border-color: var(--cream-border) !important;
+  }
+  html.dark-mode body .research-timeline .timeline-marker-dot {
+    --timeline-dot-fill: var(--cream-ink);
+  }
+  html body .research-timeline .timeline-marker:is(.active,.current,:hover,:focus-visible) .timeline-marker-dot {
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--timeline-dot-fill) 52%, transparent) !important;
+  }
+  @media (max-width: 1439px) {
+    html body [data-liquidgl-material="panel"]:not([data-liquidgl-pressed]) {
+      --lg-material-shadow: 0 10px 21px -12px var(--lg-shade);
+    }
+    html body [data-liquidgl-material="panel"][data-liquidgl-pressed] {
+      --lg-material-shadow: inset 0 3px 13px var(--lg-shade), 0 2px 5px -2px var(--lg-shade);
+    }
+    html.dark-mode body [data-liquidgl-material="panel"][data-liquidgl-pressed] {
+      --lg-material-shadow: inset 0 3px 13px rgb(6 11 25 / .65), 0 2px 5px -2px var(--lg-shade);
+    }
+    html body [data-liquidgl-material="panel"] {
+      background-clip: padding-box !important;
+    }
+  }
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    html body [data-liquidgl-material]:not([data-liquidgl-active]) { --lg-opacity: 97%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html body [data-liquidgl-material] {
+      --lg-accessible-motion: scale(1);
+      transition: none !important;
+    }
+    html body [data-liquidgl-material="control"]::after { transition: none !important; }
+  }
+}

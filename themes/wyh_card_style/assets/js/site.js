@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-      var hamburger = document.getElementById('hamburger');
+      var hamburger = document.getElementById('retainedMenu') || document.getElementById('hamburger');
       var mobileMenu = document.getElementById('mobileMenu');
       var closeMenu = document.getElementById('closeMenu');
       var desktopToggle = document.getElementById('mode-toggle');
@@ -167,10 +167,8 @@ document.addEventListener('DOMContentLoaded', function() {
           }, false);
         }
 
-        mobileMenu.querySelectorAll('a').forEach(function(link) {
-          link.addEventListener('click', function() {
-            setMobileMenu(false);
-          });
+        mobileMenu.addEventListener('click', function(event) {
+          if (event.target.closest('a[href]')) setMobileMenu(false);
         });
 
         document.addEventListener('keydown', function(e) {

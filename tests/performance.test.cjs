@@ -207,3 +207,124 @@ test('text links inside cards use text-only feedback and never allocate glass or
   assert.equal(allocations, 1);
   r.window.emit('pagehide'); assert.equal(r.frames.size, 0); assert.equal(r.timers.size, 0);
 });
+test('mobile navigation opens without the removed legacy button and keeps close/focus/resize behavior', () => {
+  const template = fs.readFileSync(path.join(__dirname, '..', 'themes/wyh_card_style/layouts/partials/base/page-start.html'), 'utf8');
+  assert.match(template, /<button[^>]*id="retainedMenu"/);
+  assert.doesNotMatch(template, /id="hamburger"/);
+  const r = runtime(), observers = new Map();
+  function control() {
+    const node = events({attrs: {}, hidden: false});
+    const list = classes(); node.classList = {...list};
+    for (const method of ['add', 'remove', 'toggle']) node.classList[method] = (...args) => {
+      const before = list.contains(args[0]); list[method](...args);
+      if (before !== list.contains(args[0])) observers.get(node)?.();
+    };
+    node.setAttribute = (key, value) => {node.attrs[key] = value;};
+    node.focus = () => {r.document.activeElement = node;};
+    node.click = () => node.emit('click', {target: node, preventDefault() {}, stopPropagation() {}});
+    return node;
+  }
+  const trigger = control(), menu = control(), close = control(), backdrop = control();
+  const home = control(), blog = control(), mobile = events({matches: true});
+  const regeneratedLinkClick = () => menu.emit('click', {target: {closest: selector => selector === 'a[href]' ? {} : null}});
+  menu.inert = true;
+  const controls = [close, home, blog];
+  menu.querySelectorAll = selector => selector === 'a' ? [home, blog] : controls;
+  menu.querySelector = () => home;
+  menu.contains = node => node === menu || controls.includes(node);
+  const nodes = {retainedMenu: trigger, mobileMenu: menu, closeMenu: close, mobileMenuBackdrop: backdrop};
+  r.document.getElementById = id => nodes[id] || null;
+  r.document.activeElement = r.document.body;
+  Object.assign(r.context, {mobile, menu, trigger, MutationObserver: class {
+    constructor(callback) {this.callback = callback;}
+    observe(node) {observers.set(node, this.callback);}
+  }});
+  // Exercise the production controller plus its layout/accessibility observer together.
+  const declarations = site.slice(site.indexOf('      var hamburger'), site.indexOf('      function applyRemarkTagColors'));
+  const controller = site.slice(site.indexOf('      if (hamburger && mobileMenu)'), site.indexOf('      function initDarkModeCursorSpotlight'));
+  const layout = read('js/layout.js');
+  const access = layout.slice(layout.indexOf('  if (menu && trigger)'), layout.indexOf('  function initDirectory'));
+  vm.runInNewContext(declarations + controller + access, r.context);
+  const assertOpen = open => {
+    assert.equal(menu.classList.contains('open'), open);
+    assert.equal(r.document.body.classList.contains('mobile-menu-open'), open);
+    assert.equal(menu.inert, !open);
+    assert.equal(menu.attrs['aria-hidden'], String(!open));
+    assert.equal(trigger.attrs['aria-expanded'], String(open));
+  };
+  assertOpen(false);
+  trigger.click(); assertOpen(true); assert.equal(r.document.activeElement, home);
+  trigger.click(); assertOpen(false); assert.equal(r.document.activeElement, trigger);
+  for (const dismiss of [() => close.click(), () => backdrop.click(), regeneratedLinkClick,
+    () => r.document.emit('keydown', {key: 'Escape'}),
+    () => close.emit('keydown', {key: 'Enter', preventDefault() {}})]) {
+    trigger.click(); assertOpen(true); dismiss(); assertOpen(false);
+  }
+  trigger.click(); close.focus();
+  let prevented = false;
+  r.document.emit('keydown', {key: 'Tab', shiftKey: true, preventDefault() {prevented = true;}});
+  assert.equal(prevented, true); assert.equal(r.document.activeElement, blog);
+  r.document.emit('keydown', {key: 'Tab', shiftKey: false, preventDefault() {}});
+  assert.equal(r.document.activeElement, close);
+  mobile.matches = false; mobile.emit('change'); assertOpen(false);
+  mobile.matches = true; mobile.emit('change'); assertOpen(false);
+  trigger.click(); assertOpen(true, 'Menu must still open after returning to mobile width');
+});
+
+test('each page builds matching directory links and transfers the selected state on click', () => {
+  const layout = read('js/layout.js');
+  const directory = layout.slice(layout.indexOf('  function initDirectory()'), layout.indexOf('  initDirectory();'));
+  const examples = [
+    {page: 'home', path: '/', entries: [['about', 'About'], ['publications', 'Publications'], ['poster', 'Posters'], ['service', 'Academic Service'], ['contact', 'Contact']]},
+    {page: 'blog-list', path: '/blog/', entries: [['blog', "Capybara's Blog"], ['blog-results', 'Posts']]},
+    {page: 'blog-post', path: '/blog/test/', entries: [['the-capybara-experience', 'The Capybara Experience'], ['watch-and-enjoy', 'Watch and Enjoy'], ['conclusion', 'Conclusion']]}
+  ];
+  for (const {page, path: pathname, entries} of examples) {
+    const r = runtime();
+    const origin = 'https://example.com';
+    const location = new URL(origin + pathname);
+    function element(tagName) {
+      return {tagName, children: [], classList: classes(), attrs: {}, hidden: false,
+        append(child) {this.children.push(child);},
+        replaceChildren(child) {this.children = [child];},
+        set href(value) {this.url = new URL(value, location);},
+        get href() {return this.url.href;},
+        get hash() {return this.url.hash;},
+        setAttribute(name, value) {this.attrs[name] = value;},
+        removeAttribute(name) {delete this.attrs[name];},
+        hasAttribute(name) {return name in this.attrs;},
+        closest(selector) {return selector === 'a[href]' ? this : null;}
+      };
+    }
+    const targets = entries.map(([id, label], index) => ({
+      id, textContent: label, tagName: page === 'blog-post' ? 'H2' : 'SECTION',
+      getBoundingClientRect: () => ({top: index * 200})
+    }));
+    const navs = [element('nav'), element('nav'), element('nav')];
+    const links = () => navs.flatMap(nav => nav.children[0]?.children.map(item => item.children[0]) || []);
+    r.document.body.dataset = {page};
+    r.document.getElementById = id => targets.find(target => target.id === id);
+    r.document.querySelector = selector => selector === '#blog .blog-title-row h2' ? targets[0] : null;
+    r.document.querySelectorAll = selector => {
+      if (selector === '.post-content h2,.post-content h3') return targets;
+      if (selector === '.page-toc a') return links();
+      if (selector.includes(' nav')) return navs;
+      return [];
+    };
+    r.document.createElement = element;
+    Object.assign(r.context, {URL, location, mobile: {matches: false}});
+    vm.runInNewContext(directory + '\ninitDirectory();', r.context);
+    r.flushFrames();
+    for (const nav of navs) {
+      assert.deepEqual(nav.children[0].children.map(item => {
+        const link = item.children[0]; return [link.hash.slice(1), link.textContent];
+      }), entries);
+      assert.equal(nav.children[0].children[0].children[0].attrs['aria-current'], 'location');
+    }
+    r.document.emit('click', {button: 0, target: links()[1]});
+    r.flushFrames();
+    assert.deepEqual(links().filter(link => link.attrs['aria-current'] === 'location').map(link => link.hash), Array(3).fill('#' + entries[1][0]));
+  }
+});
+
+require('./liquidgl-prototype.test.cjs');
