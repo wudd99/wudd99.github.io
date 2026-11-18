@@ -12,6 +12,7 @@
  function surfaceFor(target){
   if(!(target instanceof Element)||textLinkFor(target))return null;
   const surface=target.closest(surfaceSelector);if(!surface)return null;
+  if(surface.matches('[data-liquidgl-material],.timeline-marker:has([data-liquidgl-material])'))return null;
   if(surface.matches('[disabled],[aria-disabled="true"]')||surface.closest('[inert]')||surface.querySelector('input:disabled'))return null;
   const control=target.closest('a,button,input,label,select,textarea,[role="button"]');
   if(control&&control!==surface&&surface.matches('.clickable-card'))return null;

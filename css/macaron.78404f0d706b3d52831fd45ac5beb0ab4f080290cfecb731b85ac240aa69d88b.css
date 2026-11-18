@@ -1,0 +1,339 @@
+/* Garden palette: mint navigation / cream journals and topics / lavender conferences / apricot posters.
+   Opaque text colors pair with pastel fills. Glass optics keep existing gestures.
+   This file loads after legacy theme rules and changes no layout or scripts. */
+html:not(.dark-mode), html body:not(.dark-mode) {
+  --bg-main: #f8faf7;
+  --bg-soft: #fffdfc;
+  --card-bg: #fffdfc;
+  --card-bg-soft: #f1f5ef;
+  --text-main: #343a37;
+  --text-heading: #303833;
+  --text-muted: #626b64;
+  --text-subtle: #687168;
+  --border-soft: #e3e7df;
+  --border-strong: #bcc9bc;
+  --primary: #5e5777;
+  --primary-strong: #514a68;
+  --primary-soft: rgba(102,81,126,.07);
+  --primary-soft-hover: rgba(102,81,126,.12);
+  --primary-border-soft: rgba(102,81,126,.17);
+  --primary-border-hover: rgba(102,81,126,.28);
+  --glass-panel: rgba(255,253,252,.60);
+  --glass-inset: rgba(255,253,252,.22);
+  --glass-thin: rgba(248,250,247,.55);
+  --glass-thick: rgba(255,253,252,.94);
+  --glass-light: rgba(255,253,252,.54);
+  --glass-edge: rgba(145,135,157,.22);
+  --glass-highlight: rgba(255,255,246,.82);
+  --glass-shadow: rgba(45,60,50,.08);
+  --glass-fallback: #fffdfc;
+  --active-filter-bg: var(--cream-filter-selected);
+  --active-filter-press-bg: var(--cream-filter-pressed);
+  --active-filter-color: var(--cream-filter-ink);
+  --spotlight-core: rgba(232,226,245,.07);
+  --spotlight-inner: rgba(249,229,217,.035);
+  --spotlight-outer: rgba(248,239,207,.01);
+  --macaron-white: rgba(255,255,244,.85);
+  --band-opacity: .58;
+  --band-shadow-alpha: .14;
+  --recess-rgb: 38,52,43;
+  --recess-alpha: .24;
+  --rim-core-alpha: .66;
+  --rim-secondary-alpha: .5;
+  --mint-surface: #ddefe5;
+  --mint-ink: #39654f;
+  --mint-border: #b5d5c1;
+  --mint-rgb: 139,192,165;
+  --lavender-surface: #e8e2f5;
+  --lavender-ink: #66517e;
+  --lavender-border: #cfc0e4;
+  --lavender-rgb: 183,160,213;
+  --apricot-surface: #f9e5d9;
+  --apricot-ink: #87573e;
+  --apricot-border: #e6c4af;
+  --apricot-rgb: 221,174,145;
+  --cream-surface: #f8efcf;
+  --cream-ink: #776121;
+  --cream-border: #dfd099;
+  --cream-rgb: 220,198,126;
+}
+html.dark-mode, html body.dark-mode {
+  --bg-main: #262a29;
+  --bg-soft: #313736;
+  --card-bg: #313736;
+  --card-bg-soft: #39413c;
+  --text-main: #e3e9e4;
+  --text-heading: #e3e9e4;
+  --text-muted: #b5c1b8;
+  --text-subtle: #b0beb4;
+  --border-soft: #414b45;
+  --border-strong: #65796a;
+  --primary: #cabde2;
+  --primary-strong: #dbd0ec;
+  --primary-soft: rgba(211,195,233,.08);
+  --primary-soft-hover: rgba(211,195,233,.14);
+  --primary-border-soft: rgba(211,195,233,.18);
+  --primary-border-hover: rgba(211,195,233,.30);
+  --glass-panel: rgba(49,55,54,.74);
+  --glass-inset: rgba(181,193,184,.04);
+  --glass-thin: rgba(38,42,41,.65);
+  --glass-thick: rgba(49,55,54,.95);
+  --glass-light: rgba(49,55,54,.72);
+  --glass-edge: rgba(211,195,233,.18);
+  --glass-highlight: rgba(238,242,225,.15);
+  --glass-shadow: rgba(6,12,9,.24);
+  --glass-fallback: #313736;
+  --active-filter-bg: var(--cream-filter-selected);
+  --active-filter-press-bg: var(--cream-filter-pressed);
+  --active-filter-color: var(--cream-filter-ink);
+  --spotlight-core: rgba(232,226,245,.05);
+  --spotlight-inner: rgba(249,229,217,.025);
+  --spotlight-outer: rgba(248,239,207,.01);
+  --macaron-white: rgba(242,241,221,.42);
+  --band-opacity: .38;
+  --band-shadow-alpha: .07;
+  --recess-rgb: 6,12,9;
+  --recess-alpha: .55;
+  --rim-core-alpha: .42;
+  --rim-secondary-alpha: .30;
+  --mint-surface: #2d443b;
+  --mint-ink: #b9ddc7;
+  --mint-border: #567d66;
+  --mint-rgb: 143,191,163;
+  --lavender-surface: #40394f;
+  --lavender-ink: #d3c3e9;
+  --lavender-border: #79648e;
+  --lavender-rgb: 180,155,207;
+  --apricot-surface: #4a3b34;
+  --apricot-ink: #e9c2aa;
+  --apricot-border: #9b755c;
+  --apricot-rgb: 214,169,138;
+  --cream-surface: #464231;
+  --cream-ink: #dfd299;
+  --cream-border: #96864f;
+  --cream-rgb: 209,191,126;
+}
+:root, html body {
+  --body-bg: var(--bg-main);
+  --body-gradient: var(--bg-main);
+  --page-bg-decorated: var(--bg-main);
+  --text-heading-soft: var(--text-muted);
+  --link-color: var(--primary);
+  --section-border: var(--border-soft);
+  --section-accent-gradient: linear-gradient(90deg,var(--border-strong),transparent);
+  --section-accent-shadow: none;
+  --card-hover-bg: var(--card-bg-soft);
+  --card-hover-gradient: var(--card-bg-soft);
+  --card-hover-border: var(--border-strong);
+  --card-hover-shadow: 0 10px 24px var(--glass-shadow);
+  --card-focus-ring: 0 0 0 2px var(--primary-border-hover);
+  --card-pressed-bg: var(--glass-inset);
+  --card-pressed-border: var(--border-strong);
+  --nav-link-color: var(--text-muted);
+  --nav-link-active: var(--mint-ink);
+  --nav-link-hover-bg: var(--mint-surface);
+  --nav-link-hover-border: var(--mint-border);
+  --nav-link-active-bg: var(--mint-surface);
+  --nav-link-active-border: var(--mint-border);
+  --hamburger-color: var(--text-main);
+  --hamburger-border: var(--glass-edge);
+  --toggle-bg: var(--glass-inset);
+  --toggle-border: var(--glass-edge);
+  --scrollbar-thumb: var(--primary-border-hover);
+  --scrollbar-thumb-hover: var(--text-muted);
+  --social-link-color: var(--text-muted);
+  --social-link-bg: var(--glass-inset);
+  --social-link-border: var(--glass-edge);
+  --social-link-hover-color: var(--primary);
+  --social-link-hover-bg: var(--primary-soft);
+  --social-link-hover-border: var(--border-strong);
+  --social-link-hover-shadow: 0 5px 12px var(--glass-shadow);
+  --social-link-active-bg: var(--glass-inset);
+  --social-link-active-border: var(--border-strong);
+  --pub-surface: var(--card-bg);
+  --pub-surface-end: var(--card-bg-soft);
+  --pub-surface-glow: transparent;
+  --pub-border: var(--glass-edge);
+  --pub-title-color: var(--text-heading);
+  --pub-author-color: var(--text-muted);
+  --pub-source-color: var(--text-muted);
+  --pub-author-underline: var(--border-strong);
+  --pub-shadow: 0 5px 18px var(--glass-shadow);
+  --poster-surface: var(--card-bg);
+  --poster-surface-end: var(--card-bg-soft);
+  --poster-border: var(--glass-edge);
+  --card-rim-light: var(--liquid-rim-light);
+  --card-rim-blue: var(--liquid-rim-blue);
+  --card-rim-violet: var(--liquid-rim-violet);
+  --press-bg: var(--primary-soft);
+  --press-border: var(--border-strong);
+  --sci-cyan: var(--primary);
+  --sci-glow-soft: transparent;
+  --sci-glow-mid: transparent;
+  --sci-line: var(--border-soft);
+  --timeline-surface: var(--glass-panel);
+  --timeline-border: var(--glass-edge);
+  --timeline-shadow: 0 5px 18px var(--glass-shadow);
+  --timeline-overlay: none;
+  --pub-pdf-bg: var(--cream-surface);
+  --pub-pdf-hover-bg: var(--cream-surface);
+  --pub-pdf-color: var(--cream-ink);
+  --pub-pdf-shadow: 0 3px 10px var(--glass-shadow);
+  --glass-down-surface: transparent;
+  --theme-switch-duration: 0s;
+  --pub-journal-color: var(--cream-ink);
+  --pub-journal-bg: var(--cream-surface);
+  --pub-journal-border: var(--cream-border);
+  --pub-conference-color: var(--lavender-ink);
+  --pub-conference-bg: var(--lavender-surface);
+  --pub-conference-border: var(--lavender-border);
+  --poster-color: var(--apricot-ink);
+  --poster-badge-bg: var(--apricot-surface);
+  --poster-badge-border: var(--apricot-border);
+  --type-journal-color: var(--cream-ink);
+  --type-journal-bg: var(--cream-surface);
+  --type-journal-border: var(--cream-border);
+  --type-conference-color: var(--lavender-ink);
+  --type-conference-bg: var(--lavender-surface);
+  --type-conference-border: var(--lavender-border);
+  --type-other-color: var(--cream-ink);
+  --type-other-bg: var(--cream-surface);
+  --type-other-border: var(--cream-border);
+  --tag-source-color: var(--cream-ink);
+  --tag-source-bg: var(--cream-surface);
+  --tag-source-bg-hover: var(--cream-surface);
+  --tag-source-bg-active: var(--cream-surface);
+  --tag-source-border: var(--cream-border);
+  --tag-link-color: var(--lavender-ink);
+  --tag-link-bg: var(--lavender-surface);
+  --tag-link-bg-hover: var(--lavender-surface);
+  --tag-link-bg-active: var(--lavender-surface);
+  --tag-link-border: var(--lavender-border);
+  --tag-remark-color: var(--cream-ink);
+  --tag-remark-bg: var(--cream-surface);
+  --tag-remark-border: var(--cream-border);
+}
+
+/* Default optics: pearl highlight, lavender edge and apricot return light. */
+html body{--macaron-rgb:var(--lavender-rgb);--macaron-secondary-rgb:var(--apricot-rgb);--macaron-surface:var(--lavender-surface);--macaron-ink:var(--lavender-ink);--macaron-border:var(--lavender-border);--liquid-rim-light:var(--macaron-white);--liquid-rim-blue:rgba(var(--lavender-rgb),var(--rim-core-alpha));--liquid-rim-violet:rgba(var(--apricot-rgb),var(--rim-secondary-alpha));--glass-pressed-edge:var(--glass-edge)}
+html body .publication-card[data-pub-type="journal"]{--macaron-rgb:var(--cream-rgb);--macaron-secondary-rgb:var(--lavender-rgb);--macaron-surface:var(--cream-surface);--macaron-ink:var(--cream-ink);--macaron-border:var(--cream-border)}
+html body .publication-card[data-pub-type="conference"]{--macaron-rgb:var(--lavender-rgb);--macaron-secondary-rgb:var(--cream-rgb);--macaron-surface:var(--lavender-surface);--macaron-ink:var(--lavender-ink);--macaron-border:var(--lavender-border)}
+html body :is(.poster-card,.blog-card,.blog-post){--macaron-rgb:var(--apricot-rgb);--macaron-secondary-rgb:var(--cream-rgb);--macaron-surface:var(--apricot-surface);--macaron-ink:var(--apricot-ink);--macaron-border:var(--apricot-border)}
+html body :is(.research-timeline,.timeline-card){--macaron-rgb:var(--cream-rgb);--macaron-secondary-rgb:var(--lavender-rgb);--macaron-surface:var(--cream-surface);--macaron-ink:var(--cream-ink);--macaron-border:var(--cream-border)}
+html body :is(.publication-card,.poster-card,.blog-card,.blog-post,.research-timeline,.timeline-card){--card-glow:rgba(var(--macaron-rgb),.035);--pub-accent:linear-gradient(180deg,rgba(var(--macaron-rgb),.8),rgba(var(--macaron-secondary-rgb),.55));--pub-pdf-bg:var(--macaron-surface);--pub-pdf-hover-bg:var(--macaron-surface);--pub-pdf-color:var(--macaron-ink);--pub-pdf-shadow:0 3px 10px var(--glass-shadow)}
+/* The existing mask bands follow the pointer. Change only their color and strength. */
+html body .liquid-ready:is(.liquid-card,.liquid-control){--liquid-rim-light:var(--macaron-white);--liquid-rim-blue:rgba(var(--macaron-rgb),var(--rim-core-alpha));--liquid-rim-violet:rgba(var(--macaron-secondary-rgb),var(--rim-secondary-alpha));--card-rim-light:var(--macaron-white);--card-rim-blue:var(--liquid-rim-blue);--card-rim-violet:var(--liquid-rim-violet);--liquid-edge-opacity:var(--band-opacity);--liquid-hover-shadow:inset 0 1px 7px var(--glass-highlight),var(--liquid-cast-x,0px) 12px 30px -9px var(--glass-shadow),0 0 18px -5px rgba(var(--macaron-rgb),var(--band-shadow-alpha));--glass-pressed-shadow:inset var(--liquid-shadow-x,0px) 7px 22px -4px rgba(var(--recess-rgb),var(--recess-alpha)),inset 0 -3px 12px -3px rgba(var(--macaron-rgb),.30),0 1px 4px var(--glass-shadow)}
+html body .liquid-ready.liquid-control:not(.blog-cover-link){--glass-pressed-shadow:inset 0 3px 9px -2px rgba(var(--recess-rgb),var(--recess-alpha)),inset 0 -2px 6px -2px rgba(var(--macaron-rgb),.32),0 1px 3px var(--glass-shadow)}
+html body .liquid-card.liquid-pressed{--liquid-edge-top:rgba(var(--recess-rgb),.22);--liquid-edge-bottom:rgba(var(--macaron-rgb),.45)}
+html.dark-mode body .liquid-card.liquid-pressed{--liquid-edge-top:rgba(var(--recess-rgb),.5);--liquid-edge-bottom:rgba(var(--macaron-rgb),.32)}
+html body:is(.dark-mode,:not(.dark-mode)) .sidebar{--liquid-hover-shadow:inset 0 1px 0 var(--glass-highlight),0 3px 8px -4px var(--glass-shadow)}
+/* Readable colored labels and controls, with a distinct selected state. */
+html body .pub-filter-chip[data-filter-type="topic"],html body .timeline-chip{--macaron-rgb:var(--cream-rgb);--macaron-secondary-rgb:var(--lavender-rgb);--macaron-surface:var(--cream-surface);--macaron-ink:var(--cream-ink);--macaron-border:var(--cream-border);background:var(--cream-surface);color:var(--cream-ink);border-color:var(--cream-border)}
+html body .pub-filter-chip[data-filter-value="journal"]{background:var(--cream-surface);color:var(--cream-ink);border-color:var(--cream-border)}
+html body .pub-filter-chip[data-filter-value="conference"]{--macaron-surface:var(--lavender-surface);--macaron-ink:var(--lavender-ink);--macaron-border:var(--lavender-border);--macaron-rgb:var(--lavender-rgb);--macaron-secondary-rgb:var(--cream-rgb);background:var(--lavender-surface);color:var(--lavender-ink);border-color:var(--lavender-border)}
+html body:is(.dark-mode,:not(.dark-mode)) .pub-filter-chip.active{background:var(--active-filter-bg);color:var(--active-filter-color);border-color:var(--cream-border);box-shadow:0 4px 10px var(--glass-shadow)}
+html body .page-toc a[aria-current="location"],html body :is(.sidebar .nav,.mobile-menu) ul li a[aria-current="page"]{background:var(--mint-surface);color:var(--mint-ink);border-color:var(--mint-border);box-shadow:0 4px 10px var(--glass-shadow)}
+html body .page-toc a[aria-current="location"]{border-left-color:var(--mint-ink)}
+html body .nav ul li a[aria-current="page"]{box-shadow:inset 3px 0 0 var(--mint-ink)}
+html body .tag-option{background:var(--apricot-surface);color:var(--apricot-ink);border-color:var(--apricot-border)}
+html body .tag-option[aria-pressed="true"]{background:var(--cream-surface);color:var(--cream-ink);border-color:var(--cream-border);box-shadow:inset 0 -2px 0 var(--cream-ink)}
+/* Decorative layers remain local; no new animated filters or frame loops. */
+html:not([data-background="image"]) body:not(.dark-mode)::before{opacity:.62;filter:saturate(.35)}
+html body.dark-mode::before{opacity:.30;filter:grayscale(.75)}
+html body.dark-mode::after{background:none;opacity:0}
+html[data-background="image"] body:not(.dark-mode)::before{filter:saturate(.4)}
+html body ::selection{background:var(--lavender-surface);color:var(--lavender-ink)}
+html body .meteor-layer{opacity:.6}
+html body .meteor-layer .meteor{filter:grayscale(.6)}
+html body .timeline-marker-dot{animation:none!important;filter:none!important;background:var(--cream-ink)!important;box-shadow:none!important}
+html body .timeline-marker:is(.active,.current,:hover,:focus-visible) .timeline-marker-dot{box-shadow:0 0 0 3px var(--cream-surface)!important}
+
+/* Keep broad rim light softer at night, including the masked skin path. */
+html body .liquid-card>.liquid-glass-skin::after{opacity:var(--band-opacity)}
+html body .pub-filter-chip:not(.active):is(:hover,:focus-visible){background:var(--macaron-surface);color:var(--macaron-ink);border-color:var(--macaron-border);box-shadow:0 4px 10px var(--glass-shadow)}
+
+/* Filter states retain each button's own hue in both themes. */
+html:not(.dark-mode), html body:not(.dark-mode) {
+  --cream-filter-hover: #f1e4b7;
+  --cream-filter-selected: #ead99f;
+  --cream-filter-pressed: #e2ce8b;
+  --cream-filter-ink: #68541d;
+  --lavender-filter-hover: #ded4ef;
+  --lavender-filter-selected: #d4c6e9;
+  --lavender-filter-pressed: #c7b6df;
+  --lavender-filter-ink: #59446f;
+  --apricot-filter-hover: #f3d8c7;
+  --apricot-filter-selected: #edcdb7;
+  --apricot-filter-pressed: #e4bfa5;
+  --apricot-filter-ink: #75472f;
+  --mint-filter-hover: #cee7d8;
+  --mint-filter-selected: #c3dfcf;
+  --mint-filter-pressed: #b7d6c5;
+  --mint-filter-ink: #335a45;
+}
+html.dark-mode, html body.dark-mode {
+  --cream-filter-hover: #514c36;
+  --cream-filter-selected: #5d563a;
+  --cream-filter-pressed: #4e482f;
+  --cream-filter-ink: #dfd299;
+  --lavender-filter-hover: #4a415c;
+  --lavender-filter-selected: #554a69;
+  --lavender-filter-pressed: #473c58;
+  --lavender-filter-ink: #d3c3e9;
+  --apricot-filter-hover: #574238;
+  --apricot-filter-selected: #624b3e;
+  --apricot-filter-pressed: #513d32;
+  --apricot-filter-ink: #e9c2aa;
+  --mint-filter-hover: #365145;
+  --mint-filter-selected: #405e4e;
+  --mint-filter-pressed: #304a3e;
+  --mint-filter-ink: #b9ddc7;
+}
+html body:is(.dark-mode,:not(.dark-mode)) :is(.pub-filter-chip,.tag-option){--filter-fill:var(--cream-surface);--filter-base-ink:var(--cream-ink);--filter-edge:var(--cream-border);--filter-rgb:var(--cream-rgb);--filter-hover:var(--cream-filter-hover);--filter-selected:var(--cream-filter-selected);--filter-pressed:var(--cream-filter-pressed);--filter-ink:var(--cream-filter-ink);
+ --active-filter-bg:var(--filter-selected);--active-filter-press-bg:var(--filter-pressed);--active-filter-color:var(--filter-ink);
+ --press-bg:var(--filter-pressed);--press-border:var(--filter-ink);
+ --glass-edge:transparent;--glass-pressed-edge:transparent;
+ --macaron-rgb:var(--filter-rgb);--macaron-secondary-rgb:var(--filter-rgb);
+ background:var(--filter-fill);color:var(--filter-base-ink);border-color:transparent;
+}
+html body:is(.dark-mode,:not(.dark-mode)) .pub-filter-chip[data-filter-type="topic"]{--filter-fill:var(--cream-surface);--filter-base-ink:var(--cream-ink);--filter-edge:var(--cream-border);--filter-rgb:var(--cream-rgb);--filter-hover:var(--cream-filter-hover);--filter-selected:var(--cream-filter-selected);--filter-pressed:var(--cream-filter-pressed);--filter-ink:var(--cream-filter-ink);}
+html body:is(.dark-mode,:not(.dark-mode)) .pub-filter-chip[data-filter-value="conference"]{--filter-fill:var(--lavender-surface);--filter-base-ink:var(--lavender-ink);--filter-edge:var(--lavender-border);--filter-rgb:var(--lavender-rgb);--filter-hover:var(--lavender-filter-hover);--filter-selected:var(--lavender-filter-selected);--filter-pressed:var(--lavender-filter-pressed);--filter-ink:var(--lavender-filter-ink);}
+html body:is(.dark-mode,:not(.dark-mode)) :is(.tag-option,.pub-filter-chip[data-filter-value="other"]){--filter-fill:var(--apricot-surface);--filter-base-ink:var(--apricot-ink);--filter-edge:var(--apricot-border);--filter-rgb:var(--apricot-rgb);--filter-hover:var(--apricot-filter-hover);--filter-selected:var(--apricot-filter-selected);--filter-pressed:var(--apricot-filter-pressed);--filter-ink:var(--apricot-filter-ink);}
+html body:is(.dark-mode,:not(.dark-mode)) :is(.pub-filter-chip,.tag-option).liquid-ready{
+ --liquid-rim-blue:rgba(var(--filter-rgb),var(--rim-core-alpha));--liquid-rim-violet:rgba(var(--filter-rgb),var(--rim-secondary-alpha));
+ --liquid-hover-shadow:inset 0 1px 7px var(--glass-highlight),var(--liquid-cast-x,0px) 12px 30px -9px var(--glass-shadow),0 0 18px -5px rgba(var(--filter-rgb),var(--band-shadow-alpha));
+ --glass-pressed-shadow:inset 0 3px 8px -2px rgba(var(--recess-rgb),var(--recess-alpha)),inset 0 -2px 5px -2px rgba(var(--filter-rgb),.32);
+}
+html body:is(.dark-mode,:not(.dark-mode)) :is(.pub-filter-chip,.tag-option):is(:hover,.liquid-hover,:focus-visible){background:var(--filter-hover);color:var(--filter-ink);border-color:transparent;--glass-edge:transparent}
+html body:is(.dark-mode,:not(.dark-mode)) :is(.pub-filter-chip,.tag-option):is(.active,[aria-pressed="true"]){background:var(--filter-selected);color:var(--filter-ink);border-color:transparent;--glass-edge:transparent;box-shadow:none}
+html body:is(.dark-mode,:not(.dark-mode)) :is(.pub-filter-chip,.tag-option):is(.active,[aria-pressed="true"]):is(:hover,.liquid-hover,:focus-visible){background:var(--filter-selected);box-shadow:var(--liquid-hover-shadow)}
+html body:is(.dark-mode,:not(.dark-mode)) :is(.pub-filter-chip,.tag-option):is(:active,.liquid-pressed,.glass-pressed,.press-active){background:var(--filter-pressed)!important;color:var(--filter-ink)!important;border-color:transparent!important}
+html body:is(.dark-mode,:not(.dark-mode)) :is(.pub-filter-chip,.tag-option):focus-visible{outline:2px solid var(--filter-ink);outline-offset:3px}
+
+/* Navigation-like filter faces: no perimeter stroke or inset bottom outline. */
+html body:is(.dark-mode,:not(.dark-mode)) :is(.pub-filter-chip,.tag-option){border-radius:12px}
+/* Important layered rules also cover legacy hover/press declarations. */
+@layer control-optics{
+ html body :is(button,.liquid-control,.pub-tag[href],.poster-tag[href],.tag-option,.nav ul li a,.mobile-menu ul li a,.blog-back-link,.read-more,.profile-card .social-links a,label.switch){-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+ html body :is(.pub-filter-chip,.tag-option,.nav ul li a,.mobile-menu ul li a){border-color:transparent!important}
+}
+
+/* Reserve mint for desktop/mobile navigation, including its optical band. */
+html body :is(.sidebar .nav,.mobile-menu) ul li a {
+ --macaron-rgb:var(--mint-rgb);--macaron-secondary-rgb:var(--mint-rgb);
+ --macaron-surface:var(--mint-surface);--macaron-ink:var(--mint-ink);--macaron-border:var(--mint-border);
+}
+html body :is(.sidebar .nav,.mobile-menu) ul li a:is(:hover,.liquid-hover,:focus-visible) {
+ background:var(--mint-filter-hover);color:var(--mint-ink);
+}
+html body :is(.sidebar .nav,.mobile-menu) ul li a[aria-current="page"] {
+ background:var(--mint-surface);color:var(--mint-ink);
+}
+html body :is(.sidebar .nav,.mobile-menu) ul li a[aria-current="page"]:is(:hover,.liquid-hover,:focus-visible) {
+ background:var(--mint-filter-hover);
+}
+@layer garden-navigation {
+ html body :is(.sidebar .nav,.mobile-menu) ul li a:is(:active,.liquid-pressed,.glass-pressed,.press-active) {
+  background:var(--mint-filter-pressed)!important;color:var(--mint-ink)!important;
+ }
+}

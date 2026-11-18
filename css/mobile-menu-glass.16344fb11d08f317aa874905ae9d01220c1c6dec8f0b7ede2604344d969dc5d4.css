@@ -1,0 +1,20 @@
+/* A menu is a frosted panel, separate from the palette's opaque surfaces. */
+@layer mobile-menu-material {
+  @media (max-width: 767px) {
+    html body .mobile-menu {
+      --menu-glass-tint: rgba(255,253,252,.54);
+      background: var(--menu-glass-tint) !important;
+      -webkit-backdrop-filter: blur(20px) saturate(125%) !important;
+      backdrop-filter: blur(20px) saturate(125%) !important;
+    }
+    html.dark-mode body .mobile-menu,
+    html body.dark-mode .mobile-menu {
+      --menu-glass-tint: rgba(49,55,54,.62);
+    }
+    @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+      html body .mobile-menu {
+        background: var(--glass-fallback) !important;
+      }
+    }
+  }
+}

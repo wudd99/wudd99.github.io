@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="en-us">
 <head>
-	<meta name="generator" content="Hugo 0.145.0">
+	<meta name="generator" content="Hugo 0.145.0"><link rel="stylesheet" href="/css/liquidgl-prototype.01b3caf3ec7d1e5739e0d32f1952c31b72d64c8c3f47ee77d09f254a40ba200c.css" integrity="sha256-AbPK8&#43;x9Hlc54NMvGVLDG3LWTIw/R&#43;530J8lSkC6IAw=">
   <meta charset="UTF-8">
 <title>Yihao Wu | PhD Student, UCSB</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script id="background-choice">
 (function(){
  var root=document.documentElement;
- var requested=new URLSearchParams(location.search).get('bg');
+ var params=new URLSearchParams(location.search);
+ var requested=params.get('bg');
+ if (requested==='prism' || (!requested && params.get('glass')!=='off')) {
+  root.dataset.background='prism';
+  return;
+ }
  var mode=requested==='image'||requested==='pattern'?requested:'pattern';
  if(!requested){try{var saved=sessionStorage.getItem('yihao-background');if(saved==='image'||saved==='pattern')mode=saved;}catch(e){}}
  root.dataset.background=mode;
@@ -74,11 +79,13 @@
 
 
 <link rel="stylesheet" href="/css/layout.be79b68672d7b7672112be8dff8585e6df6550debb96417275934b70a0021f01.css" integrity="sha256-vnm2hnLXt2chEr6N/4WF5t9lUN67lkFydZNLcKACHwE=">
-<link rel="stylesheet" href="/css/macaron.3c5ee7b9ceaf884086a05aaceb323a59f6f77605faae5c12884d89be564b5a23.css" integrity="sha256-PF7nuc6viECGoFqs6zI6Wfb3dgX6rlwSiE2JvlZLWiM=">
+<link rel="stylesheet" href="/css/macaron.78404f0d706b3d52831fd45ac5beb0ab4f080290cfecb731b85ac240aa69d88b.css" integrity="sha256-eEBPDXBrPVKDH9Raxb6wq08IApDP7LcxuFrCQKpp2Is=">
 
 <link rel="canonical" href="https://yihaow.com/">
 
 <link rel="stylesheet" href="/css/text-links.0b1931329d3f3ec7b42b2ba0f02b59eba1420149266d307e38acb5852d4f26a2.css" integrity="sha256-CxkxMp0/Pse0Kyug8CtZ66FCAUkmbTB&#43;OKy1hS1PJqI=">
+
+<link rel="stylesheet" href="/css/mobile-menu-glass.16344fb11d08f317aa874905ae9d01220c1c6dec8f0b7ede2604344d969dc5d4.css" integrity="sha256-FjRPsR0I8xeqh0kFrp0BIgwcbeyPC37eJgQ0TZadxdQ=">
 </head>
 <body data-page="home">
 
@@ -108,7 +115,12 @@
   <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
   <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg><span>Home</span></a></li><li><a href="/blog/"><svg class="ui-icon tabler-icon" data-icon="tabler-pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
   <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
-  <path d="M13.5 6.5l4 4" /></svg><span>Capybara’s Blog</span></a></li></ul><div class="mobile-home-sections"><p>Home sections</p><ul><li><a href="/#about">About</a></li><li><a href="/#publications">Publications</a></li><li><a href="/#poster">Posters</a></li><li><a href="/#service">Academic Service</a></li><li><a href="/#contact">Contact</a></li></ul></div><div class="mobile-appearance"><button type="button" class="appearance-button" data-theme-toggle><svg class="ui-icon theme-moon tabler-icon" data-icon="tabler-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M13.5 6.5l4 4" /></svg><span>Capybara’s Blog</span></a></li></ul><div class="mobile-home-sections"><p>On this page</p><nav aria-label="Page sections">
+
+<ol class="page-toc"><li><a href="#about">About</a></li><li><a href="#publications">Publications</a></li><li><a href="#poster">Posters</a></li><li><a href="#service">Academic Service</a></li><li><a href="#contact">Contact</a></li></ol>
+
+</nav>
+</div><div class="mobile-appearance"><button type="button" class="appearance-button" data-theme-toggle><svg class="ui-icon theme-moon tabler-icon" data-icon="tabler-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
   <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" /></svg><svg class="ui-icon theme-sun tabler-icon" data-icon="tabler-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
   <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
   <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" /></svg><span data-theme-label>Dark mode</span></button><input type="checkbox" id="mobile-mode-toggle-checkbox" hidden tabindex="-1" aria-hidden="true"></div></nav>
@@ -136,7 +148,12 @@
   <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg><span>Home</span></a></li><li><a href="/blog/"><svg class="ui-icon tabler-icon" data-icon="tabler-pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
   <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
   <path d="M13.5 6.5l4 4" /></svg><span>Capybara’s Blog</span></a></li></ul>
-</nav><div class="sidebar-directory utility-panel"><h2>On this page</h2><nav aria-label="Page sections"><ol class="page-toc"><li><a href="#about">About</a></li><li><a href="#publications">Publications</a></li><li><a href="#poster">Posters</a></li><li><a href="#service">Academic Service</a></li><li><a href="#contact">Contact</a></li></ol></nav></div><div class="sidebar-appearance"><button type="button" class="appearance-button" data-theme-toggle><svg class="ui-icon theme-moon tabler-icon" data-icon="tabler-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+</nav><div class="sidebar-directory utility-panel"><h2>On this page</h2><nav aria-label="Page sections">
+
+<ol class="page-toc"><li><a href="#about">About</a></li><li><a href="#publications">Publications</a></li><li><a href="#poster">Posters</a></li><li><a href="#service">Academic Service</a></li><li><a href="#contact">Contact</a></li></ol>
+
+</nav>
+</div><div class="sidebar-appearance"><button type="button" class="appearance-button" data-theme-toggle><svg class="ui-icon theme-moon tabler-icon" data-icon="tabler-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
   <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" /></svg><svg class="ui-icon theme-sun tabler-icon" data-icon="tabler-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" d="M0 0h24v24H0z" fill="none"/>
   <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
   <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" /></svg><span data-theme-label>Dark mode</span></button><input type="checkbox" id="mode-toggle" hidden tabindex="-1" aria-hidden="true"></div></aside>
@@ -155,7 +172,12 @@
   
 </section>
 
-<details class="inline-toc"><summary>On this page</summary><nav aria-label="Page sections"><ol class="page-toc"><li><a href="#about">About</a></li><li><a href="#publications">Publications</a></li><li><a href="#poster">Posters</a></li><li><a href="#service">Academic Service</a></li><li><a href="#contact">Contact</a></li></ol></nav></details>
+<details class="inline-toc"><summary>On this page</summary><nav aria-label="Page sections">
+
+<ol class="page-toc"><li><a href="#about">About</a></li><li><a href="#publications">Publications</a></li><li><a href="#poster">Posters</a></li><li><a href="#service">Academic Service</a></li><li><a href="#contact">Contact</a></li></ol>
+
+</nav>
+</details>
 <div class="publications-section" id="publications">
   <h2>Publications</h2>
   <div class="home-tools-slot"></div>
@@ -527,11 +549,16 @@ window.WYH_SITE_DATA = window.WYH_SITE_DATA || {};
 window.WYH_SITE_DATA.timelineItems = [{"description":"Built a solid foundation in integrated-circuit design, chip testing, PCB prototyping, and hardware validation.","tags":["IC Design","Testing"],"title":"IC Design Foundation","year":"2023"},{"description":"Shifted toward domain-specific computing hardware, with two TSMC 65nm chips taped out for optimization and non-von-Neumann computing.","tags":["Tapeout","Hardware"],"title":"Computational Hardware","year":"2024"},{"description":"Developed m-Zephyr, a densely connected Ising-machine architecture aimed at reducing mapping overhead for practical optimization problems.","tags":["m-Zephyr","VLSI"],"title":"Dense Ising Architecture","year":"2025"},{"description":"Advanced COBI toward more application-oriented Ising hardware, focusing on dense connectivity, efficient mapping, and real-world problem structures.","tags":["COBI","ISSCC"],"title":"COBI and Practical Mapping","year":"2026"},{"current":true,"description":"Exploring beyond-Ising computing fabrics, including predictive coding, complex industrial systems, and sensor-compute integration.","tags":["Predictive Coding","Sensing"],"title":"Beyond Ising Computing","year":"Now"}];
 </script>
 
-<script src="/js/site.717819f2dd6dd807f130d14a6120f96728d8314cc354e66d8c4e912d34a420af.js" integrity="sha256-cXgZ8t1t2AfxMNFKYSD5ZyjYMUzDVOZtjE6RLTSkIK8=" defer></script>
+<script src="/js/site.3e324a485bba4d160edf44e9d1c787097092797c2a5da7376fde8a91ebf5d78d.js" integrity="sha256-PjJKSFu6TRYO30Tp0ceHCXCSeXwqXac3b96Kkev1140=" defer></script>
 
-<script src="/js/glass.83d59ed5b6a8777337ddc3428f16266d1c1dc064c8b56b40c3246b0a326fdcab.js" integrity="sha256-g9We1baod3M33cNCjxYmbRwdwGTItWtAwyRrCjJv3Ks=" defer></script>
+<script src="/js/glass.3eca668bbb61be08eb2d25d84bcbb5bc6a543ab9d315ef4da2d557f8a99e58e4.js" integrity="sha256-Pspmi7thvgjrLSXYS8u1vGpUOrnTFe9NotVX&#43;KmeWOQ=" defer></script>
 
-<script src="/js/layout.0baa3821bcea25511c6779fe1bcf48489cd586845694dbbaca2d6a093ba62b3d.js" integrity="sha256-C6o4IbzqJVEcZ3n&#43;G89ISJzVhoRWlNu6yi1qCTumKz0=" defer></script>
+<script src="/js/layout.4190b49b032d529cd796ca0ab61f9c66dfc624963656af52829e41f8f098a506.js" integrity="sha256-QZC0mwMtUpzXlsoKth&#43;cZt/GJJY2Vq9Sgp5B&#43;PCYpQY=" defer></script>
+
+
+
+
+<script src="/js/liquidgl-adapter.b58e96882a3beb651b1b1d9721d744db4452c9c3c4268a413aff4a9a7b68ed41.js" integrity="sha256-tY6WiCo762UbGx2XIddE20RSycPEJopBOv9Kmnto7UE=" defer></script>
 
 
 </body>
