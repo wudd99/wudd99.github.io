@@ -57,7 +57,10 @@ function runtime({search = '', reduce = false, missingLibrary = false, withDiscl
   menuButton.rect = {left: 32, top: 140, width: 328, height: 46, right: 360, bottom: 186};
   toc.rect = {left: 250, top: 180, width: 720, height: 48, right: 970, bottom: 228};
   summary.rect = {left: 266, top: 180, width: 688, height: 48, right: 954, bottom: 228};
-  const candidates = withDisclosures ? [nav, card, menu, menuButton, toc, summary] : [nav, card];
+  const topbar = new Element();
+  topbar.selector = '.ref-topbar';
+  topbar.rect = {left: 0, top: 0, width: 392, height: 68, right: 392, bottom: 68};
+  const candidates = withDisclosures ? [nav, card, topbar, menu, menuButton, toc, summary] : [nav, card];
   const document = events({documentElement: html, body, head, hidden: false,
     createElement: () => new Element(), querySelectorAll: selector => candidates.filter(node => node.matches(selector)), getElementById: id => withDisclosures && id === 'mobileMenu' ? menu : null});
   const reduced = events({matches: reduce});
@@ -85,10 +88,10 @@ function runtime({search = '', reduce = false, missingLibrary = false, withDiscl
     MutationObserver: Observer, ResizeObserver: window.ResizeObserver,
     getComputedStyle: (element, pseudo) => pseudo ? {backgroundImage: 'url(/images/soft-tile.svg)', opacity: '.62'} : {
       backgroundColor: html.classList.contains('dark-mode') ? '#262a29' : '#f8faf7', borderRadius: '18px',
-      getPropertyValue: name => name === '--bg-main' ? (html.classList.contains('dark-mode') ? '#262a29' : '#f8faf7') : name.includes('mint') ? '#DDEFE5' : '#F8EFCF'
+      getPropertyValue: name => name === '--bg-main' ? (html.classList.contains('dark-mode') ? '#262a29' : '#f8faf7') : name === '--navigation-surface' ? '#DDEFE5' : '#F8EFCF'
     }};
   vm.runInNewContext(source, context); document.emit('DOMContentLoaded');
-  return {window, document, html, nav, card, menu, menuButton, toc, summary, frames, timers, calls, pending, reduced, compactCards, lenses,
+  return {window, document, html, nav, card, topbar, menu, menuButton, toc, summary, frames, timers, calls, pending, reduced, compactCards, lenses,
     get destroyed() {return destroyed;},
     flush() {now += 16; const list = [...frames.values()]; frames.clear(); list.forEach(fn => fn());},
     ready() {pending.splice(0).forEach(fn => fn());},
@@ -202,16 +205,26 @@ test('card press follows the spring temporarily and a nested text link does not 
   }};
   r.document.emit('pointerdown', {target: textLink, button: 0, pointerId: 2});
   assert.equal('data-liquidgl-pressed' in r.card.attrs, false);
-  r.document.emit('pointerdown', {target: r.card, button: 0, pointerId: 3});
+  assert.equal('data-liquidgl-rim' in r.card.attrs, false);
+  r.document.emit('pointerdown', {target: r.card, button: 0, pointerId: 3, clientX: 280, clientY: 550});
+  assert.ok('data-liquidgl-card-rim' in r.card.attrs);
+  assert.ok('data-liquidgl-rim' in r.card.attrs);
+  assert.equal(r.card.style['--lg-rim-x'], '0%');
+  assert.equal(r.card.style['--lg-rim-y'], 100 / 220 * 100 + '%');
   r.flush();
   assert.ok('data-liquidgl-pressed' in r.card.attrs);
   assert.ok(r.lenses[0].options.frost > r.lenses[1].options.frost);
+  r.advance(25);
   r.document.emit('pointerup', {pointerId: 3});
-  assert.equal(r.timers.size, 0, 'card release starts immediately');
   assert.equal('data-liquidgl-pressed' in r.card.attrs, false);
+  assert.ok('data-liquidgl-rim' in r.card.attrs, 'highlight persists after the card starts to release');
+  assert.equal(r.timers.size, 1, 'only the highlight waits for a timer');
   r.flush();
   assert.ok(r.lenses[0].options.frost > r.lenses[1].options.frost, 'optics relax while the panel returns');
   assert.equal(r.frames.size, 1, 'the pane follows the returning card');
+  const [timer, dismiss] = [...r.timers.entries()][0];
+  r.timers.delete(timer); dismiss();
+  assert.equal('data-liquidgl-rim' in r.card.attrs, false);
   r.advance(400); r.flush();
   assert.equal(r.lenses[0].options.frost, r.lenses[1].options.frost);
   assert.equal(r.frames.size, 0, 'card motion must not leave an extra render loop running');
@@ -236,9 +249,11 @@ test('quick clicks release the button immediately and only hold a directional ri
   assert.equal('data-liquidgl-rim' in r.nav.attrs, false);
 });
 
-test('inline contents use one surface and the opened mobile menu stays on the live CSS backdrop', () => {
+test('the mobile bar and menu stay on the live CSS backdrop while inline contents use one surface', () => {
   const r = runtime({withDisclosures: true});
   r.flush(); r.ready(); r.flush();
+  assert.equal(r.topbar.dataset.liquidglMaterial, 'overlay');
+  assert.equal('data-liquidgl-active' in r.topbar.attrs, false, 'the bar must keep its live backdrop filter');
   assert.equal(r.toc.dataset.liquidglMaterial, 'field');
   assert.ok('data-liquidgl-active' in r.toc.attrs);
   assert.equal(r.summary.dataset.liquidglMaterial, undefined, 'summary must not draw a second glass surface');
@@ -260,9 +275,10 @@ test('resizing to compact mode removes panel lenses while preserving presses and
   assert.equal('data-liquidgl-active' in r.card.attrs, false, 'no GPU perimeter remains on the compact card');
   assert.equal(r.card.dataset.liquidglMaterial, 'panel');
   assert.ok('data-liquidgl-active' in r.nav.attrs);
-  r.document.emit('pointerdown', {target: r.card, button: 0, pointerId: 1});
+  r.document.emit('pointerdown', {target: r.card, button: 0, pointerId: 1, pointerType: 'touch'});
   r.flush();
   assert.ok('data-liquidgl-pressed' in r.card.attrs, 'the native surface still moves on press');
+  assert.ok('data-liquidgl-rim' in r.card.attrs, 'the pressed edge still lights up on touch');
   assert.equal('data-liquidgl-active' in r.card.attrs, false);
   r.document.emit('pointercancel', {pointerId: 1});
   r.compactCards.matches = false;

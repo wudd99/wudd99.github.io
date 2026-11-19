@@ -17,11 +17,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const fields = '.search-field,.inline-toc';
   const controls = '.tag-filter summary,.nav a,.mobile-menu a,.appearance-button,.hamburger,.close-menu,.social-links a,.pub-tag.link,.poster-tag.link,.pub-filter-chip,.tag-option,.text-button,.search-submit,.post-tags a,.timeline-marker-label';
   const bareControls = '.right-rail .tag-filter > summary,.timeline-marker-label';
-  const tactileCards = '.publication-card,.poster-card,.blog-card,.timeline-card,#service li';
+  const cards = '.publication-card,.poster-card,.blog-card,.timeline-card';
+  const tactileCards = cards + ',#service li';
   const media = '.blog-cover-link,.profile-home,.ref-brand';
   const selector = [panels, overlays, fields, controls, media].join(',');
   const toneRules = [
-    ['.nav a,.mobile-menu a,.hamburger,.close-menu,.ref-topbar,.appearance-button', 'mint'],
+    ['.nav a,.mobile-menu a,.hamburger,.close-menu,.ref-topbar,.appearance-button', 'navigation'],
     ['.publication-card[data-pub-type="journal"],.publication-card[data-pub-type="journal"] .pub-tag.link,.pub-filter-chip[data-filter-value="journal"],.pub-filter-chip[data-filter-type="topic"],.research-timeline,.timeline-card,.timeline-marker-label', 'cream'],
     ['.publication-card[data-pub-type="conference"],.publication-card[data-pub-type="conference"] .pub-tag.link,.pub-filter-chip[data-filter-value="conference"]', 'lavender'],
     ['.poster-card,.poster-tag.link,.poster-card .pub-tag.link,.blog-card,.blog-post,.post-tags a,.tag-option', 'apricot']
@@ -53,18 +54,22 @@ document.addEventListener('DOMContentLoaded', () => {
       element.removeAttribute('data-liquidgl-material');
       element.removeAttribute('data-liquidgl-tone');
       element.removeAttribute('data-liquidgl-rim-anchor');
+      element.removeAttribute('data-liquidgl-card-rim');
     }
     for (const element of current) {
       if (observed.has(element)) continue;
       const kind = element.matches(overlays) ? 'overlay' :
         element.matches(panels) ? 'panel' : element.matches(fields) ? 'field' :
         element.matches(media) ? 'media' : 'control';
-      const tone = toneRules.find(([rule]) => element.matches(rule))?.[1] || 'neutral';
+      const tone = toneRules.find(([rule]) => element.matches(rule))?.[1] ||
+        (kind === 'control' ? 'interface' : 'neutral');
       element.dataset.liquidglMaterial = kind;
       element.dataset.liquidglTone = tone;
+      const isCard = element.matches(cards);
+      if (isCard) element.setAttribute('data-liquidgl-card-rim', '');
       records.set(element, {element, kind, tone});
       observed.add(element);
-      if (kind === 'control' && getComputedStyle(element).position === 'static') {
+      if ((kind === 'control' || isCard) && getComputedStyle(element).position === 'static') {
         element.setAttribute('data-liquidgl-rim-anchor', '');
       }
       if (kind !== 'media') resizeObserver?.observe(element);
@@ -266,9 +271,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const visible = [];
     for (const record of records.values()) {
       const {element, kind} = record;
-      // The open menu uses the live page as its backdrop. Keep its panel
-      // and controls off the wallpaper-only canvas.
-      if (kind === 'media' || menu?.contains(element) || element.matches(bareControls)) continue;
+      // The fixed bar and open menu blur the live page as it scrolls underneath.
+      if (kind === 'media' || kind === 'overlay' ||
+          menu?.contains(element) || element.matches(bareControls)) continue;
       // A wide card's shader bevel can show a second edge inside the CSS border
       // as its proportions change. Compact cards use one native rounded surface.
       if (kind === 'panel' && compactCards.matches) continue;
@@ -284,8 +289,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       visible.push({record, rect, radius: getComputedStyle(element).borderTopLeftRadius, tint: tintFor(record, bodyStyle)});
     }
-    // Reserve coverage for cards, the open menu and search before smaller controls.
-    const priority = {overlay: 0, panel: 1, field: 2, control: 3};
+    // Reserve coverage for cards and search before smaller controls.
+    const priority = {panel: 0, field: 1, control: 2};
     visible.sort((first, second) => priority[first.record.kind] - priority[second.record.kind]);
     const chosen = visible.slice(0, maxPanes);
     const interactionTarget = press?.element || recovery?.element || hover?.element;
@@ -409,12 +414,23 @@ document.addEventListener('DOMContentLoaded', () => {
     rimTarget = null;
   }
 
-  function locatePress(element, event, key) {
+  function locatePress(element, event, key, isCard) {
     const {left, top, width, height} = element.getBoundingClientRect();
     if (!width || !height) return;
     const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
     const x = key || !Number.isFinite(event.clientX) ? width / 2 : clamp(event.clientX - left, 0, width);
     const y = key || !Number.isFinite(event.clientY) ? height / 2 : clamp(event.clientY - top, 0, height);
+
+    if (isCard) {
+      // A card is a rounded rectangle, so project to the closest of its four edges.
+      const horizontal = Math.min(x, width - x);
+      const vertical = Math.min(y, height - y);
+      const edgeX = horizontal < vertical ? (x < width / 2 ? 0 : width) : x;
+      const edgeY = horizontal < vertical ? y : (y < height / 2 ? 0 : height);
+      element.style.setProperty('--lg-rim-x', edgeX / width * 100 + '%');
+      element.style.setProperty('--lg-rim-y', edgeY / height * 100 + '%');
+      return;
+    }
 
     // Project onto the nearest edge of the pill. Keep the glow off its flat face.
     const radius = Math.min(width, height) / 2;
@@ -437,18 +453,19 @@ document.addEventListener('DOMContentLoaded', () => {
     clearPress();
     clearRim();
     recovery = null;
-    if (element.dataset.liquidglMaterial === 'control' && !element.matches(bareControls)) {
-      locatePress(element, event, key);
+    const isCard = element.matches(cards);
+    if (isCard || (element.dataset.liquidglMaterial === 'control' && !element.matches(bareControls))) {
+      locatePress(element, event, key, isCard);
       rimTarget = element;
       element.setAttribute('data-liquidgl-rim', '');
     }
-    press = {element, key, pointerId: event.pointerId, started: performance.now()};
+    press = {element, key, pointerId: event.pointerId, started: performance.now(), isCard};
     element.setAttribute('data-liquidgl-pressed', '');
     followMotion();
   }
 
   function finishPress(cancelled = false) {
-    const {element, started} = press;
+    const {element, isCard, started} = press;
     clearPress();
     if (cancelled || reduced.matches) {
       clearRim();
@@ -456,8 +473,8 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       recovery = {element, started: performance.now()};
       if (rimTarget) {
-        // Give a very quick click one paint of light without holding the shape down.
-        const remaining = Math.max(0, 34 - (performance.now() - started));
+        // The card rim stays visible after release while the card shape springs back.
+        const remaining = isCard ? 190 : Math.max(0, 34 - (performance.now() - started));
         if (remaining) rimTimer = setTimeout(clearRim, remaining);
         else clearRim();
       }
