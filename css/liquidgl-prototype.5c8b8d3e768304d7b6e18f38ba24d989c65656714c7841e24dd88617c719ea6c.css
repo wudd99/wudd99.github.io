@@ -81,7 +81,22 @@
     --lg-glint-color: rgb(214 226 255 / .25);
     --lg-sheen: linear-gradient(151deg, rgb(255 255 255 / .08), transparent 48%, rgb(255 255 255 / .035));
   }
-  html body [data-liquidgl-tone="mint"] { --lg-pigment: var(--mint-surface); }
+  html body {
+    --navigation-surface: var(--mint-surface);
+    --navigation-ink: var(--mint-ink);
+    --navigation-border: var(--mint-border);
+    --interface-surface: var(--card-bg);
+  }
+  html.dark-mode body {
+    --navigation-surface: var(--lavender-surface);
+    --navigation-ink: var(--lavender-ink);
+    --navigation-border: var(--lavender-border);
+    --interface-surface: var(--lavender-surface);
+  }
+  html body [data-liquidgl-tone="navigation"] {
+    --lg-pigment: var(--navigation-surface);
+  }
+  html body [data-liquidgl-tone="interface"] { --lg-pigment: var(--interface-surface); }
   html body [data-liquidgl-tone="cream"] { --lg-pigment: var(--cream-surface); }
   html body [data-liquidgl-tone="lavender"] { --lg-pigment: var(--lavender-surface); }
   html body [data-liquidgl-tone="apricot"] { --lg-pigment: var(--apricot-surface); }
@@ -113,9 +128,62 @@
   html body .inline-toc > summary:is(:hover,:focus-visible) { color: var(--primary-strong); }
   /* Directory links keep their selected surface alongside the plain-link press feedback. */
   html body .page-toc a[aria-current="location"] {
-    background: var(--mint-surface) !important;
-    color: var(--mint-ink) !important;
+    background: var(--navigation-surface) !important;
+    color: var(--navigation-ink) !important;
     border-radius: 8px !important;
+  }
+  html.dark-mode body :is(.sidebar .nav,.mobile-menu) a:is([aria-current="page"],:hover,:focus-visible),
+  html.dark-mode body :is(.ref-topbar .hamburger,.mobile-menu .close-menu,.appearance-button) {
+    color: var(--navigation-ink) !important;
+  }
+  html.dark-mode body .page-toc a[aria-current="location"] {
+    border-left-color: var(--navigation-border) !important;
+  }
+  html.dark-mode body footer { background: transparent !important; }
+  @media (max-width: 767px) {
+    html body .ref-topbar {
+      --topbar-glass-tint: rgb(255 253 252 / .23);
+      --topbar-edge-glow: rgb(255 253 250 / .74);
+      --topbar-halo: rgb(222 231 251 / .52);
+      background: var(--topbar-glass-tint) !important;
+      border-bottom-color: var(--topbar-edge-glow) !important;
+      box-shadow: inset 0 -1px 7px var(--topbar-edge-glow),
+        0 3px 13px var(--topbar-halo), 0 8px 24px -8px var(--glass-shadow) !important;
+      -webkit-backdrop-filter: blur(8px) saturate(116%) !important;
+      backdrop-filter: blur(8px) saturate(116%) !important;
+    }
+    html.dark-mode body .ref-topbar {
+      --topbar-glass-tint: rgb(64 57 79 / .30);
+      --topbar-edge-glow: rgb(230 216 249 / .20);
+      --topbar-halo: rgb(180 155 207 / .18);
+    }
+    html.dark-mode body .mobile-menu {
+      background: color-mix(in srgb, var(--navigation-surface) 62%, transparent) !important;
+    }
+    @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+      html body .ref-topbar { background: var(--glass-fallback) !important; }
+      html.dark-mode body .mobile-menu { background: var(--navigation-surface) !important; }
+    }
+    html body .mobile-menu .mobile-home-sections .page-toc a:not(:is(
+      :hover, :focus-visible, :active, [data-liquidgl-hover], [data-liquidgl-pressed], [data-liquidgl-rim]
+    )) {
+      background: transparent !important;
+      border-color: transparent !important;
+      box-shadow: none !important;
+      -webkit-backdrop-filter: none !important;
+      backdrop-filter: none !important;
+    }
+    html body .mobile-menu .mobile-home-sections .page-toc a[aria-current="location"] {
+      font-weight: 600;
+    }
+  }
+  @media (any-pointer: coarse) {
+    /* Touch already has custom press feedback. Leave keyboard focus visible. */
+    html body :is([data-liquidgl-material], .clickable-card,
+      .publication-card, .poster-card, .timeline-card),
+    html body :is(.clickable-card, .publication-card, .poster-card, .timeline-card) :is(a, button) {
+      -webkit-tap-highlight-color: transparent;
+    }
   }
   @media (prefers-reduced-motion: no-preference) {
     html body .inline-toc > summary:active { transform: translateY(1px); }
@@ -207,6 +275,33 @@
     --lg-press-light: rgb(221 234 255 / .76);
     --lg-press-reflection: rgb(198 213 255 / .12);
   }
+  html.dark-mode body :is([data-liquidgl-tone="navigation"], [data-liquidgl-tone="interface"]) {
+    --lg-base: var(--lavender-surface);
+    --lg-glint-color: rgb(217 191 255 / .30);
+    --lg-press-light: rgb(230 212 255 / .85);
+    --lg-press-reflection: rgb(200 170 242 / .17);
+  }
+  html body [data-liquidgl-card-rim] {
+    --lg-card-rim-hue: var(--lavender-rgb);
+    --lg-card-rim-ink: var(--lavender-ink);
+    --lg-press-light: color-mix(in srgb, rgb(var(--lg-card-rim-hue)) 66%, var(--lg-card-rim-ink));
+    --lg-press-reflection: transparent;
+    --lg-rim-spread: 108px 46px;
+    --lg-rim-width: 3px;
+    --lg-rim-stops: var(--lg-press-light),
+      color-mix(in srgb, var(--lg-press-light) 34%, transparent) 46%, transparent 88%;
+  }
+  html.dark-mode body [data-liquidgl-card-rim] {
+    --lg-press-light: color-mix(in srgb, var(--lg-card-rim-ink) 74%, white);
+  }
+  html body [data-liquidgl-card-rim][data-liquidgl-tone="cream"] {
+    --lg-card-rim-hue: var(--cream-rgb);
+    --lg-card-rim-ink: var(--cream-ink);
+  }
+  html body [data-liquidgl-card-rim][data-liquidgl-tone="apricot"] {
+    --lg-card-rim-hue: var(--apricot-rgb);
+    --lg-card-rim-ink: var(--apricot-ink);
+  }
   html body [data-liquidgl-material="control"][data-liquidgl-pressed],
   html body [data-liquidgl-material="control"]:where(:active) {
     --lg-glint: linear-gradient(transparent, transparent);
@@ -223,16 +318,16 @@
       0 2px 5px -3px var(--lg-shade);
   }
   @supports ((mask-composite: exclude) or (-webkit-mask-composite: xor)) {
-    html body [data-liquidgl-material="control"]::after {
+    html body :is([data-liquidgl-material="control"], [data-liquidgl-card-rim])::after {
       content: "";
       pointer-events: none;
       position: absolute;
       inset: 0;
-      padding: 2.5px;
+      padding: var(--lg-rim-width, 2.5px);
       border-radius: inherit;
       background:
-        radial-gradient(ellipse 34% 85% at var(--lg-rim-x, 50%) var(--lg-rim-y, 0%),
-          var(--lg-press-light), transparent 79%),
+        radial-gradient(ellipse var(--lg-rim-spread, 34% 85%) at var(--lg-rim-x, 50%) var(--lg-rim-y, 0%),
+          var(--lg-rim-stops, var(--lg-press-light), transparent 79%)),
         radial-gradient(ellipse 42% 100% at calc(100% - var(--lg-rim-x, 50%)) calc(100% - var(--lg-rim-y, 0%)),
           var(--lg-press-reflection), transparent 80%);
       -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -242,15 +337,27 @@
       opacity: 0;
       transition: opacity .19s ease-out;
     }
-    html body [data-liquidgl-material="control"][data-liquidgl-rim]::after {
+    html body :is([data-liquidgl-material="control"], [data-liquidgl-card-rim])[data-liquidgl-rim]::after {
       opacity: 1;
       transition: opacity .045s ease-out;
+    }
+    html body [data-liquidgl-card-rim]::after {
+      z-index: 1;
+      transition: opacity .34s ease-out;
+    }
+    html body [data-liquidgl-card-rim][data-liquidgl-rim]::after {
+      opacity: .68;
+      transition: opacity .1s ease-out;
     }
   }
   @supports not ((mask-composite: exclude) or (-webkit-mask-composite: xor)) {
     html body [data-liquidgl-material="control"][data-liquidgl-rim] {
       --lg-glint: radial-gradient(ellipse 28% 60% at var(--lg-rim-x, 50%) var(--lg-rim-y, 0%),
         var(--lg-press-reflection), transparent 85%);
+    }
+    html body [data-liquidgl-material][data-liquidgl-card-rim][data-liquidgl-rim] {
+      --lg-glint: radial-gradient(ellipse var(--lg-rim-spread) at var(--lg-rim-x, 50%) var(--lg-rim-y, 0%),
+        color-mix(in srgb, var(--lg-press-light) 20%, transparent), transparent 86%);
     }
   }
   html body [data-liquidgl-material="panel"][data-liquidgl-pressed] {
@@ -310,6 +417,8 @@
       --lg-accessible-motion: scale(1);
       transition: none !important;
     }
-    html body [data-liquidgl-material="control"]::after { transition: none !important; }
+    html body :is([data-liquidgl-material="control"], [data-liquidgl-card-rim])::after {
+      transition: none !important;
+    }
   }
 }
